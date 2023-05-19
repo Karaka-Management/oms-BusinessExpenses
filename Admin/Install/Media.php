@@ -1,14 +1,14 @@
 <?php
 /**
- * Orange Management
+ * Karaka
  *
- * PHP Version 7.4
+ * PHP Version 8.1
  *
  * @package   Modules\BusinessExpenses\Admin\Install
  * @copyright Dennis Eichhorn
- * @license   OMS License 1.0
+ * @license   OMS License 2.0
  * @version   1.0.0
- * @link      https://orange-management.org
+ * @link      https://jingga.app
  */
 declare(strict_types=1);
 
@@ -17,17 +17,17 @@ namespace Modules\BusinessExpenses\Admin\Install;
 use phpOMS\Application\ApplicationAbstract;
 
 /**
- * Navigation class.
+ * Media class.
  *
  * @package Modules\BusinessExpenses\Admin\Install
- * @license OMS License 1.0
- * @link    https://orange-management.org
+ * @license OMS License 2.0
+ * @link    https://jingga.app
  * @since   1.0.0
  */
-class Navigation
+class Media
 {
     /**
-     * Install navigation providing
+     * Install media providing
      *
      * @param ApplicationAbstract $app  Application
      * @param string              $path Module path
@@ -38,6 +38,6 @@ class Navigation
      */
     public static function install(ApplicationAbstract $app, string $path) : void
     {
-        \Modules\Navigation\Admin\Installer::installExternal($app, ['path' => __DIR__ . '/Navigation.install.json']);
+        \Modules\Media\Admin\Installer::installExternal($app, ['path' => __DIR__ . '/Media.install.json']);
     }
 }

@@ -1,0 +1,65 @@
+[
+    {
+		"name": "fuel",
+		"l11n": {
+			"en": "Fuel",
+			"de": "Kraftstoff"
+		}
+	},
+    {
+		"name": "entertainment",
+		"l11n": {
+			"en": "Entertainment",
+			"de": "Unterhaltung"
+		}
+	},
+    {
+		"name": "breakfast",
+		"l11n": {
+			"en": "Breakfast",
+			"de": "Frühstück"
+		}
+	},
+    {
+		"name": "lunch",
+		"l11n": {
+			"en": "Lunch",
+			"de": "Mittagessen"
+		}
+	},
+    {
+		"name": "dinner",
+		"l11n": {
+			"en": "Dinner",
+			"de": "Abendessen"
+		}
+	},
+    {
+		"name": "hotel",
+		"l11n": {
+			"en": "Hotel",
+			"de": "Hotel"
+		}
+	},
+    {
+		"name": "travelling",
+		"l11n": {
+			"en": "Travelling (train, airplane, bus, taxi, ...)",
+			"de": "Reisen (Zug, Flugzeug, Bus, Taxi, ...)"
+		}
+	},
+    {
+        "name": "present",
+        "l11n": {
+            "en": "Present",
+            "de": "Geschenk"
+        }
+    },
+    {
+        "name": "other",
+        "l11n": {
+            "en": "Other",
+            "de": "Sonstiges"
+        }
+    }
+]

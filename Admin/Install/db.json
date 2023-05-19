@@ -1,0 +1,333 @@
+{
+    "bizexpenses_expense_type": {
+        "name": "bizexpenses_expense_type",
+        "fields": {
+            "bizexpenses_expense_type_id": {
+                "name": "bizexpenses_expense_type_id",
+                "type": "INT",
+                "null": false,
+                "primary": true,
+                "autoincrement": true
+            },
+            "bizexpenses_expense_type_name": {
+                "name": "bizexpenses_expense_type_name",
+                "type": "VARCHAR(255)",
+                "null": false
+            }
+        }
+    },
+    "bizexpenses_expense_type_l11n": {
+        "name": "bizexpenses_expense_type_l11n",
+        "fields": {
+            "bizexpenses_expense_type_l11n_id": {
+                "name": "bizexpenses_expense_type_l11n_id",
+                "type": "INT",
+                "null": false,
+                "primary": true,
+                "autoincrement": true
+            },
+            "bizexpenses_expense_type_l11n_title": {
+                "name": "bizexpenses_expense_type_l11n_title",
+                "type": "VARCHAR(255)",
+                "null": false
+            },
+            "bizexpenses_expense_type_l11n_type": {
+                "name": "bizexpenses_expense_type_l11n_type",
+                "type": "INT(11)",
+                "null": false,
+                "foreignTable": "bizexpenses_expense_type",
+                "foreignKey": "bizexpenses_expense_type_id"
+            },
+            "bizexpenses_expense_type_l11n_lang": {
+                "name": "bizexpenses_expense_type_l11n_lang",
+                "type": "VARCHAR(2)",
+                "null": false,
+                "foreignTable": "language",
+                "foreignKey": "language_639_1"
+            }
+        }
+    },
+    "bizexpenses_expense_element_type": {
+        "name": "bizexpenses_expense_element_type",
+        "fields": {
+            "bizexpenses_expense_element_type_id": {
+                "name": "bizexpenses_expense_element_type_id",
+                "type": "INT",
+                "null": false,
+                "primary": true,
+                "autoincrement": true
+            },
+            "bizexpenses_expense_element_type_name": {
+                "name": "bizexpenses_expense_element_type_name",
+                "type": "VARCHAR(255)",
+                "null": false
+            }
+        }
+    },
+    "bizexpenses_expense_element_type_l11n": {
+        "name": "bizexpenses_expense_element_type_l11n",
+        "fields": {
+            "bizexpenses_expense_element_type_l11n_id": {
+                "name": "bizexpenses_expense_element_type_l11n_id",
+                "type": "INT",
+                "null": false,
+                "primary": true,
+                "autoincrement": true
+            },
+            "bizexpenses_expense_element_type_l11n_title": {
+                "name": "bizexpenses_expense_element_type_l11n_title",
+                "type": "VARCHAR(255)",
+                "null": false
+            },
+            "bizexpenses_expense_element_type_l11n_type": {
+                "name": "bizexpenses_expense_element_type_l11n_type",
+                "type": "INT(11)",
+                "null": false,
+                "foreignTable": "bizexpenses_expense_element_type",
+                "foreignKey": "bizexpenses_expense_element_type_id"
+            },
+            "bizexpenses_expense_element_type_l11n_lang": {
+                "name": "bizexpenses_expense_element_type_l11n_lang",
+                "type": "VARCHAR(2)",
+                "null": false,
+                "foreignTable": "language",
+                "foreignKey": "language_639_1"
+            }
+        }
+    },
+    "bizexpenses_expense": {
+        "name": "bizexpenses_expense",
+        "fields": {
+            "bizexpenses_expense_id": {
+                "name": "bizexpenses_expense_id",
+                "type": "INT",
+                "null": false,
+                "primary": true,
+                "autoincrement": true
+            },
+            "bizexpenses_expense_status": {
+                "name": "bizexpenses_expense_status",
+                "type": "TINYINT(1)",
+                "null": false
+            },
+            "bizexpenses_expense_description": {
+                "name": "bizexpenses_expense_description",
+                "type": "TEXT",
+                "null": false
+            },
+            "bizexpenses_expense_approved": {
+                "name": "bizexpenses_expense_approved",
+                "type": "TINYINT(1)",
+                "null": false
+            },
+            "bizexpenses_expense_paid": {
+                "name": "bizexpenses_expense_paid",
+                "type": "TINYINT(1)",
+                "null": false
+            },
+            "bizexpenses_expense_net": {
+                "name": "bizexpenses_expense_net",
+                "type": "BIGINT",
+                "null": false
+            },
+            "bizexpenses_expense_gross": {
+                "name": "bizexpenses_expense_gross",
+                "type": "BIGINT",
+                "null": false
+            },
+            "bizexpenses_expense_taxp": {
+                "name": "bizexpenses_expense_taxP",
+                "type": "BIGINT",
+                "null": false
+            },
+            "bizexpenses_expense_created": {
+                "name": "bizexpenses_expense_created",
+                "type": "DATETIME",
+                "null": false
+            },
+            "bizexpenses_expense_start": {
+                "name": "bizexpenses_expense_start",
+                "type": "DATETIME",
+                "null": false
+            },
+            "bizexpenses_expense_end": {
+                "name": "bizexpenses_expense_end",
+                "type": "DATETIME",
+                "null": false
+            },
+            "bizexpenses_expense_type": {
+                "name": "bizexpenses_expense_type",
+                "type": "INT",
+                "null": false,
+                "foreignTable": "bizexpenses_expense_type",
+                "foreignKey": "bizexpenses_expense_type_id"
+            },
+            "bizexpenses_expense_from": {
+                "name": "bizexpenses_expense_from",
+                "type": "INT",
+                "null": false,
+                "foreignTable": "account",
+                "foreignKey": "account_id"
+            },
+            "bizexpenses_expense_country": {
+                "name": "bizexpenses_expense_country",
+                "type": "VARCHAR(2)",
+                "null": true,
+                "default": null,
+                "foreignTable": "country",
+                "foreignKey": "country_code2"
+            }
+        }
+    },
+    "bizexpenses_expense_element": {
+        "name": "bizexpenses_expense_element",
+        "fields": {
+            "bizexpenses_expense_element_id": {
+                "name": "bizexpenses_expense_element_id",
+                "type": "INT",
+                "null": false,
+                "primary": true,
+                "autoincrement": true
+            },
+            "bizexpenses_expense_element_description": {
+                "name": "bizexpenses_expense_element_description",
+                "type": "TEXT",
+                "null": false
+            },
+            "bizexpenses_expense_element_approved": {
+                "name": "bizexpenses_expense_element_approved",
+                "type": "TINYINT(1)",
+                "null": false
+            },
+            "bizexpenses_expense_element_net": {
+                "name": "bizexpenses_expense_element_net",
+                "type": "BIGINT",
+                "null": false
+            },
+            "bizexpenses_expense_element_gross": {
+                "name": "bizexpenses_expense_element_gross",
+                "type": "BIGINT",
+                "null": false
+            },
+            "bizexpenses_expense_element_taxp": {
+                "name": "bizexpenses_expense_element_taxp",
+                "type": "BIGINT",
+                "null": false
+            },
+            "bizexpenses_expense_element_taxr": {
+                "name": "bizexpenses_expense_element_taxr",
+                "type": "BIGINT",
+                "null": false
+            },
+            "bizexpenses_expense_element_quantity": {
+                "name": "bizexpenses_expense_element_quantity",
+                "type": "BIGINT",
+                "null": false
+            },
+            "bizexpenses_expense_element_taxid": {
+                "name": "bizexpenses_expense_element_taxid",
+                "type": "TEXT",
+                "null": false
+            },
+            "bizexpenses_expense_element_start": {
+                "name": "bizexpenses_expense_element_start",
+                "type": "DATETIME",
+                "null": false
+            },
+            "bizexpenses_expense_element_end": {
+                "name": "bizexpenses_expense_element_end",
+                "type": "DATETIME",
+                "null": false
+            },
+            "bizexpenses_expense_element_supplier": {
+                "name": "bizexpenses_expense_element_supplier",
+                "type": "INT",
+                "null": true,
+                "default": null,
+                "foreignTable": "suppliermgmt_supplier",
+                "foreignKey": "suppliermgmt_supplier_id"
+            },
+            "bizexpenses_expense_element_ref": {
+                "name": "bizexpenses_expense_element_ref",
+                "type": "INT",
+                "null": false,
+                "foreignTable": "account",
+                "foreignKey": "account_id"
+            },
+            "bizexpenses_expense_element_type": {
+                "name": "bizexpenses_expense_element_type",
+                "type": "INT",
+                "null": false,
+                "foreignTable": "bizexpenses_expense_element_type",
+                "foreignKey": "bizexpenses_expense_element_type_id"
+            },
+            "bizexpenses_expense_element_country": {
+                "name": "bizexpenses_expense_element_country",
+                "type": "VARCHAR(2)",
+                "null": true,
+                "default": null,
+                "foreignTable": "country",
+                "foreignKey": "country_code2"
+            },
+            "bizexpenses_expense_element_expense": {
+                "name": "bizexpenses_expense_element_expense",
+                "type": "INT",
+                "null": false,
+                "foreignTable": "bizexpenses_expense",
+                "foreignKey": "bizexpenses_expense_id"
+            }
+        }
+    },
+    "bizexpenses_expense_media": {
+        "name": "bizexpenses_expense_media",
+        "fields": {
+            "bizexpenses_expense_media_id": {
+                "name": "bizexpenses_expense_media_id",
+                "type": "INT",
+                "null": false,
+                "primary": true,
+                "autoincrement": true
+            },
+            "bizexpenses_expense_media_src": {
+                "name": "bizexpenses_expense_media_src",
+                "type": "INT",
+                "null": false,
+                "foreignTable": "bizexpenses_expense",
+                "foreignKey": "bizexpenses_expense_id"
+            },
+            "bizexpenses_expense_media_dst": {
+                "name": "bizexpenses_expense_media_dst",
+                "type": "INT",
+                "null": false,
+                "foreignTable": "media",
+                "foreignKey": "media_id"
+            }
+        }
+    },
+    "bizexpenses_expense_element_media": {
+        "name": "bizexpenses_expense_element_media",
+        "fields": {
+            "bizexpenses_expense_element_media_id": {
+                "name": "bizexpenses_expense_element_media_id",
+                "type": "INT",
+                "null": false,
+                "primary": true,
+                "autoincrement": true
+            },
+            "bizexpenses_expense_element_media_src": {
+                "name": "bizexpenses_expense_element_media_src",
+                "type": "INT",
+                "null": false,
+                "foreignTable": "bizexpenses_expense_element",
+                "foreignKey": "bizexpenses_expense_element_id"
+            },
+            "bizexpenses_expense_element_media_dst": {
+                "name": "bizexpenses_expense_element_media_dst",
+                "type": "INT",
+                "null": false,
+                "foreignTable": "media",
+                "foreignKey": "media_id"
+            }
+        }
+    }
+}

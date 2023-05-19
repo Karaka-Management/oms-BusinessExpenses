@@ -11,13 +11,14 @@
         "phpOMS-db": "1.0.0"
     },
     "creator": {
-        "name": "Orange Management",
-        "website": "www.spl1nes.com"
+        "name": "Jingga",
+        "website": "jingga.app"
     },
     "description": "Accounting module.",
     "directory": "BusinessExpenses",
     "dependencies": {
-        "Admin": "1.0.0"
+        "Admin": "1.0.0",
+        "Supplier": "1.0.0"
     },
     "providing": {
         "Navigation": "*"

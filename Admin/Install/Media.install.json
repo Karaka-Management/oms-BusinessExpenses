@@ -1,0 +1,16 @@
+[
+    {
+        "type": "collection",
+        "create_directory": true,
+        "name": "BusinessExpenses",
+        "virtualPath": "/Modules",
+        "user": 1
+    },
+    {
+        "type": "collection",
+        "create_directory": true,
+        "name": "Expense",
+        "virtualPath": "/Modules/BusinessExpenses",
+        "user": 1
+    }
+]

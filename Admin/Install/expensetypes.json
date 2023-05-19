@@ -1,0 +1,44 @@
+[
+    {
+        "name": "sales",
+        "l11n": {
+            "en": "Sales",
+            "de": "Vertrieb"
+        }
+    },
+    {
+        "name": "supplier",
+        "l11n": {
+            "en": "Supplier",
+            "de": "Einkauf"
+        }
+    },
+    {
+        "name": "education",
+        "l11n": {
+            "en": "Education",
+            "de": "Fortbildung"
+        }
+    },
+    {
+        "name": "event",
+        "l11n": {
+            "en": "Event (e.g. conference, trade fair)",
+            "de": "Event (z.B. Konferenz, Messe)"
+        }
+    },
+    {
+        "name": "affiliate",
+        "l11n": {
+            "en": "Affiliates",
+            "de": "Verbundene Unternehmen"
+        }
+    },
+    {
+        "name": "other",
+        "l11n": {
+            "en": "Other",
+            "de": "Sonstiges"
+        }
+    }
+]
