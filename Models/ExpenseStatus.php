@@ -28,7 +28,9 @@ abstract class ExpenseStatus extends Enum
 {
     public const DRAFT = 1;
 
-    public const FINALIZED = 2;
+    public const OPEN = 2;
 
-    public const INACTIVE = 3;
+    public const APPROVED = 3;
+
+    public const DENIED = 3;
 }

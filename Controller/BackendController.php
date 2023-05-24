@@ -14,6 +14,7 @@ declare(strict_types=1);
 
 namespace Modules\BusinessExpenses\Controller;
 
+use Modules\BusinessExpenses\Models\ExpenseMapper;
 use phpOMS\Contract\RenderableInterface;
 use phpOMS\Message\RequestAbstract;
 use phpOMS\Message\ResponseAbstract;
@@ -49,6 +50,12 @@ final class BackendController extends Controller
         $view->setTemplate('/Modules/BusinessExpenses/Theme/Backend/expense-list');
         $view->addData('nav', $this->app->moduleManager->get('Navigation')->createNavigationMid(1001001001, $request, $response));
 
+        $list = ExpenseMapper::getAll()
+            ->with('from')
+            ->execute();
+
+        $view->addData('expenses', $list);
+
         return $view;
     }
 
@@ -68,8 +75,15 @@ final class BackendController extends Controller
     {
         $view = new View($this->app->l11nManager, $request, $response);
 
-        $view->setTemplate('/Modules/BusinessExpenses/Theme/Backend/expenses-profile');
+        $view->setTemplate('/Modules/BusinessExpenses/Theme/Backend/expense-single');
         $view->addData('nav', $this->app->moduleManager->get('Navigation')->createNavigationMid(1001001001, $request, $response));
+
+        $expense = ExpenseMapper::get()
+            ->with('from')
+            ->where('id', (int) $request->getData('id'))
+            ->execute();
+
+        $view->addData('expense', $expense);
 
         return $view;
     }
