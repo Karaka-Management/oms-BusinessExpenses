@@ -54,7 +54,7 @@ final class Installer extends InstallerAbstract
         }
 
         /** @var array $types */
-        $types = \json_decode($fileContent, true);
+        $types         = \json_decode($fileContent, true);
         $expenseTypes  = self::createExpenseTypes($app, $types);
 
         /* Element types */
@@ -64,7 +64,7 @@ final class Installer extends InstallerAbstract
         }
 
         /** @var array $types */
-        $types = \json_decode($fileContent, true);
+        $types         = \json_decode($fileContent, true);
         $elementTypes  = self::createExpenseElementTypes($app, $types);
     }
 

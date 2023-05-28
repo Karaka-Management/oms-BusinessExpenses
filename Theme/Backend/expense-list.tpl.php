@@ -17,7 +17,7 @@ use Modules\BusinessExpenses\Models\ExpenseStatus;
 use phpOMS\Uri\UriFactory;
 
 /** @var \phpOMS\Views\View $this */
-$expenses = $this->getData('expenses') ?? [];
+$expenses      = $this->getData('expenses') ?? [];
 $expenseStatus = ExpenseStatus::getConstants();
 
 echo $this->getData('nav')->render(); ?>
@@ -122,7 +122,7 @@ echo $this->getData('nav')->render(); ?>
                         </label>
                 <tbody>
                 <?php $count = 0; foreach ($expenses as $key => $value) : ++$count;
-                 $url = UriFactory::build('{/base}/businessexpenses/expense?{?}&id=' . $value->id);
+                 $url        = UriFactory::build('{/base}/businessexpenses/expense?{?}&id=' . $value->id);
                  ?>
                 <tr data-href="<?= $url; ?>">
                     <td>

@@ -39,22 +39,22 @@ final class ExpenseElementMapper extends DataMapperFactory
      * @since 1.0.0
      */
     public const COLUMNS = [
-        'bizexpenses_expense_element_id'    => ['name' => 'bizexpenses_expense_element_id',    'type' => 'int',    'internal' => 'id'],
+        'bizexpenses_expense_element_id'          => ['name' => 'bizexpenses_expense_element_id',    'type' => 'int',    'internal' => 'id'],
         'bizexpenses_expense_element_description' => ['name' => 'bizexpenses_expense_element_description', 'type' => 'string', 'internal' => 'description'],
-        'bizexpenses_expense_element_approved' => ['name' => 'bizexpenses_expense_element_approved', 'type' => 'bool', 'internal' => 'approved'],
-        'bizexpenses_expense_element_net' => ['name' => 'bizexpenses_expense_element_net', 'type' => 'Serializable', 'internal' => 'net'],
-        'bizexpenses_expense_element_gross' => ['name' => 'bizexpenses_expense_element_gross', 'type' => 'Serializable', 'internal' => 'gross'],
-        'bizexpenses_expense_element_taxp' => ['name' => 'bizexpenses_expense_element_taxp', 'type' => 'Serializable', 'internal' => 'taxP'],
-        'bizexpenses_expense_element_taxr' => ['name' => 'bizexpenses_expense_element_taxr', 'type' => 'Serializable', 'internal' => 'taxR'],
-        'bizexpenses_expense_element_quantity' => ['name' => 'bizexpenses_expense_element_quantity', 'type' => 'Serializable', 'internal' => 'quantity'],
-        'bizexpenses_expense_element_taxid' => ['name' => 'bizexpenses_expense_element_taxid', 'type' => 'string', 'internal' => 'taxId'],
-        'bizexpenses_expense_element_start' => ['name' => 'bizexpenses_expense_element_start', 'type' => 'DateTime', 'internal' => 'start'],
-        'bizexpenses_expense_element_end' => ['name' => 'bizexpenses_expense_element_end', 'type' => 'DateTime', 'internal' => 'end'],
-        'bizexpenses_expense_element_supplier' => ['name' => 'bizexpenses_expense_element_supplier', 'type' => 'int', 'internal' => 'supplier'],
-        'bizexpenses_expense_element_ref' => ['name' => 'bizexpenses_expense_element_ref', 'type' => 'int', 'internal' => 'ref'],
-        'bizexpenses_expense_element_type' => ['name' => 'bizexpenses_expense_element_type', 'type' => 'int', 'internal' => 'type'],
-        'bizexpenses_expense_element_country' => ['name' => 'bizexpenses_expense_element_country', 'type' => 'string', 'internal' => 'country'],
-        'bizexpenses_expense_element_expense' => ['name' => 'bizexpenses_expense_element_expense', 'type' => 'int', 'internal' => 'expense'],
+        'bizexpenses_expense_element_approved'    => ['name' => 'bizexpenses_expense_element_approved', 'type' => 'bool', 'internal' => 'approved'],
+        'bizexpenses_expense_element_net'         => ['name' => 'bizexpenses_expense_element_net', 'type' => 'Serializable', 'internal' => 'net'],
+        'bizexpenses_expense_element_gross'       => ['name' => 'bizexpenses_expense_element_gross', 'type' => 'Serializable', 'internal' => 'gross'],
+        'bizexpenses_expense_element_taxp'        => ['name' => 'bizexpenses_expense_element_taxp', 'type' => 'Serializable', 'internal' => 'taxP'],
+        'bizexpenses_expense_element_taxr'        => ['name' => 'bizexpenses_expense_element_taxr', 'type' => 'Serializable', 'internal' => 'taxR'],
+        'bizexpenses_expense_element_quantity'    => ['name' => 'bizexpenses_expense_element_quantity', 'type' => 'Serializable', 'internal' => 'quantity'],
+        'bizexpenses_expense_element_taxid'       => ['name' => 'bizexpenses_expense_element_taxid', 'type' => 'string', 'internal' => 'taxId'],
+        'bizexpenses_expense_element_start'       => ['name' => 'bizexpenses_expense_element_start', 'type' => 'DateTime', 'internal' => 'start'],
+        'bizexpenses_expense_element_end'         => ['name' => 'bizexpenses_expense_element_end', 'type' => 'DateTime', 'internal' => 'end'],
+        'bizexpenses_expense_element_supplier'    => ['name' => 'bizexpenses_expense_element_supplier', 'type' => 'int', 'internal' => 'supplier'],
+        'bizexpenses_expense_element_ref'         => ['name' => 'bizexpenses_expense_element_ref', 'type' => 'int', 'internal' => 'ref'],
+        'bizexpenses_expense_element_type'        => ['name' => 'bizexpenses_expense_element_type', 'type' => 'int', 'internal' => 'type'],
+        'bizexpenses_expense_element_country'     => ['name' => 'bizexpenses_expense_element_country', 'type' => 'string', 'internal' => 'country'],
+        'bizexpenses_expense_element_expense'     => ['name' => 'bizexpenses_expense_element_expense', 'type' => 'int', 'internal' => 'expense'],
     ];
 
     /**

@@ -14,7 +14,6 @@
 declare(strict_types=1);
 
 use Modules\BusinessExpenses\Models\NullExpense;
-use phpOMS\Uri\UriFactory;
 
 /** @var \phpOMS\Views\View $this */
 $expense = $this->getData('expense') ?? new NullExpense();

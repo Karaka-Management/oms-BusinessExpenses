@@ -25,9 +25,9 @@ use Modules\BusinessExpenses\Models\ExpenseMapper;
 use Modules\BusinessExpenses\Models\ExpenseStatus;
 use Modules\BusinessExpenses\Models\ExpenseType;
 use Modules\BusinessExpenses\Models\ExpenseTypeL11nMapper;
-use Modules\BusinessExpenses\Models\NullExpenseType;
 use Modules\BusinessExpenses\Models\ExpenseTypeMapper;
 use Modules\BusinessExpenses\Models\NullExpenseElementType;
+use Modules\BusinessExpenses\Models\NullExpenseType;
 use Modules\Media\Models\CollectionMapper;
 use Modules\Media\Models\MediaMapper;
 use Modules\Media\Models\PathSettings;
@@ -377,10 +377,10 @@ final class ApiController extends Controller
      */
     private function createExpenseFromRequest(RequestAbstract $request) : Expense
     {
-        $expense = new Expense();
-        $expense->from = new NullAccount((int) $request->header->account);
-        $expense->type = new NullExpenseType((int) $request->getDataInt('type'));
-        $expense->status = (int) ($request->getDataInt('status') ?? ExpenseStatus::DRAFT);
+        $expense              = new Expense();
+        $expense->from        = new NullAccount((int) $request->header->account);
+        $expense->type        = new NullExpenseType((int) $request->getDataInt('type'));
+        $expense->status      = (int) ($request->getDataInt('status') ?? ExpenseStatus::DRAFT);
         $expense->description = $request->getDataString('description') ?? '';
 
         $country = $request->getDataString('country') ?? '';
@@ -464,19 +464,19 @@ final class ApiController extends Controller
      */
     private function createExpenseElementFromRequest(RequestAbstract $request) : ExpenseElement
     {
-        $element      = new ExpenseElement();
-        $element->expense = (int) $request->getData('expense');
+        $element              = new ExpenseElement();
+        $element->expense     = (int) $request->getData('expense');
         $element->description = $request->getDataString('description') ?? '';
-        $element->type = new NullExpenseElementType((int) $request->getData('type'));
+        $element->type        = new NullExpenseElementType((int) $request->getData('type'));
 
         // @todo: fill from media if available
 
         // @todo: handle different value set (net, gross, taxr, ...).
         // Depending on the value set the other values should be calculated
-        $element->net = new FloatInt($request->getDataInt('net') ?? 0);
-        $element->taxR = new FloatInt($request->getDataInt('taxr') ?? 0);
-        $element->taxP = new FloatInt($request->getDataInt('taxp') ?? 0);
-        $element->gross = new FloatInt($request->getDataInt('gross') ?? 0);
+        $element->net      = new FloatInt($request->getDataInt('net') ?? 0);
+        $element->taxR     = new FloatInt($request->getDataInt('taxr') ?? 0);
+        $element->taxP     = new FloatInt($request->getDataInt('taxp') ?? 0);
+        $element->gross    = new FloatInt($request->getDataInt('gross') ?? 0);
         $element->quantity = new FloatInt($request->getDataInt('quantity') ?? 0);
 
         if ($request->hasData('supplier')) {
@@ -523,7 +523,7 @@ final class ApiController extends Controller
 
         /** @var \Modules\BusinessExpenses\Models\Expense $expense */
         $expense = ExpenseMapper::get()->where('id', (int) $request->getData('expense'))->execute();
-        $path = $this->createExpenseDir($expense);
+        $path    = $this->createExpenseDir($expense);
 
         $element = (int) $request->getData('element');
 

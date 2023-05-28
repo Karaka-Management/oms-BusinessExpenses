@@ -58,21 +58,23 @@ class Expense {
     public FloatInt $taxP;
 
     public \DateTime $start;
+
     public \DateTime $end;
+
     public \DateTimeImmutable $createdAt;
 
     public string $country = ISO3166TwoEnum::_USA;
 
     public function __construct()
     {
-        $this->type = new ExpenseType();
-        $this->start = new \DateTime('now');
-        $this->end = new \DateTime('now');
+        $this->type      = new ExpenseType();
+        $this->start     = new \DateTime('now');
+        $this->end       = new \DateTime('now');
         $this->createdAt = new \DateTimeImmutable('now');
-        $this->from = new Account();
+        $this->from      = new Account();
 
-        $this->net = new FloatInt();
+        $this->net   = new FloatInt();
         $this->gross = new FloatInt();
-        $this->taxP = new FloatInt();
+        $this->taxP  = new FloatInt();
     }
 }
