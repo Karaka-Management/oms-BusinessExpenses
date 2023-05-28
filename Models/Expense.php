@@ -26,7 +26,8 @@ use phpOMS\Stdlib\Base\FloatInt;
  * @link    https://jingga.app
  * @since   1.0.0
  */
-class Expense {
+class Expense
+{
     public int $id = 0;
 
     public Account $from;
