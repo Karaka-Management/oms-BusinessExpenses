@@ -67,7 +67,7 @@ final class ApiController extends Controller
     public function apiExpenseTypeCreate(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
     {
         if (!empty($val = $this->validateExpenseTypeCreate($request))) {
-            $response->set($request->uri->__toString(), new FormValidation($val));
+            $response->data[$request->uri->__toString()] = new FormValidation($val);
             $response->header->status = RequestStatusCode::R_400;
 
             return;
@@ -142,7 +142,7 @@ final class ApiController extends Controller
     public function apiExpenseTypeL11nCreate(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
     {
         if (!empty($val = $this->validateExpenseTypeL11nCreate($request))) {
-            $response->set('expense_type_l11n_create', new FormValidation($val));
+            $response->data['expense_type_l11n_create'] = new FormValidation($val);
             $response->header->status = RequestStatusCode::R_400;
 
             return;
@@ -211,7 +211,7 @@ final class ApiController extends Controller
     public function apiExpenseElementTypeCreate(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
     {
         if (!empty($val = $this->validateExpenseElementTypeCreate($request))) {
-            $response->set($request->uri->__toString(), new FormValidation($val));
+            $response->data[$request->uri->__toString()] = new FormValidation($val);
             $response->header->status = RequestStatusCode::R_400;
 
             return;
@@ -286,7 +286,7 @@ final class ApiController extends Controller
     public function apiExpenseElementTypeL11nCreate(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
     {
         if (!empty($val = $this->validateExpenseElementTypeL11nCreate($request))) {
-            $response->set('expense_element_type_l11n_create', new FormValidation($val));
+            $response->data['expense_element_type_l11n_create'] = new FormValidation($val);
             $response->header->status = RequestStatusCode::R_400;
 
             return;
@@ -355,7 +355,7 @@ final class ApiController extends Controller
     public function apiExpenseCreate(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
     {
         if (!empty($val = $this->validateExpenseCreate($request))) {
-            $response->set('expense_create', new FormValidation($val));
+            $response->data['expense_create'] = new FormValidation($val);
             $response->header->status = RequestStatusCode::R_400;
 
             return;
@@ -434,7 +434,7 @@ final class ApiController extends Controller
     public function apiExpenseElementCreate(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
     {
         if (!empty($val = $this->validateExpenseElementCreate($request))) {
-            $response->set('expense_element_create', new FormValidation($val));
+            $response->data['expense_element_create'] = new FormValidation($val);
             $response->header->status = RequestStatusCode::R_400;
 
             return;
@@ -515,7 +515,7 @@ final class ApiController extends Controller
     public function apiMediaAddToExpenseElement(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
     {
         if (!empty($val = $this->validateMediaAddToExpenseElement($request))) {
-            $response->set($request->uri->__toString(), new FormValidation($val));
+            $response->data[$request->uri->__toString()] = new FormValidation($val);
             $response->header->status = RequestStatusCode::R_400;
 
             return;
@@ -528,7 +528,7 @@ final class ApiController extends Controller
         $element = (int) $request->getData('element');
 
         $uploaded = [];
-        if (!empty($uploadedFiles = $request->getFiles())) {
+        if (!empty($uploadedFiles = $request->files)) {
             $uploaded = $this->app->moduleManager->get('Media')->uploadFiles(
                 names: [],
                 fileNames: [],
@@ -621,7 +621,7 @@ final class ApiController extends Controller
     private function validateMediaAddToExpenseElement(RequestAbstract $request) : array
     {
         $val = [];
-        if (($val['media'] = (!$request->hasData('media') && empty($request->getFiles())))
+        if (($val['media'] = (!$request->hasData('media') && empty($request->files)))
             || ($val['expense'] = !$request->hasData('expense'))
             || ($val['element'] = !$request->hasData('element'))
         ) {
