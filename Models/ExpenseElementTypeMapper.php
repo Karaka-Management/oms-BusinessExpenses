@@ -15,6 +15,7 @@ declare(strict_types=1);
 namespace Modules\BusinessExpenses\Models;
 
 use phpOMS\DataStorage\Database\Mapper\DataMapperFactory;
+use phpOMS\Localization\BaseStringL11nType;
 
 /**
  * Item mapper class.
@@ -24,7 +25,7 @@ use phpOMS\DataStorage\Database\Mapper\DataMapperFactory;
  * @link    https://jingga.app
  * @since   1.0.0
  *
- * @template T of ExpenseType
+ * @template T of BaseStringL11nType
  * @extends DataMapperFactory<T>
  */
 final class ExpenseElementTypeMapper extends DataMapperFactory
@@ -37,7 +38,7 @@ final class ExpenseElementTypeMapper extends DataMapperFactory
      */
     public const COLUMNS = [
         'bizexpenses_expense_element_type_id'         => ['name' => 'bizexpenses_expense_element_type_id',       'type' => 'int',    'internal' => 'id'],
-        'bizexpenses_expense_element_type_name'       => ['name' => 'bizexpenses_expense_element_type_name',     'type' => 'string', 'internal' => 'name', 'autocomplete' => true],
+        'bizexpenses_expense_element_type_name'       => ['name' => 'bizexpenses_expense_element_type_name',     'type' => 'string', 'internal' => 'title', 'autocomplete' => true],
     ];
 
     /**
@@ -62,7 +63,7 @@ final class ExpenseElementTypeMapper extends DataMapperFactory
      * @var class-string<T>
      * @since 1.0.0
      */
-    public const MODEL = ExpenseElementType::class;
+    public const MODEL = BaseStringL11nType::class;
 
     /**
      * Primary table.

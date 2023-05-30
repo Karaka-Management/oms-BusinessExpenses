@@ -23,16 +23,16 @@ use Modules\BusinessExpenses\Models\ExpenseElementTypeL11nMapper;
 use Modules\BusinessExpenses\Models\ExpenseElementTypeMapper;
 use Modules\BusinessExpenses\Models\ExpenseMapper;
 use Modules\BusinessExpenses\Models\ExpenseStatus;
-use Modules\BusinessExpenses\Models\ExpenseType;
 use Modules\BusinessExpenses\Models\ExpenseTypeL11nMapper;
 use Modules\BusinessExpenses\Models\ExpenseTypeMapper;
 use Modules\BusinessExpenses\Models\NullExpenseElementType;
-use Modules\BusinessExpenses\Models\NullExpenseType;
 use Modules\Media\Models\CollectionMapper;
 use Modules\Media\Models\MediaMapper;
 use Modules\Media\Models\PathSettings;
 use Modules\SupplierManagement\Models\NullSupplier;
 use phpOMS\Localization\BaseStringL11n;
+use phpOMS\Localization\NullBaseStringL11nType;
+use phpOMS\Localization\BaseStringL11nType;
 use phpOMS\Localization\ISO639x1Enum;
 use phpOMS\Message\Http\RequestStatusCode;
 use phpOMS\Message\NotificationLevel;
@@ -73,7 +73,7 @@ final class ApiController extends Controller
             return;
         }
 
-        /** @var ExpenseType $type */
+        /** @var BaseStringL11nType $type */
         $type = $this->createExpenseTypeFromRequest($request);
         $this->createModel($request->header->account, $type, ExpenseTypeMapper::class, 'expense_type', $request->getOrigin());
 
@@ -92,14 +92,14 @@ final class ApiController extends Controller
      *
      * @param RequestAbstract $request Request
      *
-     * @return ExpenseType Returns the created type from the request
+     * @return BaseStringL11nType Returns the created type from the request
      *
      * @since 1.0.0
      */
-    public function createExpenseTypeFromRequest(RequestAbstract $request) : ExpenseType
+    public function createExpenseTypeFromRequest(RequestAbstract $request) : BaseStringL11nType
     {
-        $type       = new ExpenseType();
-        $type->name = $request->getDataString('name') ?? '';
+        $type       = new BaseStringL11nType();
+        $type->title = $request->getDataString('name') ?? '';
         $type->setL11n($request->getDataString('title') ?? '', $request->getDataString('language') ?? ISO639x1Enum::_EN);
 
         return $type;
@@ -217,7 +217,7 @@ final class ApiController extends Controller
             return;
         }
 
-        /** @var ExpenseType $type */
+        /** @var BaseStringL11nType $type */
         $type = $this->createExpenseElementTypeFromRequest($request);
         $this->createModel($request->header->account, $type, ExpenseElementTypeMapper::class, 'expense_element_type', $request->getOrigin());
 
@@ -236,13 +236,13 @@ final class ApiController extends Controller
      *
      * @param RequestAbstract $request Request
      *
-     * @return ExpenseType Returns the created type from the request
+     * @return BaseStringL11nType Returns the created type from the request
      *
      * @since 1.0.0
      */
-    public function createExpenseElementTypeFromRequest(RequestAbstract $request) : ExpenseType
+    public function createExpenseElementTypeFromRequest(RequestAbstract $request) : BaseStringL11nType
     {
-        $type       = new ExpenseType();
+        $type       = new BaseStringL11nType();
         $type->name = $request->getDataString('name') ?? '';
         $type->setL11n($request->getDataString('title') ?? '', $request->getDataString('language') ?? ISO639x1Enum::_EN);
 
@@ -379,7 +379,7 @@ final class ApiController extends Controller
     {
         $expense              = new Expense();
         $expense->from        = new NullAccount((int) $request->header->account);
-        $expense->type        = new NullExpenseType((int) $request->getDataInt('type'));
+        $expense->type        = new NullBaseStringL11nType((int) $request->getDataInt('type'));
         $expense->status      = (int) ($request->getDataInt('status') ?? ExpenseStatus::DRAFT);
         $expense->description = $request->getDataString('description') ?? '';
 
@@ -467,7 +467,7 @@ final class ApiController extends Controller
         $element              = new ExpenseElement();
         $element->expense     = (int) $request->getData('expense');
         $element->description = $request->getDataString('description') ?? '';
-        $element->type        = new NullExpenseElementType((int) $request->getData('type'));
+        $element->type        = new NullBaseStringL11nType((int) $request->getData('type'));
 
         // @todo: fill from media if available
 
