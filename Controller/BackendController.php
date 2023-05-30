@@ -48,13 +48,13 @@ final class BackendController extends Controller
         $view = new View($this->app->l11nManager, $request, $response);
 
         $view->setTemplate('/Modules/BusinessExpenses/Theme/Backend/expense-list');
-        $view->addData('nav', $this->app->moduleManager->get('Navigation')->createNavigationMid(1001001001, $request, $response));
+        $view->data['nav'] = $this->app->moduleManager->get('Navigation')->createNavigationMid(1001001001, $request, $response);
 
         $list = ExpenseMapper::getAll()
             ->with('from')
             ->execute();
 
-        $view->addData('expenses', $list);
+        $view->data['expenses'] = $list;
 
         return $view;
     }
@@ -76,14 +76,14 @@ final class BackendController extends Controller
         $view = new View($this->app->l11nManager, $request, $response);
 
         $view->setTemplate('/Modules/BusinessExpenses/Theme/Backend/expense-single');
-        $view->addData('nav', $this->app->moduleManager->get('Navigation')->createNavigationMid(1001001001, $request, $response));
+        $view->data['nav'] = $this->app->moduleManager->get('Navigation')->createNavigationMid(1001001001, $request, $response);
 
         $expense = ExpenseMapper::get()
             ->with('from')
             ->where('id', (int) $request->getData('id'))
             ->execute();
 
-        $view->addData('expense', $expense);
+        $view->data['expense'] = $expense;
 
         return $view;
     }

@@ -17,10 +17,10 @@ use Modules\BusinessExpenses\Models\ExpenseStatus;
 use phpOMS\Uri\UriFactory;
 
 /** @var \phpOMS\Views\View $this */
-$expenses      = $this->getData('expenses') ?? [];
+$expenses      = $this->data['expenses'] ?? [];
 $expenseStatus = ExpenseStatus::getConstants();
 
-echo $this->getData('nav')->render(); ?>
+echo $this->data['nav']->render(); ?>
 <div class="row">
     <div class="col-xs-12">
         <section class="portlet">
