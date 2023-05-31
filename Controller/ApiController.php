@@ -25,15 +25,14 @@ use Modules\BusinessExpenses\Models\ExpenseMapper;
 use Modules\BusinessExpenses\Models\ExpenseStatus;
 use Modules\BusinessExpenses\Models\ExpenseTypeL11nMapper;
 use Modules\BusinessExpenses\Models\ExpenseTypeMapper;
-use Modules\BusinessExpenses\Models\NullExpenseElementType;
 use Modules\Media\Models\CollectionMapper;
 use Modules\Media\Models\MediaMapper;
 use Modules\Media\Models\PathSettings;
 use Modules\SupplierManagement\Models\NullSupplier;
 use phpOMS\Localization\BaseStringL11n;
-use phpOMS\Localization\NullBaseStringL11nType;
 use phpOMS\Localization\BaseStringL11nType;
 use phpOMS\Localization\ISO639x1Enum;
+use phpOMS\Localization\NullBaseStringL11nType;
 use phpOMS\Message\Http\RequestStatusCode;
 use phpOMS\Message\NotificationLevel;
 use phpOMS\Message\RequestAbstract;
@@ -68,7 +67,7 @@ final class ApiController extends Controller
     {
         if (!empty($val = $this->validateExpenseTypeCreate($request))) {
             $response->data[$request->uri->__toString()] = new FormValidation($val);
-            $response->header->status = RequestStatusCode::R_400;
+            $response->header->status                    = RequestStatusCode::R_400;
 
             return;
         }
@@ -98,7 +97,7 @@ final class ApiController extends Controller
      */
     public function createExpenseTypeFromRequest(RequestAbstract $request) : BaseStringL11nType
     {
-        $type       = new BaseStringL11nType();
+        $type        = new BaseStringL11nType();
         $type->title = $request->getDataString('name') ?? '';
         $type->setL11n($request->getDataString('title') ?? '', $request->getDataString('language') ?? ISO639x1Enum::_EN);
 
@@ -143,7 +142,7 @@ final class ApiController extends Controller
     {
         if (!empty($val = $this->validateExpenseTypeL11nCreate($request))) {
             $response->data['expense_type_l11n_create'] = new FormValidation($val);
-            $response->header->status = RequestStatusCode::R_400;
+            $response->header->status                   = RequestStatusCode::R_400;
 
             return;
         }
@@ -212,7 +211,7 @@ final class ApiController extends Controller
     {
         if (!empty($val = $this->validateExpenseElementTypeCreate($request))) {
             $response->data[$request->uri->__toString()] = new FormValidation($val);
-            $response->header->status = RequestStatusCode::R_400;
+            $response->header->status                    = RequestStatusCode::R_400;
 
             return;
         }
@@ -242,7 +241,7 @@ final class ApiController extends Controller
      */
     public function createExpenseElementTypeFromRequest(RequestAbstract $request) : BaseStringL11nType
     {
-        $type       = new BaseStringL11nType();
+        $type        = new BaseStringL11nType();
         $type->title = $request->getDataString('name') ?? '';
         $type->setL11n($request->getDataString('title') ?? '', $request->getDataString('language') ?? ISO639x1Enum::_EN);
 
@@ -287,7 +286,7 @@ final class ApiController extends Controller
     {
         if (!empty($val = $this->validateExpenseElementTypeL11nCreate($request))) {
             $response->data['expense_element_type_l11n_create'] = new FormValidation($val);
-            $response->header->status = RequestStatusCode::R_400;
+            $response->header->status                           = RequestStatusCode::R_400;
 
             return;
         }
@@ -356,7 +355,7 @@ final class ApiController extends Controller
     {
         if (!empty($val = $this->validateExpenseCreate($request))) {
             $response->data['expense_create'] = new FormValidation($val);
-            $response->header->status = RequestStatusCode::R_400;
+            $response->header->status         = RequestStatusCode::R_400;
 
             return;
         }
@@ -435,7 +434,7 @@ final class ApiController extends Controller
     {
         if (!empty($val = $this->validateExpenseElementCreate($request))) {
             $response->data['expense_element_create'] = new FormValidation($val);
-            $response->header->status = RequestStatusCode::R_400;
+            $response->header->status                 = RequestStatusCode::R_400;
 
             return;
         }
@@ -516,7 +515,7 @@ final class ApiController extends Controller
     {
         if (!empty($val = $this->validateMediaAddToExpenseElement($request))) {
             $response->data[$request->uri->__toString()] = new FormValidation($val);
-            $response->header->status = RequestStatusCode::R_400;
+            $response->header->status                    = RequestStatusCode::R_400;
 
             return;
         }
