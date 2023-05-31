@@ -16,6 +16,7 @@ namespace Modules\BusinessExpenses\Models;
 
 use Modules\Admin\Models\Account;
 use Modules\SupplierManagement\Models\Supplier;
+use phpOMS\Localization\BaseStringL11nType;
 use phpOMS\Localization\ISO3166TwoEnum;
 use phpOMS\Stdlib\Base\FloatInt;
 
@@ -47,7 +48,7 @@ class ExpenseElement
 
     public FloatInt $quantity;
 
-    public ExpenseElementType $type;
+    public BaseStringL11nType $type;
 
     public ?Account $ref = null;
 
@@ -65,7 +66,7 @@ class ExpenseElement
 
     public function __construct()
     {
-        $this->type     = new ExpenseElementType();
+        $this->type     = new BaseStringL11nType();
         $this->net      = new FloatInt();
         $this->taxR     = new FloatInt();
         $this->taxP     = new FloatInt();

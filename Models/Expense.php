@@ -15,6 +15,7 @@ declare(strict_types=1);
 namespace Modules\BusinessExpenses\Models;
 
 use Modules\Admin\Models\Account;
+use phpOMS\Localization\BaseStringL11nType;
 use phpOMS\Localization\ISO3166TwoEnum;
 use phpOMS\Stdlib\Base\FloatInt;
 
@@ -34,7 +35,7 @@ class Expense
 
     public int $status = ExpenseStatus::DRAFT;
 
-    public ExpenseType $type;
+    public BaseStringL11nType $type;
 
     public string $description = '';
 
@@ -68,7 +69,7 @@ class Expense
 
     public function __construct()
     {
-        $this->type      = new ExpenseType();
+        $this->type      = new BaseStringL11nType();
         $this->start     = new \DateTime('now');
         $this->end       = new \DateTime('now');
         $this->createdAt = new \DateTimeImmutable('now');

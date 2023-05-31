@@ -243,7 +243,7 @@ final class ApiController extends Controller
     public function createExpenseElementTypeFromRequest(RequestAbstract $request) : BaseStringL11nType
     {
         $type       = new BaseStringL11nType();
-        $type->name = $request->getDataString('name') ?? '';
+        $type->title = $request->getDataString('name') ?? '';
         $type->setL11n($request->getDataString('title') ?? '', $request->getDataString('language') ?? ISO639x1Enum::_EN);
 
         return $type;
@@ -443,7 +443,7 @@ final class ApiController extends Controller
         $element = $this->createExpenseElementFromRequest($request);
         $this->createModel($request->header->account, $element, ExpenseElementMapper::class, 'expense_element', $request->getOrigin());
 
-        if ($request->hasFiles()) {
+        if (!empty($request->files)) {
             $request->setData('element', $element->id, true);
             $this->apiMediaAddToExpenseElement($request, $response, $data);
 
