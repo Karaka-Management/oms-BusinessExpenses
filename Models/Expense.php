@@ -33,6 +33,8 @@ class Expense
 
     public Account $from;
 
+    public ?Account $approvedBy = null;
+
     public int $status = ExpenseStatus::DRAFT;
 
     public BaseStringL11nType $type;
@@ -66,6 +68,8 @@ class Expense
     public \DateTimeImmutable $createdAt;
 
     public string $country = ISO3166TwoEnum::_USA;
+
+    public array $notes = [];
 
     public function __construct()
     {

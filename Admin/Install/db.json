@@ -120,6 +120,14 @@
                 "type": "TINYINT(1)",
                 "null": false
             },
+            "bizexpenses_expense_approvedby": {
+                "name": "bizexpenses_expense_approvedby",
+                "type": "INT",
+                "null": true,
+                "default": null,
+                "foreignTable": "account",
+                "foreignKey": "account_id"
+            },
             "bizexpenses_expense_paid": {
                 "name": "bizexpenses_expense_paid",
                 "type": "TINYINT(1)",
@@ -198,6 +206,14 @@
                 "name": "bizexpenses_expense_element_approved",
                 "type": "TINYINT(1)",
                 "null": false
+            },
+            "bizexpenses_expense_element_approvedby": {
+                "name": "bizexpenses_expense_element_approvedby",
+                "type": "INT",
+                "null": true,
+                "default": null,
+                "foreignTable": "account",
+                "foreignKey": "account_id"
             },
             "bizexpenses_expense_element_net": {
                 "name": "bizexpenses_expense_element_net",
@@ -327,6 +343,32 @@
                 "null": false,
                 "foreignTable": "media",
                 "foreignKey": "media_id"
+            }
+        }
+    },
+    "bizexpenses_expense_note": {
+        "name": "bizexpenses_expense_note",
+        "fields": {
+            "bizexpenses_expense_note_id": {
+                "name": "bizexpenses_expense_note_id",
+                "type": "INT",
+                "null": false,
+                "primary": true,
+                "autoincrement": true
+            },
+            "bizexpenses_expense_note_expense": {
+                "name": "bizexpenses_expense_note_expense",
+                "type": "INT",
+                "null": false,
+                "foreignTable": "bizexpenses_expense",
+                "foreignKey": "bizexpenses_expense_id"
+            },
+            "bizexpenses_expense_note_doc": {
+                "name": "bizexpenses_expense_note_doc",
+                "type": "INT",
+                "null": false,
+                "foreignTable": "editor_doc",
+                "foreignKey": "editor_doc_id"
             }
         }
     }

@@ -17,6 +17,7 @@ namespace Modules\BusinessExpenses\Models;
 use Modules\Admin\Models\AccountMapper;
 use Modules\Media\Models\MediaMapper;
 use phpOMS\DataStorage\Database\Mapper\DataMapperFactory;
+use Modules\Editor\Models\EditorDocMapper;
 
 /**
  *  mapper class.
@@ -42,6 +43,7 @@ final class ExpenseMapper extends DataMapperFactory
         'bizexpenses_expense_status'      => ['name' => 'bizexpenses_expense_status', 'type' => 'int', 'internal' => 'status'],
         'bizexpenses_expense_description' => ['name' => 'bizexpenses_expense_description', 'type' => 'string', 'internal' => 'description'],
         'bizexpenses_expense_approved'    => ['name' => 'bizexpenses_expense_approved', 'type' => 'bool', 'internal' => 'approved'],
+        'bizexpenses_expense_approvedby'    => ['name' => 'bizexpenses_expense_approvedby', 'type' => 'bool', 'internal' => 'approvedBy'],
         'bizexpenses_expense_paid'        => ['name' => 'bizexpenses_expense_paid', 'type' => 'bool', 'internal' => 'paid'],
         'bizexpenses_expense_net'         => ['name' => 'bizexpenses_expense_net', 'type' => 'Serializable', 'internal' => 'net'],
         'bizexpenses_expense_gross'       => ['name' => 'bizexpenses_expense_gross', 'type' => 'Serializable', 'internal' => 'gross'],
@@ -73,6 +75,12 @@ final class ExpenseMapper extends DataMapperFactory
             'external' => 'bizexpenses_expense_media_dst',
             'self'     => 'bizexpenses_expense_media_src',
         ],
+        'notes' => [
+            'mapper'   => EditorDocMapper::class,       /* mapper of the related object */
+            'table'    => 'bizexpenses_expense_note',         /* table of the related object, null if no relation table is used (many->1) */
+            'external' => 'bizexpenses_expense_note_doc',
+            'self'     => 'bizexpenses_expense_note_expense',
+        ],
     ];
 
     /**
@@ -85,6 +93,10 @@ final class ExpenseMapper extends DataMapperFactory
         'from' => [
             'mapper'     => AccountMapper::class,
             'external'   => 'bizexpenses_expense_from',
+        ],
+        'approvedBy' => [
+            'mapper'     => AccountMapper::class,
+            'external'   => 'bizexpenses_expense_approvedby',
         ],
     ];
 

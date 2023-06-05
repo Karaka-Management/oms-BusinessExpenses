@@ -36,6 +36,8 @@ class ExpenseElement
 
     public bool $approved = false;
 
+    public ?Account $approvedBy = null;
+
     public string $description = '';
 
     public FloatInt $net;

@@ -42,6 +42,7 @@ final class ExpenseElementMapper extends DataMapperFactory
         'bizexpenses_expense_element_id'          => ['name' => 'bizexpenses_expense_element_id',    'type' => 'int',    'internal' => 'id'],
         'bizexpenses_expense_element_description' => ['name' => 'bizexpenses_expense_element_description', 'type' => 'string', 'internal' => 'description'],
         'bizexpenses_expense_element_approved'    => ['name' => 'bizexpenses_expense_element_approved', 'type' => 'bool', 'internal' => 'approved'],
+        'bizexpenses_expense_element_approvedby'    => ['name' => 'bizexpenses_expense_element_approvedby', 'type' => 'bool', 'internal' => 'approvedBy'],
         'bizexpenses_expense_element_net'         => ['name' => 'bizexpenses_expense_element_net', 'type' => 'Serializable', 'internal' => 'net'],
         'bizexpenses_expense_element_gross'       => ['name' => 'bizexpenses_expense_element_gross', 'type' => 'Serializable', 'internal' => 'gross'],
         'bizexpenses_expense_element_taxp'        => ['name' => 'bizexpenses_expense_element_taxp', 'type' => 'Serializable', 'internal' => 'taxP'],
@@ -86,6 +87,10 @@ final class ExpenseElementMapper extends DataMapperFactory
         'supplier' => [
             'mapper'     => SupplierMapper::class,
             'external'   => 'bizexpenses_expense_element_supplier',
+        ],
+        'approvedBy' => [
+            'mapper'     => AccountMapper::class,
+            'external'   => 'bizexpenses_expense_element_approvedby',
         ],
     ];
 
