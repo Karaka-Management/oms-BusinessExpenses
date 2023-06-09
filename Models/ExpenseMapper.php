@@ -69,7 +69,7 @@ final class ExpenseMapper extends DataMapperFactory
             'self'         => 'bizexpenses_expense_element_expense',
             'external'     => null,
         ],
-        'media'        => [
+        'files'        => [
             'mapper'   => MediaMapper::class,
             'table'    => 'bizexpenses_expense_media',
             'external' => 'bizexpenses_expense_media_dst',

@@ -53,8 +53,6 @@ class Expense
      */
     public array $elements = [];
 
-    public array $media = [];
-
     public FloatInt $net;
 
     public FloatInt $gross;
@@ -69,8 +67,6 @@ class Expense
 
     public string $country = ISO3166TwoEnum::_USA;
 
-    public array $notes = [];
-
     public function __construct()
     {
         $this->type      = new BaseStringL11nType();
@@ -83,4 +79,7 @@ class Expense
         $this->gross = new FloatInt();
         $this->taxP  = new FloatInt();
     }
+
+    use \Modules\Media\Models\MediaListTrait;
+    use \Modules\Editor\Models\EditorDocListTrait;
 }
