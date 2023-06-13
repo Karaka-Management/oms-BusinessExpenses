@@ -565,6 +565,7 @@ final class ApiController extends Controller
                 }
 
                 if ($collection === null) {
+                    /** @var \Modules\Media\Models\Collection $collection */
                     $collection = MediaMapper::getParentCollection($path)->limit(1)->execute();
 
                     if ($collection->id === 0) {
@@ -702,7 +703,7 @@ final class ApiController extends Controller
     {
         if (!empty($val = $this->validateNoteCreate($request))) {
             $response->data['expense_note_create'] = new FormValidation($val);
-            $response->header->status           = RequestStatusCode::R_400;
+            $response->header->status              = RequestStatusCode::R_400;
 
             return;
         }

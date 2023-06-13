@@ -71,10 +71,10 @@ final class Installer extends InstallerAbstract
     /**
      * Install fuel type
      *
-     * @param ApplicationAbstract                                                                                                                                                              $app        Application
-     * @param array<array{name:string, l11n?:array<string, string>, is_required?:bool, is_custom_allowed?:bool, validation_pattern?:string, value_type?:string, values?:array<string, mixed>}> $attributes Attribute definition
+     * @param ApplicationAbstract $app   Application
+     * @param array               $types Type definition
      *
-     * @return array<string, array>
+     * @return array
      *
      * @since 1.0.0
      */
@@ -132,10 +132,10 @@ final class Installer extends InstallerAbstract
     /**
      * Install fuel type
      *
-     * @param ApplicationAbstract                                                                                                                                                              $app        Application
-     * @param array<array{name:string, l11n?:array<string, string>, is_required?:bool, is_custom_allowed?:bool, validation_pattern?:string, value_type?:string, values?:array<string, mixed>}> $attributes Attribute definition
+     * @param ApplicationAbstract $app   Application
+     * @param array               $types Type definition
      *
-     * @return array<string, array>
+     * @return array
      *
      * @since 1.0.0
      */

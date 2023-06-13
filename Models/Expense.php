@@ -67,6 +67,11 @@ class Expense
 
     public string $country = ISO3166TwoEnum::_USA;
 
+    /**
+     * Constructor.
+     *
+     * @since 1.0.0
+     */
     public function __construct()
     {
         $this->type      = new BaseStringL11nType();

@@ -27,7 +27,7 @@ use Modules\Editor\Models\EditorDocMapper;
  * @link    https://jingga.app
  * @since   1.0.0
  *
- * @template T of BaseStringL11n
+ * @template T of Expense
  * @extends DataMapperFactory<T>
  */
 final class ExpenseMapper extends DataMapperFactory
