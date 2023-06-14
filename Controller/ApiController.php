@@ -547,7 +547,7 @@ final class ApiController extends Controller
                     $element,
                     $media->id,
                     ExpenseElementMapper::class,
-                    'media',
+                    'files',
                     '',
                     $request->getOrigin()
                 );
@@ -596,7 +596,7 @@ final class ApiController extends Controller
                     $element,
                     (int) $media,
                     ExpenseElementMapper::class,
-                    'media',
+                    'files',
                     '',
                     $request->getOrigin()
                 );
