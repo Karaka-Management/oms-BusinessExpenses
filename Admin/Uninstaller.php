@@ -1,12 +1,12 @@
 <?php
 /**
- * Orange Management
+ * Karaka
  *
- * PHP Version 7.4
+ * PHP Version 8.1
  *
  * @package   Modules\BusinessExpenses\Admin
  * @copyright Dennis Eichhorn
- * @license   OMS License 1.0
+ * @license   OMS License 2.0
  * @version   1.0.0
  * @link      https://orange-management.org
  */
@@ -20,7 +20,7 @@ use phpOMS\Module\UninstallerAbstract;
  * Uninstaller class.
  *
  * @package Modules\BusinessExpenses\Admin
- * @license OMS License 1.0
+ * @license OMS License 2.0
  * @link    https://orange-management.org
  * @since   1.0.0
  */
