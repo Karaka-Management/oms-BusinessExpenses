@@ -37,7 +37,6 @@ use phpOMS\Message\Http\RequestStatusCode;
 use phpOMS\Message\NotificationLevel;
 use phpOMS\Message\RequestAbstract;
 use phpOMS\Message\ResponseAbstract;
-use phpOMS\Model\Message\FormValidation;
 use phpOMS\Stdlib\Base\FloatInt;
 
 /**
@@ -47,6 +46,9 @@ use phpOMS\Stdlib\Base\FloatInt;
  * @license OMS License 2.0
  * @link    https://jingga.app
  * @since   1.0.0
+ *
+ * @todo: create Media add and remove functions for the expense report itself (not just the elements).
+ * Also adjust the db schema for that.
  */
 final class ApiController extends Controller
 {
@@ -66,8 +68,8 @@ final class ApiController extends Controller
     public function apiExpenseTypeCreate(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
     {
         if (!empty($val = $this->validateExpenseTypeCreate($request))) {
-            $response->data[$request->uri->__toString()] = new FormValidation($val);
-            $response->header->status                    = RequestStatusCode::R_400;
+            $response->header->status = RequestStatusCode::R_400;
+            $this->createInvalidCreateResponse($request, $response, $val);
 
             return;
         }
@@ -75,15 +77,7 @@ final class ApiController extends Controller
         /** @var BaseStringL11nType $type */
         $type = $this->createExpenseTypeFromRequest($request);
         $this->createModel($request->header->account, $type, ExpenseTypeMapper::class, 'expense_type', $request->getOrigin());
-
-        $this->fillJsonResponse(
-            $request,
-            $response,
-            NotificationLevel::OK,
-            '',
-            $this->app->l11nManager->getText($response->header->l11n->language, '0', '0', 'SucessfulCreate'),
-            $type
-        );
+        $this->createStandardCreateResponse($request, $response, $type);
     }
 
     /**
@@ -141,15 +135,15 @@ final class ApiController extends Controller
     public function apiExpenseTypeL11nCreate(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
     {
         if (!empty($val = $this->validateExpenseTypeL11nCreate($request))) {
-            $response->data['expense_type_l11n_create'] = new FormValidation($val);
-            $response->header->status                   = RequestStatusCode::R_400;
+            $response->header->status = RequestStatusCode::R_400;
+            $this->createInvalidCreateResponse($request, $response, $val);
 
             return;
         }
 
         $typeL11n = $this->createExpenseTypeL11nFromRequest($request);
         $this->createModel($request->header->account, $typeL11n, ExpenseTypeL11nMapper::class, 'expense_type_l11n', $request->getOrigin());
-        $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Localization', 'Localization successfully created', $typeL11n);
+        $this->createStandardCreateResponse($request, $response, $typeL11n);
     }
 
     /**
@@ -210,8 +204,8 @@ final class ApiController extends Controller
     public function apiExpenseElementTypeCreate(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
     {
         if (!empty($val = $this->validateExpenseElementTypeCreate($request))) {
-            $response->data[$request->uri->__toString()] = new FormValidation($val);
-            $response->header->status                    = RequestStatusCode::R_400;
+            $response->header->status = RequestStatusCode::R_400;
+            $this->createInvalidCreateResponse($request, $response, $val);
 
             return;
         }
@@ -219,15 +213,7 @@ final class ApiController extends Controller
         /** @var BaseStringL11nType $type */
         $type = $this->createExpenseElementTypeFromRequest($request);
         $this->createModel($request->header->account, $type, ExpenseElementTypeMapper::class, 'expense_element_type', $request->getOrigin());
-
-        $this->fillJsonResponse(
-            $request,
-            $response,
-            NotificationLevel::OK,
-            '',
-            $this->app->l11nManager->getText($response->header->l11n->language, '0', '0', 'SucessfulCreate'),
-            $type
-        );
+        $this->createStandardCreateResponse($request, $response, $type);
     }
 
     /**
@@ -285,15 +271,15 @@ final class ApiController extends Controller
     public function apiExpenseElementTypeL11nCreate(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
     {
         if (!empty($val = $this->validateExpenseElementTypeL11nCreate($request))) {
-            $response->data['expense_element_type_l11n_create'] = new FormValidation($val);
-            $response->header->status                           = RequestStatusCode::R_400;
+            $response->header->status = RequestStatusCode::R_400;
+            $this->createInvalidCreateResponse($request, $response, $val);
 
             return;
         }
 
         $typeL11n = $this->createExpenseElementTypeL11nFromRequest($request);
         $this->createModel($request->header->account, $typeL11n, ExpenseElementTypeL11nMapper::class, 'expense_element_type_l11n', $request->getOrigin());
-        $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Localization', 'Localization successfully created', $typeL11n);
+        $this->createStandardCreateResponse($request, $response, $typeL11n);
     }
 
     /**
@@ -354,15 +340,15 @@ final class ApiController extends Controller
     public function apiExpenseCreate(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
     {
         if (!empty($val = $this->validateExpenseCreate($request))) {
-            $response->data['expense_create'] = new FormValidation($val);
-            $response->header->status         = RequestStatusCode::R_400;
+            $response->header->status = RequestStatusCode::R_400;
+            $this->createInvalidCreateResponse($request, $response, $val);
 
             return;
         }
 
         $expense = $this->createExpenseFromRequest($request);
         $this->createModel($request->header->account, $expense, ExpenseMapper::class, 'expense', $request->getOrigin());
-        $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Expense', 'Successfully created', $expense);
+        $this->createStandardCreateResponse($request, $response, $expense);
     }
 
     /**
@@ -379,7 +365,7 @@ final class ApiController extends Controller
         $expense              = new Expense();
         $expense->from        = new NullAccount((int) $request->header->account);
         $expense->type        = new NullBaseStringL11nType((int) $request->getDataInt('type'));
-        $expense->status      = (int) ($request->getDataInt('status') ?? ExpenseStatus::DRAFT);
+        $expense->status      = $request->getDataInt('status') ?? ExpenseStatus::DRAFT;
         $expense->description = $request->getDataString('description') ?? '';
 
         $country = $request->getDataString('country') ?? '';
@@ -433,14 +419,24 @@ final class ApiController extends Controller
     public function apiExpenseElementCreate(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
     {
         if (!empty($val = $this->validateExpenseElementCreate($request))) {
-            $response->data['expense_element_create'] = new FormValidation($val);
-            $response->header->status                 = RequestStatusCode::R_400;
+            $response->header->status = RequestStatusCode::R_400;
+            $this->createInvalidCreateResponse($request, $response, $val);
 
             return;
         }
 
         $element = $this->createExpenseElementFromRequest($request);
         $this->createModel($request->header->account, $element, ExpenseElementMapper::class, 'expense_element', $request->getOrigin());
+
+        /* @var \Modules\BusinessExpenses\Models\Expense $expense */
+        $old = ExpenseMapper::get()
+            ->with('elements')
+            ->where('id', (int) $request->getData('expense'))
+            ->execute();
+
+        $new = clone $old;
+        $new->recalculate();
+        $this->updateModel($request->header->account, $old, $new, ExpenseMapper::class, 'expense', $request->getOrigin());
 
         if (!empty($request->files)) {
             $request->setData('element', $element->id, true);
@@ -449,7 +445,7 @@ final class ApiController extends Controller
             // @todo: refill element with parsed data from media (ocr)
         }
 
-        $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Element', 'Successfully created', $element);
+        $this->createStandardCreateResponse($request, $response, $element);
     }
 
     /**
@@ -514,8 +510,8 @@ final class ApiController extends Controller
     public function apiMediaAddToExpenseElement(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
     {
         if (!empty($val = $this->validateMediaAddToExpenseElement($request))) {
-            $response->data[$request->uri->__toString()] = new FormValidation($val);
-            $response->header->status                    = RequestStatusCode::R_400;
+            $response->header->status = RequestStatusCode::R_400;
+            $this->createInvalidAddResponse($request, $response, $val);
 
             return;
         }
@@ -632,6 +628,113 @@ final class ApiController extends Controller
     }
 
     /**
+     * Api method to remove Media from ExpenseElement
+     *
+     * @param RequestAbstract  $request  Request
+     * @param ResponseAbstract $response Response
+     * @param mixed            $data     Generic data
+     *
+     * @return void
+     *
+     * @api
+     *
+     * @since 1.0.0
+     */
+    public function apiMediaRemoveFromExpenseElement(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
+    {
+        // @todo: check that it is not system generated media!
+        if (!empty($val = $this->validateMediaRemoveFromExpenseElement($request))) {
+            $response->header->status = RequestStatusCode::R_400;
+            $this->createInvalidRemoveResponse($request, $response, $val);
+
+            return;
+        }
+
+        /** @var \Modules\Media\Models\Media $media */
+        $media = MediaMapper::get()->where('id', (int) $request->getData('media'))->execute();
+
+        /** @var \Modules\BusinessExpenses\Models\Expense $expense */
+        $expense = ExpenseMapper::get()->where('id', (int) $request->getData('expense'))->execute();
+
+        /** @var \Modules\BusinessExpenses\Models\ExpenseElement $element */
+        $element = ExpenseElementMapper::get()->where('id', (int) $request->getData('element'))->execute();
+
+        $path = $this->createExpenseDir($expense);
+
+        $elementCollection = CollectionMapper::getAll()
+            ->where('virtual', $path)
+            ->execute();
+
+        if (\count($elementCollection) !== 1) {
+            // For some reason there are multiple collections with the same virtual path?
+            // @todo: check if this is the correct way to handle it or if we need to make sure that it is a collection
+            return;
+        }
+
+        $collection = \reset($elementCollection);
+
+        $this->deleteModelRelation(
+            $request->header->account,
+            $element->id,
+            $media->id,
+            BillMapper::class,
+            'files',
+            '',
+            $request->getOrigin()
+        );
+
+        $this->deleteModelRelation(
+            $request->header->account,
+            $collection->id,
+            $media->id,
+            CollectionMapper::class,
+            'sources',
+            '',
+            $request->getOrigin()
+        );
+
+        $referenceCount = MediaMapper::countInternalReferences($media->id);
+
+        if ($referenceCount === 0) {
+            // Is not used anywhere else -> remove from db and file system
+
+            // @todo: remove media types from media
+
+            $this->deleteModel($request->header->account, $media, MediaMapper::class, 'element_media', $request->getOrigin());
+
+            if (\is_dir($media->getAbsolutePath())) {
+                \phpOMS\System\File\Local\Directory::delete($media->getAbsolutePath());
+            } else {
+                \phpOMS\System\File\Local\File::delete($media->getAbsolutePath());
+            }
+        }
+
+        $this->createStandardDeleteResponse($request, $response, $media);
+    }
+
+    /**
+     * Validate Media remove from ExpenseElement request
+     *
+     * @param RequestAbstract $request Request
+     *
+     * @return array<string, bool>
+     *
+     * @since 1.0.0
+     */
+    private function validateMediaRemoveFromExpenseElement(RequestAbstract $request) : array
+    {
+        $val = [];
+        if (($val['media'] = !$request->hasData('media'))
+            || ($val['expense'] = !$request->hasData('expense'))
+            || ($val['element'] = !$request->hasData('element'))
+        ) {
+            return $val;
+        }
+
+        return [];
+    }
+
+    /**
      * Validate expense attribute l11n create request
      *
      * @param RequestAbstract $request Request
@@ -702,8 +805,8 @@ final class ApiController extends Controller
     public function apiNoteCreate(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
     {
         if (!empty($val = $this->validateNoteCreate($request))) {
-            $response->data['expense_note_create'] = new FormValidation($val);
-            $response->header->status              = RequestStatusCode::R_400;
+            $response->header->status = RequestStatusCode::R_400;
+            $this->createInvalidCreateResponse($request, $response, $val);
 
             return;
         }
@@ -738,6 +841,802 @@ final class ApiController extends Controller
         $val = [];
         if (($val['id'] = !$request->hasData('id'))
         ) {
+            return $val;
+        }
+
+        return [];
+    }
+
+    /**
+     * Api method to update Note
+     *
+     * @param RequestAbstract  $request  Request
+     * @param ResponseAbstract $response Response
+     * @param mixed            $data     Generic data
+     *
+     * @return void
+     *
+     * @api
+     *
+     * @since 1.0.0
+     */
+    public function apiNoteUpdate(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
+    {
+        // @todo: check permissions
+        $this->app->moduleManager->get('Editor', 'Api')->apiEditorDocUpdate($request, $response, $data);
+    }
+
+    /**
+     * Api method to delete Note
+     *
+     * @param RequestAbstract  $request  Request
+     * @param ResponseAbstract $response Response
+     * @param mixed            $data     Generic data
+     *
+     * @return void
+     *
+     * @api
+     *
+     * @since 1.0.0
+     */
+    public function apiNoteDelete(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
+    {
+        // @todo: check permissions
+        $this->app->moduleManager->get('Editor', 'Api')->apiEditorDocDelete($request, $response, $data);
+    }
+
+    /**
+     * Api method to update ExpenseType
+     *
+     * @param RequestAbstract  $request  Request
+     * @param ResponseAbstract $response Response
+     * @param mixed            $data     Generic data
+     *
+     * @return void
+     *
+     * @api
+     *
+     * @since 1.0.0
+     */
+    public function apiExpenseTypeUpdate(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
+    {
+        if (!empty($val = $this->validateExpenseTypeUpdate($request))) {
+            $response->header->status = RequestStatusCode::R_400;
+            $this->createInvalidUpdateResponse($request, $response, $val);
+
+            return;
+        }
+
+        /** @var BaseStringL11nType $old */
+        $old = ExpenseTypeMapper::get()->where('id', (int) $request->getData('id'))->execute();
+        $new = $this->updateExpenseTypeFromRequest($request, clone $old);
+
+        $this->updateModel($request->header->account, $old, $new, ExpenseTypeMapper::class, 'expense_type', $request->getOrigin());
+        $this->createStandardUpdateResponse($request, $response, $new);
+    }
+
+    /**
+     * Method to update ExpenseType from request.
+     *
+     * @param RequestAbstract  $request Request
+     * @param BaseStringL11nType     $new     Model to modify
+     *
+     * @return BaseStringL11nType
+     *
+     * @todo: implement
+     *
+     * @since 1.0.0
+     */
+    public function updateExpenseTypeFromRequest(RequestAbstract $request, BaseStringL11nType $new) : BaseStringL11nType
+    {
+        $new->title = $request->getDataString('name') ?? $new->title;
+
+        return $new;
+    }
+
+    /**
+     * Validate ExpenseType update request
+     *
+     * @param RequestAbstract $request Request
+     *
+     * @return array<string, bool>
+     *
+     * @todo: implement
+     *
+     * @since 1.0.0
+     */
+    private function validateExpenseTypeUpdate(RequestAbstract $request) : array
+    {
+        $val = [];
+        if (($val['id'] = !$request->hasData('id'))) {
+            return $val;
+        }
+
+        return [];
+    }
+
+    /**
+     * Api method to delete ExpenseType
+     *
+     * @param RequestAbstract  $request  Request
+     * @param ResponseAbstract $response Response
+     * @param mixed            $data     Generic data
+     *
+     * @return void
+     *
+     * @api
+     *
+     * @since 1.0.0
+     */
+    public function apiExpenseTypeDelete(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
+    {
+        // @todo: check if type unused
+        if (!empty($val = $this->validateExpenseTypeDelete($request))) {
+            $response->header->status = RequestStatusCode::R_400;
+            $this->createInvalidDeleteResponse($request, $response, $val);
+
+            return;
+        }
+
+        /** @var \Modules\BusinessExpenses\Models\ExpenseType $expenseType */
+        $expenseType = ExpenseTypeMapper::get()->where('id', (int) $request->getData('id'))->execute();
+        $this->deleteModel($request->header->account, $expenseType, ExpenseTypeMapper::class, 'expense_type', $request->getOrigin());
+        $this->createStandardDeleteResponse($request, $response, $expenseType);
+    }
+
+    /**
+     * Validate ExpenseType delete request
+     *
+     * @param RequestAbstract $request Request
+     *
+     * @return array<string, bool>
+     *
+     * @since 1.0.0
+     */
+    private function validateExpenseTypeDelete(RequestAbstract $request) : array
+    {
+        $val = [];
+        if (($val['id'] = !$request->hasData('id'))) {
+            return $val;
+        }
+
+        return [];
+    }
+
+    /**
+     * Api method to update ExpenseTypeL11n
+     *
+     * @param RequestAbstract  $request  Request
+     * @param ResponseAbstract $response Response
+     * @param mixed            $data     Generic data
+     *
+     * @return void
+     *
+     * @api
+     *
+     * @since 1.0.0
+     */
+    public function apiExpenseTypeL11nUpdate(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
+    {
+        if (!empty($val = $this->validateExpenseTypeL11nUpdate($request))) {
+            $response->header->status = RequestStatusCode::R_400;
+            $this->createInvalidUpdateResponse($request, $response, $val);
+
+            return;
+        }
+
+        /** @var BaseStringL11n $old */
+        $old = ExpenseTypeL11nMapper::get()->where('id', (int) $request->getData('id'))->execute();
+        $new = $this->updateExpenseTypeL11nFromRequest($request, clone $old);
+
+        $this->updateModel($request->header->account, $old, $new, ExpenseTypeL11nMapper::class, 'expense_type_l11n', $request->getOrigin());
+        $this->createStandardUpdateResponse($request, $response, $new);
+    }
+
+    /**
+     * Method to update ExpenseTypeL11n from request.
+     *
+     * @param RequestAbstract  $request Request
+     * @param BaseStringL11n     $new     Model to modify
+     *
+     * @return BaseStringL11n
+     *
+     * @todo: implement
+     *
+     * @since 1.0.0
+     */
+    public function updateExpenseTypeL11nFromRequest(RequestAbstract $request, BaseStringL11n $new) : BaseStringL11n
+    {
+        $new->setLanguage(
+            $request->getDataString('language') ?? $new->language
+        );
+        $new->content = $request->getDataString('title') ?? $new->content;
+
+        return $new;
+    }
+
+    /**
+     * Validate ExpenseTypeL11n update request
+     *
+     * @param RequestAbstract $request Request
+     *
+     * @return array<string, bool>
+     *
+     * @todo: implement
+     *
+     * @since 1.0.0
+     */
+    private function validateExpenseTypeL11nUpdate(RequestAbstract $request) : array
+    {
+        $val = [];
+        if (($val['id'] = !$request->hasData('id'))) {
+            return $val;
+        }
+
+        return [];
+    }
+
+    /**
+     * Api method to delete ExpenseTypeL11n
+     *
+     * @param RequestAbstract  $request  Request
+     * @param ResponseAbstract $response Response
+     * @param mixed            $data     Generic data
+     *
+     * @return void
+     *
+     * @api
+     *
+     * @since 1.0.0
+     */
+    public function apiExpenseTypeL11nDelete(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
+    {
+        if (!empty($val = $this->validateExpenseTypeL11nDelete($request))) {
+            $response->header->status = RequestStatusCode::R_400;
+            $this->createInvalidDeleteResponse($request, $response, $val);
+
+            return;
+        }
+
+        $expenseTypeL11n = ExpenseTypeL11nMapper::get()->where('id', (int) $request->getData('id'))->execute();
+        $this->deleteModel($request->header->account, $expenseTypeL11n, ExpenseTypeL11nMapper::class, 'expense_type_l11n', $request->getOrigin());
+        $this->createStandardDeleteResponse($request, $response, $expenseTypeL11n);
+    }
+
+    /**
+     * Validate ExpenseTypeL11n delete request
+     *
+     * @param RequestAbstract $request Request
+     *
+     * @return array<string, bool>
+     *
+     * @todo: implement
+     *
+     * @since 1.0.0
+     */
+    private function validateExpenseTypeL11nDelete(RequestAbstract $request) : array
+    {
+        $val = [];
+        if (($val['id'] = !$request->hasData('id'))) {
+            return $val;
+        }
+
+        return [];
+    }
+
+    /**
+     * Api method to update ExpenseElementType
+     *
+     * @param RequestAbstract  $request  Request
+     * @param ResponseAbstract $response Response
+     * @param mixed            $data     Generic data
+     *
+     * @return void
+     *
+     * @api
+     *
+     * @since 1.0.0
+     */
+    public function apiExpenseElementTypeUpdate(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
+    {
+        if (!empty($val = $this->validateExpenseElementTypeUpdate($request))) {
+            $response->header->status = RequestStatusCode::R_400;
+            $this->createInvalidUpdateResponse($request, $response, $val);
+
+            return;
+        }
+
+        /** @var BaseStringL11nType $old */
+        $old = ExpenseElementTypeMapper::get()->where('id', (int) $request->getData('id'))->execute();
+        $new = $this->updateExpenseElementTypeFromRequest($request, clone $old);
+
+        $this->updateModel($request->header->account, $old, $new, ExpenseElementTypeMapper::class, 'expense_element_type', $request->getOrigin());
+        $this->createStandardUpdateResponse($request, $response, $new);
+    }
+
+    /**
+     * Method to update ExpenseElementType from request.
+     *
+     * @param RequestAbstract  $request Request
+     * @param BaseStringL11nType     $new     Model to modify
+     *
+     * @return BaseStringL11nType
+     *
+     * @todo: implement
+     *
+     * @since 1.0.0
+     */
+    public function updateExpenseElementTypeFromRequest(RequestAbstract $request, BaseStringL11nType $new) : BaseStringL11nType
+    {
+        $new->title = $request->getDataString('name') ?? $new->title;
+
+        return $new;
+    }
+
+    /**
+     * Validate ExpenseElementType update request
+     *
+     * @param RequestAbstract $request Request
+     *
+     * @return array<string, bool>
+     *
+     * @todo: implement
+     *
+     * @since 1.0.0
+     */
+    private function validateExpenseElementTypeUpdate(RequestAbstract $request) : array
+    {
+        $val = [];
+        if (($val['id'] = !$request->hasData('id'))) {
+            return $val;
+        }
+
+        return [];
+    }
+
+    /**
+     * Api method to delete ExpenseElementType
+     *
+     * @param RequestAbstract  $request  Request
+     * @param ResponseAbstract $response Response
+     * @param mixed            $data     Generic data
+     *
+     * @return void
+     *
+     * @api
+     *
+     * @since 1.0.0
+     */
+    public function apiExpenseElementTypeDelete(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
+    {
+        // @todo: make sure can be deleted
+        if (!empty($val = $this->validateExpenseElementTypeDelete($request))) {
+            $response->header->status = RequestStatusCode::R_400;
+            $this->createInvalidDeleteResponse($request, $response, $val);
+
+            return;
+        }
+
+        /** @var \Modules\BusinessExpenses\Models\ExpenseElementType $expenseElementType */
+        $expenseElementType = ExpenseElementTypeMapper::get()->where('id', (int) $request->getData('id'))->execute();
+        $this->deleteModel($request->header->account, $expenseElementType, ExpenseElementTypeMapper::class, 'expense_element_type', $request->getOrigin());
+        $this->createStandardDeleteResponse($request, $response, $expenseElementType);
+    }
+
+    /**
+     * Validate ExpenseElementType delete request
+     *
+     * @param RequestAbstract $request Request
+     *
+     * @return array<string, bool>
+     *
+     * @todo: implement
+     *
+     * @since 1.0.0
+     */
+    private function validateExpenseElementTypeDelete(RequestAbstract $request) : array
+    {
+        $val = [];
+        if (($val['id'] = !$request->hasData('id'))) {
+            return $val;
+        }
+
+        return [];
+    }
+
+    /**
+     * Api method to update ExpenseElementTypeL11n
+     *
+     * @param RequestAbstract  $request  Request
+     * @param ResponseAbstract $response Response
+     * @param mixed            $data     Generic data
+     *
+     * @return void
+     *
+     * @api
+     *
+     * @since 1.0.0
+     */
+    public function apiExpenseElementTypeL11nUpdate(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
+    {
+        if (!empty($val = $this->validateExpenseElementTypeL11nUpdate($request))) {
+            $response->header->status = RequestStatusCode::R_400;
+            $this->createInvalidUpdateResponse($request, $response, $val);
+
+            return;
+        }
+
+        /** @var BaseStringL11n $old */
+        $old = ExpenseElementTypeL11nMapper::get()->where('id', (int) $request->getData('id'))->execute();
+        $new = $this->updateExpenseElementTypeL11nFromRequest($request, clone $old);
+
+        $this->updateModel($request->header->account, $old, $new, ExpenseElementTypeL11nMapper::class, 'expense_element_type_l11n', $request->getOrigin());
+        $this->createStandardUpdateResponse($request, $response, $new);
+    }
+
+    /**
+     * Method to update ExpenseElementTypeL11n from request.
+     *
+     * @param RequestAbstract  $request Request
+     * @param BaseStringL11n     $new     Model to modify
+     *
+     * @return BaseStringL11n
+     *
+     * @todo: implement
+     *
+     * @since 1.0.0
+     */
+    public function updateExpenseElementTypeL11nFromRequest(RequestAbstract $request, BaseStringL11n $new) : BaseStringL11n
+    {
+        $new->setLanguage(
+            $request->getDataString('language') ?? $new->language
+        );
+        $new->content = $request->getDataString('title') ?? $new->content;
+
+        return $new;
+    }
+
+    /**
+     * Validate ExpenseElementTypeL11n update request
+     *
+     * @param RequestAbstract $request Request
+     *
+     * @return array<string, bool>
+     *
+     * @todo: implement
+     *
+     * @since 1.0.0
+     */
+    private function validateExpenseElementTypeL11nUpdate(RequestAbstract $request) : array
+    {
+        $val = [];
+        if (($val['id'] = !$request->hasData('id'))) {
+            return $val;
+        }
+
+        return [];
+    }
+
+    /**
+     * Api method to delete ExpenseElementTypeL11n
+     *
+     * @param RequestAbstract  $request  Request
+     * @param ResponseAbstract $response Response
+     * @param mixed            $data     Generic data
+     *
+     * @return void
+     *
+     * @api
+     *
+     * @since 1.0.0
+     */
+    public function apiExpenseElementTypeL11nDelete(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
+    {
+        if (!empty($val = $this->validateExpenseElementTypeL11nDelete($request))) {
+            $response->header->status = RequestStatusCode::R_400;
+            $this->createInvalidDeleteResponse($request, $response, $val);
+
+            return;
+        }
+
+        $expenseElementTypeL11n = ExpenseElementTypeL11nMapper::get()->where('id', (int) $request->getData('id'))->execute();
+        $this->deleteModel($request->header->account, $expenseElementTypeL11n, ExpenseElementTypeL11nMapper::class, 'expense_element_type_l11n', $request->getOrigin());
+        $this->createStandardDeleteResponse($request, $response, $expenseElementTypeL11n);
+    }
+
+    /**
+     * Validate ExpenseElementTypeL11n delete request
+     *
+     * @param RequestAbstract $request Request
+     *
+     * @return array<string, bool>
+     *
+     * @todo: implement
+     *
+     * @since 1.0.0
+     */
+    private function validateExpenseElementTypeL11nDelete(RequestAbstract $request) : array
+    {
+        $val = [];
+        if (($val['id'] = !$request->hasData('id'))) {
+            return $val;
+        }
+
+        return [];
+    }
+
+    /**
+     * Api method to update Expense
+     *
+     * @param RequestAbstract  $request  Request
+     * @param ResponseAbstract $response Response
+     * @param mixed            $data     Generic data
+     *
+     * @return void
+     *
+     * @api
+     *
+     * @since 1.0.0
+     */
+    public function apiExpenseUpdate(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
+    {
+        if (!empty($val = $this->validateExpenseUpdate($request))) {
+            $response->header->status = RequestStatusCode::R_400;
+            $this->createInvalidUpdateResponse($request, $response, $val);
+
+            return;
+        }
+
+        /** @var \Modules\BusinessExpenses\Models\Expense $old */
+        $old = ExpenseMapper::get()->where('id', (int) $request->getData('id'))->execute();
+        $new = $this->updateExpenseFromRequest($request, clone $old);
+
+        $this->updateModel($request->header->account, $old, $new, ExpenseMapper::class, 'expense', $request->getOrigin());
+        $this->createStandardUpdateResponse($request, $response, $new);
+    }
+
+    /**
+     * Method to update Expense from request.
+     *
+     * @param RequestAbstract  $request Request
+     * @param Expense     $new     Model to modify
+     *
+     * @return Expense
+     *
+     * @todo: implement
+     *
+     * @since 1.0.0
+     */
+    public function updateExpenseFromRequest(RequestAbstract $request, Expense $new) : Expense
+    {
+        $new->type        = $request->hasData('type') ? new NullBaseStringL11nType((int) $request->getDataInt('type')) : $new->type;
+        $new->status      = $request->getDataInt('status') ?? $new->status;
+        $new->description = $request->getDataString('description') ?? $new->description;
+        $new->country     = $request->getDataString('country') ?? $new->country;
+
+        return $new;
+    }
+
+    /**
+     * Validate Expense update request
+     *
+     * @param RequestAbstract $request Request
+     *
+     * @return array<string, bool>
+     *
+     * @todo: implement
+     *
+     * @since 1.0.0
+     */
+    private function validateExpenseUpdate(RequestAbstract $request) : array
+    {
+        $val = [];
+        if (($val['id'] = !$request->hasData('id'))) {
+            return $val;
+        }
+
+        return [];
+    }
+
+    /**
+     * Api method to delete Expense
+     *
+     * @param RequestAbstract  $request  Request
+     * @param ResponseAbstract $response Response
+     * @param mixed            $data     Generic data
+     *
+     * @return void
+     *
+     * @api
+     *
+     * @since 1.0.0
+     */
+    public function apiExpenseDelete(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
+    {
+        if (!empty($val = $this->validateExpenseDelete($request))) {
+            $response->header->status = RequestStatusCode::R_400;
+            $this->createInvalidDeleteResponse($request, $response, $val);
+
+            return;
+        }
+
+        /** @var \Modules\BusinessExpenses\Models\Expense $expense */
+        $expense = ExpenseMapper::get()->where('id', (int) $request->getData('id'))->execute();
+
+        // @todo: delete elements
+        // @todo: delete media
+        // @todo: check external accounting references?
+
+        $this->deleteModel($request->header->account, $expense, ExpenseMapper::class, 'expense', $request->getOrigin());
+        $this->createStandardDeleteResponse($request, $response, $expense);
+    }
+
+    /**
+     * Validate Expense delete request
+     *
+     * @param RequestAbstract $request Request
+     *
+     * @return array<string, bool>
+     *
+     * @todo: implement
+     *
+     * @since 1.0.0
+     */
+    private function validateExpenseDelete(RequestAbstract $request) : array
+    {
+        $val = [];
+        if (($val['id'] = !$request->hasData('id'))) {
+            return $val;
+        }
+
+        return [];
+    }
+
+    /**
+     * Api method to update ExpenseElement
+     *
+     * @param RequestAbstract  $request  Request
+     * @param ResponseAbstract $response Response
+     * @param mixed            $data     Generic data
+     *
+     * @return void
+     *
+     * @api
+     *
+     * @since 1.0.0
+     */
+    public function apiExpenseElementUpdate(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
+    {
+        if (!empty($val = $this->validateExpenseElementUpdate($request))) {
+            $response->header->status = RequestStatusCode::R_400;
+            $this->createInvalidUpdateResponse($request, $response, $val);
+
+            return;
+        }
+
+        /** @var \Modules\BusinessExpenses\Models\ExpenseElement $old */
+        $old = ExpenseElementMapper::get()->where('id', (int) $request->getData('id'))->execute();
+        $new = $this->updateExpenseElementFromRequest($request, clone $old);
+        $this->updateModel($request->header->account, $old, $new, ExpenseElementMapper::class, 'expense_element', $request->getOrigin());
+
+        /* @var \Modules\BusinessExpenses\Models\Expense $expense */
+        $old = ExpenseMapper::get()
+            ->with('elements')
+            ->where('id', (int) $request->getData('expense'))
+            ->execute();
+
+        $new = clone $old;
+        $new->recalculate();
+        $this->updateModel($request->header->account, $old, $new, ExpenseMapper::class, 'expense', $request->getOrigin());
+        $this->createStandardUpdateResponse($request, $response, $new);
+    }
+
+    /**
+     * Method to update ExpenseElement from request.
+     *
+     * @param RequestAbstract  $request Request
+     * @param ExpenseElement     $new     Model to modify
+     *
+     * @return ExpenseElement
+     *
+     * @todo: implement
+     *
+     * @since 1.0.0
+     */
+    public function updateExpenseElementFromRequest(RequestAbstract $request, ExpenseElement $new) : ExpenseElement
+    {
+        $new->description = $request->getDataString('description') ?? $new->description;
+        $new->type        = $request->hasData('type') ? new NullBaseStringL11nType((int) $request->getData('type')) : $new->type;
+
+        // Depending on the value set the other values should be calculated
+        $new->net      = $request->hasData('net') ? new FloatInt($request->getDataInt('net') ?? 0) : $new->net;
+        $new->taxR     = $request->hasData('taxr') ? new FloatInt($request->getDataInt('taxr') ?? 0) : $new->taxR;
+        $new->taxP     = $request->hasData('taxp') ? new FloatInt($request->getDataInt('taxp') ?? 0) : $new->taxP;
+        $new->gross    = $request->hasData('gross') ? new FloatInt($request->getDataInt('gross') ?? 0) : $new->gross;
+        $new->quantity = $request->hasData('quantity') ? new FloatInt($request->getDataInt('quantity') ?? 0) : $new->quantity;
+        $new->supplier = $request->hasData('supplier') ? new NullSupplier((int) $request->getData('supplier')) : $new->supplier;
+        $new->country  = $request->getDataString('country') ?? $new->country;
+
+        return $new;
+    }
+
+    /**
+     * Validate ExpenseElement update request
+     *
+     * @param RequestAbstract $request Request
+     *
+     * @return array<string, bool>
+     *
+     * @todo: implement
+     *
+     * @since 1.0.0
+     */
+    private function validateExpenseElementUpdate(RequestAbstract $request) : array
+    {
+        $val = [];
+        if (($val['id'] = !$request->hasData('id'))) {
+            return $val;
+        }
+
+        return [];
+    }
+
+    /**
+     * Api method to delete ExpenseElement
+     *
+     * @param RequestAbstract  $request  Request
+     * @param ResponseAbstract $response Response
+     * @param mixed            $data     Generic data
+     *
+     * @return void
+     *
+     * @api
+     *
+     * @since 1.0.0
+     */
+    public function apiExpenseElementDelete(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
+    {
+        if (!empty($val = $this->validateExpenseElementDelete($request))) {
+            $response->header->status = RequestStatusCode::R_400;
+            $this->createInvalidDeleteResponse($request, $response, $val);
+
+            return;
+        }
+
+        // @todo: delete media
+
+        /** @var \Modules\BusinessExpenses\Models\ExpenseElement $expenseElement */
+        $expenseElement = ExpenseElementMapper::get()->where('id', (int) $request->getData('id'))->execute();
+        $this->deleteModel($request->header->account, $expenseElement, ExpenseElementMapper::class, 'expense_element', $request->getOrigin());
+
+        /* @var \Modules\BusinessExpenses\Models\Expense $expense */
+        $old = ExpenseMapper::get()
+            ->with('elements')
+            ->where('id', (int) $request->getData('expense'))
+            ->execute();
+
+        $new = clone $old;
+        $new->recalculate();
+        $this->updateModel($request->header->account, $old, $new, ExpenseMapper::class, 'expense', $request->getOrigin());
+
+        $this->createStandardDeleteResponse($request, $response, $expenseElement);
+    }
+
+    /**
+     * Validate ExpenseElement delete request
+     *
+     * @param RequestAbstract $request Request
+     *
+     * @return array<string, bool>
+     *
+     * @todo: implement
+     *
+     * @since 1.0.0
+     */
+    private function validateExpenseElementDelete(RequestAbstract $request) : array
+    {
+        $val = [];
+        if (($val['id'] = !$request->hasData('id'))) {
             return $val;
         }
 

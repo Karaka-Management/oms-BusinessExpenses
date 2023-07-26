@@ -85,6 +85,20 @@ class Expense
         $this->taxP  = new FloatInt();
     }
 
+    public function recalculate() : void
+    {
+        $net = 0;
+        $gross = 0;
+
+        foreach ($this->elements as $element) {
+            $net   += $element->net->value;
+            $gross += $element->gross->value;
+        }
+
+        $this->net->value   = $net;
+        $this->gross->value = $gross;
+    }
+
     use \Modules\Media\Models\MediaListTrait;
     use \Modules\Editor\Models\EditorDocListTrait;
 }

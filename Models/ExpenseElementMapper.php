@@ -28,7 +28,7 @@ use phpOMS\Localization\BaseStringL11n;
  * @link    https://jingga.app
  * @since   1.0.0
  *
- * @template T of BaseStringL11n
+ * @template T of ExpenseElement
  * @extends DataMapperFactory<T>
  */
 final class ExpenseElementMapper extends DataMapperFactory
@@ -130,5 +130,5 @@ final class ExpenseElementMapper extends DataMapperFactory
      * @var class-string<T>
      * @since 1.0.0
      */
-    public const MODEL = BaseStringL11n::class;
+    public const MODEL = ExpenseElement::class;
 }
