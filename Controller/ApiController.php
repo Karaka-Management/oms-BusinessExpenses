@@ -918,8 +918,8 @@ final class ApiController extends Controller
     /**
      * Method to update ExpenseType from request.
      *
-     * @param RequestAbstract  $request Request
-     * @param BaseStringL11nType     $new     Model to modify
+     * @param RequestAbstract    $request Request
+     * @param BaseStringL11nType $new     Model to modify
      *
      * @return BaseStringL11nType
      *
@@ -1036,8 +1036,8 @@ final class ApiController extends Controller
     /**
      * Method to update ExpenseTypeL11n from request.
      *
-     * @param RequestAbstract  $request Request
-     * @param BaseStringL11n     $new     Model to modify
+     * @param RequestAbstract $request Request
+     * @param BaseStringL11n  $new     Model to modify
      *
      * @return BaseStringL11n
      *
@@ -1157,8 +1157,8 @@ final class ApiController extends Controller
     /**
      * Method to update ExpenseElementType from request.
      *
-     * @param RequestAbstract  $request Request
-     * @param BaseStringL11nType     $new     Model to modify
+     * @param RequestAbstract    $request Request
+     * @param BaseStringL11nType $new     Model to modify
      *
      * @return BaseStringL11nType
      *
@@ -1277,8 +1277,8 @@ final class ApiController extends Controller
     /**
      * Method to update ExpenseElementTypeL11n from request.
      *
-     * @param RequestAbstract  $request Request
-     * @param BaseStringL11n     $new     Model to modify
+     * @param RequestAbstract $request Request
+     * @param BaseStringL11n  $new     Model to modify
      *
      * @return BaseStringL11n
      *
@@ -1398,8 +1398,8 @@ final class ApiController extends Controller
     /**
      * Method to update Expense from request.
      *
-     * @param RequestAbstract  $request Request
-     * @param Expense     $new     Model to modify
+     * @param RequestAbstract $request Request
+     * @param Expense         $new     Model to modify
      *
      * @return Expense
      *
@@ -1534,8 +1534,8 @@ final class ApiController extends Controller
     /**
      * Method to update ExpenseElement from request.
      *
-     * @param RequestAbstract  $request Request
-     * @param ExpenseElement     $new     Model to modify
+     * @param RequestAbstract $request Request
+     * @param ExpenseElement  $new     Model to modify
      *
      * @return ExpenseElement
      *

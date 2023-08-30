@@ -87,7 +87,7 @@ class Expense
 
     public function recalculate() : void
     {
-        $net = 0;
+        $net   = 0;
         $gross = 0;
 
         foreach ($this->elements as $element) {
