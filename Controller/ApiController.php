@@ -16,6 +16,7 @@ namespace Modules\BusinessExpenses\Controller;
 
 use Modules\Admin\Models\AccountMapper;
 use Modules\Admin\Models\NullAccount;
+use Modules\Billing\Models\BillMapper;
 use Modules\BusinessExpenses\Models\Expense;
 use Modules\BusinessExpenses\Models\ExpenseElement;
 use Modules\BusinessExpenses\Models\ExpenseElementMapper;
@@ -978,7 +979,7 @@ final class ApiController extends Controller
             return;
         }
 
-        /** @var \Modules\BusinessExpenses\Models\ExpenseType $expenseType */
+        /** @var BaseStringL11nType $expenseType */
         $expenseType = ExpenseTypeMapper::get()->where('id', (int) $request->getData('id'))->execute();
         $this->deleteModel($request->header->account, $expenseType, ExpenseTypeMapper::class, 'expense_type', $request->getOrigin());
         $this->createStandardDeleteResponse($request, $response, $expenseType);
@@ -1217,7 +1218,7 @@ final class ApiController extends Controller
             return;
         }
 
-        /** @var \Modules\BusinessExpenses\Models\ExpenseElementType $expenseElementType */
+        /** @var BaseStringL11nType $expenseElementType */
         $expenseElementType = ExpenseElementTypeMapper::get()->where('id', (int) $request->getData('id'))->execute();
         $this->deleteModel($request->header->account, $expenseElementType, ExpenseElementTypeMapper::class, 'expense_element_type', $request->getOrigin());
         $this->createStandardDeleteResponse($request, $response, $expenseElementType);
