@@ -85,6 +85,13 @@ class Expense
         $this->taxP  = new FloatInt();
     }
 
+    /**
+     * Recalculate the expenses
+     *
+     * @return void
+     *
+     * @since 1.0.0
+     */
     public function recalculate() : void
     {
         $net   = 0;
