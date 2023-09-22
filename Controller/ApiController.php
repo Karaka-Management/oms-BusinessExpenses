@@ -662,6 +662,7 @@ final class ApiController extends Controller
 
         $path = $this->createExpenseDir($expense);
 
+        /** @var \Modules\Media\Models\Collection[] $elementCollection */
         $elementCollection = CollectionMapper::getAll()
             ->where('virtual', $path)
             ->execute();
