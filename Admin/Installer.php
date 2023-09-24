@@ -103,9 +103,9 @@ final class Installer extends InstallerAbstract
                 continue;
             }
 
-            $expenseTypes[$type['name']] = !\is_array($responseData['response'])
-                ? $responseData['response']->toArray()
-                : $responseData['response'];
+            $expenseTypes[$type['name']] = \is_array($responseData['response'])
+                ? $responseData['response']
+                : $responseData['response']->toArray();
 
             $isFirst = true;
             foreach ($type['l11n'] as $language => $l11n) {
@@ -164,9 +164,9 @@ final class Installer extends InstallerAbstract
                 continue;
             }
 
-            $elementTypes[$type['name']] = !\is_array($responseData['response'])
-                ? $responseData['response']->toArray()
-                : $responseData['response'];
+            $elementTypes[$type['name']] = \is_array($responseData['response'])
+                ? $responseData['response']
+                : $responseData['response']->toArray();
 
             $isFirst = true;
             foreach ($type['l11n'] as $language => $l11n) {
