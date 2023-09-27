@@ -58,7 +58,7 @@ final class ApiController extends Controller
      *
      * @param RequestAbstract  $request  Request
      * @param ResponseAbstract $response Response
-     * @param mixed            $data     Generic data
+     * @param array            $data     Generic data
      *
      * @return void
      *
@@ -66,7 +66,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiExpenseTypeCreate(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
+    public function apiExpenseTypeCreate(RequestAbstract $request, ResponseAbstract $response, array $data = []) : void
     {
         if (!empty($val = $this->validateExpenseTypeCreate($request))) {
             $response->header->status = RequestStatusCode::R_400;
@@ -125,7 +125,7 @@ final class ApiController extends Controller
      *
      * @param RequestAbstract  $request  Request
      * @param ResponseAbstract $response Response
-     * @param mixed            $data     Generic data
+     * @param array            $data     Generic data
      *
      * @return void
      *
@@ -133,7 +133,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiExpenseTypeL11nCreate(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
+    public function apiExpenseTypeL11nCreate(RequestAbstract $request, ResponseAbstract $response, array $data = []) : void
     {
         if (!empty($val = $this->validateExpenseTypeL11nCreate($request))) {
             $response->header->status = RequestStatusCode::R_400;
@@ -194,7 +194,7 @@ final class ApiController extends Controller
      *
      * @param RequestAbstract  $request  Request
      * @param ResponseAbstract $response Response
-     * @param mixed            $data     Generic data
+     * @param array            $data     Generic data
      *
      * @return void
      *
@@ -202,7 +202,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiExpenseElementTypeCreate(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
+    public function apiExpenseElementTypeCreate(RequestAbstract $request, ResponseAbstract $response, array $data = []) : void
     {
         if (!empty($val = $this->validateExpenseElementTypeCreate($request))) {
             $response->header->status = RequestStatusCode::R_400;
@@ -261,7 +261,7 @@ final class ApiController extends Controller
      *
      * @param RequestAbstract  $request  Request
      * @param ResponseAbstract $response Response
-     * @param mixed            $data     Generic data
+     * @param array            $data     Generic data
      *
      * @return void
      *
@@ -269,7 +269,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiExpenseElementTypeL11nCreate(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
+    public function apiExpenseElementTypeL11nCreate(RequestAbstract $request, ResponseAbstract $response, array $data = []) : void
     {
         if (!empty($val = $this->validateExpenseElementTypeL11nCreate($request))) {
             $response->header->status = RequestStatusCode::R_400;
@@ -330,7 +330,7 @@ final class ApiController extends Controller
      *
      * @param RequestAbstract  $request  Request
      * @param ResponseAbstract $response Response
-     * @param mixed            $data     Generic data
+     * @param array            $data     Generic data
      *
      * @return void
      *
@@ -338,7 +338,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiExpenseCreate(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
+    public function apiExpenseCreate(RequestAbstract $request, ResponseAbstract $response, array $data = []) : void
     {
         if (!empty($val = $this->validateExpenseCreate($request))) {
             $response->header->status = RequestStatusCode::R_400;
@@ -409,7 +409,7 @@ final class ApiController extends Controller
      *
      * @param RequestAbstract  $request  Request
      * @param ResponseAbstract $response Response
-     * @param mixed            $data     Generic data
+     * @param array            $data     Generic data
      *
      * @return void
      *
@@ -417,7 +417,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiExpenseElementCreate(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
+    public function apiExpenseElementCreate(RequestAbstract $request, ResponseAbstract $response, array $data = []) : void
     {
         if (!empty($val = $this->validateExpenseElementCreate($request))) {
             $response->header->status = RequestStatusCode::R_400;
@@ -500,7 +500,7 @@ final class ApiController extends Controller
      *
      * @param RequestAbstract  $request  Request
      * @param ResponseAbstract $response Response
-     * @param mixed            $data     Generic data
+     * @param array            $data     Generic data
      *
      * @return void
      *
@@ -508,7 +508,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiMediaAddToExpenseElement(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
+    public function apiMediaAddToExpenseElement(RequestAbstract $request, ResponseAbstract $response, array $data = []) : void
     {
         if (!empty($val = $this->validateMediaAddToExpenseElement($request))) {
             $response->header->status = RequestStatusCode::R_400;
@@ -633,7 +633,7 @@ final class ApiController extends Controller
      *
      * @param RequestAbstract  $request  Request
      * @param ResponseAbstract $response Response
-     * @param mixed            $data     Generic data
+     * @param array            $data     Generic data
      *
      * @return void
      *
@@ -641,7 +641,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiMediaRemoveFromExpenseElement(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
+    public function apiMediaRemoveFromExpenseElement(RequestAbstract $request, ResponseAbstract $response, array $data = []) : void
     {
         // @todo: check that it is not system generated media!
         if (!empty($val = $this->validateMediaRemoveFromExpenseElement($request))) {
@@ -779,7 +779,7 @@ final class ApiController extends Controller
      *
      * @param RequestAbstract  $request  Request
      * @param ResponseAbstract $response Response
-     * @param mixed            $data     Generic data
+     * @param array            $data     Generic data
      *
      * @return void
      *
@@ -787,7 +787,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiExpenseFromUpload(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
+    public function apiExpenseFromUpload(RequestAbstract $request, ResponseAbstract $response, array $data = []) : void
     {
     }
 
@@ -796,7 +796,7 @@ final class ApiController extends Controller
      *
      * @param RequestAbstract  $request  Request
      * @param ResponseAbstract $response Response
-     * @param mixed            $data     Generic data
+     * @param array            $data     Generic data
      *
      * @return void
      *
@@ -804,7 +804,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiNoteCreate(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
+    public function apiNoteCreate(RequestAbstract $request, ResponseAbstract $response, array $data = []) : void
     {
         if (!empty($val = $this->validateNoteCreate($request))) {
             $response->header->status = RequestStatusCode::R_400;
@@ -854,7 +854,7 @@ final class ApiController extends Controller
      *
      * @param RequestAbstract  $request  Request
      * @param ResponseAbstract $response Response
-     * @param mixed            $data     Generic data
+     * @param array            $data     Generic data
      *
      * @return void
      *
@@ -862,7 +862,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiNoteUpdate(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
+    public function apiNoteUpdate(RequestAbstract $request, ResponseAbstract $response, array $data = []) : void
     {
         // @todo: check permissions
         $this->app->moduleManager->get('Editor', 'Api')->apiEditorDocUpdate($request, $response, $data);
@@ -873,7 +873,7 @@ final class ApiController extends Controller
      *
      * @param RequestAbstract  $request  Request
      * @param ResponseAbstract $response Response
-     * @param mixed            $data     Generic data
+     * @param array            $data     Generic data
      *
      * @return void
      *
@@ -881,7 +881,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiNoteDelete(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
+    public function apiNoteDelete(RequestAbstract $request, ResponseAbstract $response, array $data = []) : void
     {
         // @todo: check permissions
         $this->app->moduleManager->get('Editor', 'Api')->apiEditorDocDelete($request, $response, $data);
@@ -892,7 +892,7 @@ final class ApiController extends Controller
      *
      * @param RequestAbstract  $request  Request
      * @param ResponseAbstract $response Response
-     * @param mixed            $data     Generic data
+     * @param array            $data     Generic data
      *
      * @return void
      *
@@ -900,7 +900,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiExpenseTypeUpdate(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
+    public function apiExpenseTypeUpdate(RequestAbstract $request, ResponseAbstract $response, array $data = []) : void
     {
         if (!empty($val = $this->validateExpenseTypeUpdate($request))) {
             $response->header->status = RequestStatusCode::R_400;
@@ -962,7 +962,7 @@ final class ApiController extends Controller
      *
      * @param RequestAbstract  $request  Request
      * @param ResponseAbstract $response Response
-     * @param mixed            $data     Generic data
+     * @param array            $data     Generic data
      *
      * @return void
      *
@@ -970,7 +970,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiExpenseTypeDelete(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
+    public function apiExpenseTypeDelete(RequestAbstract $request, ResponseAbstract $response, array $data = []) : void
     {
         // @todo: check if type unused
         if (!empty($val = $this->validateExpenseTypeDelete($request))) {
@@ -1010,7 +1010,7 @@ final class ApiController extends Controller
      *
      * @param RequestAbstract  $request  Request
      * @param ResponseAbstract $response Response
-     * @param mixed            $data     Generic data
+     * @param array            $data     Generic data
      *
      * @return void
      *
@@ -1018,7 +1018,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiExpenseTypeL11nUpdate(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
+    public function apiExpenseTypeL11nUpdate(RequestAbstract $request, ResponseAbstract $response, array $data = []) : void
     {
         if (!empty($val = $this->validateExpenseTypeL11nUpdate($request))) {
             $response->header->status = RequestStatusCode::R_400;
@@ -1083,7 +1083,7 @@ final class ApiController extends Controller
      *
      * @param RequestAbstract  $request  Request
      * @param ResponseAbstract $response Response
-     * @param mixed            $data     Generic data
+     * @param array            $data     Generic data
      *
      * @return void
      *
@@ -1091,7 +1091,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiExpenseTypeL11nDelete(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
+    public function apiExpenseTypeL11nDelete(RequestAbstract $request, ResponseAbstract $response, array $data = []) : void
     {
         if (!empty($val = $this->validateExpenseTypeL11nDelete($request))) {
             $response->header->status = RequestStatusCode::R_400;
@@ -1131,7 +1131,7 @@ final class ApiController extends Controller
      *
      * @param RequestAbstract  $request  Request
      * @param ResponseAbstract $response Response
-     * @param mixed            $data     Generic data
+     * @param array            $data     Generic data
      *
      * @return void
      *
@@ -1139,7 +1139,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiExpenseElementTypeUpdate(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
+    public function apiExpenseElementTypeUpdate(RequestAbstract $request, ResponseAbstract $response, array $data = []) : void
     {
         if (!empty($val = $this->validateExpenseElementTypeUpdate($request))) {
             $response->header->status = RequestStatusCode::R_400;
@@ -1201,7 +1201,7 @@ final class ApiController extends Controller
      *
      * @param RequestAbstract  $request  Request
      * @param ResponseAbstract $response Response
-     * @param mixed            $data     Generic data
+     * @param array            $data     Generic data
      *
      * @return void
      *
@@ -1209,7 +1209,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiExpenseElementTypeDelete(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
+    public function apiExpenseElementTypeDelete(RequestAbstract $request, ResponseAbstract $response, array $data = []) : void
     {
         // @todo: make sure can be deleted
         if (!empty($val = $this->validateExpenseElementTypeDelete($request))) {
@@ -1251,7 +1251,7 @@ final class ApiController extends Controller
      *
      * @param RequestAbstract  $request  Request
      * @param ResponseAbstract $response Response
-     * @param mixed            $data     Generic data
+     * @param array            $data     Generic data
      *
      * @return void
      *
@@ -1259,7 +1259,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiExpenseElementTypeL11nUpdate(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
+    public function apiExpenseElementTypeL11nUpdate(RequestAbstract $request, ResponseAbstract $response, array $data = []) : void
     {
         if (!empty($val = $this->validateExpenseElementTypeL11nUpdate($request))) {
             $response->header->status = RequestStatusCode::R_400;
@@ -1324,7 +1324,7 @@ final class ApiController extends Controller
      *
      * @param RequestAbstract  $request  Request
      * @param ResponseAbstract $response Response
-     * @param mixed            $data     Generic data
+     * @param array            $data     Generic data
      *
      * @return void
      *
@@ -1332,7 +1332,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiExpenseElementTypeL11nDelete(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
+    public function apiExpenseElementTypeL11nDelete(RequestAbstract $request, ResponseAbstract $response, array $data = []) : void
     {
         if (!empty($val = $this->validateExpenseElementTypeL11nDelete($request))) {
             $response->header->status = RequestStatusCode::R_400;
@@ -1372,7 +1372,7 @@ final class ApiController extends Controller
      *
      * @param RequestAbstract  $request  Request
      * @param ResponseAbstract $response Response
-     * @param mixed            $data     Generic data
+     * @param array            $data     Generic data
      *
      * @return void
      *
@@ -1380,7 +1380,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiExpenseUpdate(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
+    public function apiExpenseUpdate(RequestAbstract $request, ResponseAbstract $response, array $data = []) : void
     {
         if (!empty($val = $this->validateExpenseUpdate($request))) {
             $response->header->status = RequestStatusCode::R_400;
@@ -1445,7 +1445,7 @@ final class ApiController extends Controller
      *
      * @param RequestAbstract  $request  Request
      * @param ResponseAbstract $response Response
-     * @param mixed            $data     Generic data
+     * @param array            $data     Generic data
      *
      * @return void
      *
@@ -1453,7 +1453,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiExpenseDelete(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
+    public function apiExpenseDelete(RequestAbstract $request, ResponseAbstract $response, array $data = []) : void
     {
         if (!empty($val = $this->validateExpenseDelete($request))) {
             $response->header->status = RequestStatusCode::R_400;
@@ -1499,7 +1499,7 @@ final class ApiController extends Controller
      *
      * @param RequestAbstract  $request  Request
      * @param ResponseAbstract $response Response
-     * @param mixed            $data     Generic data
+     * @param array            $data     Generic data
      *
      * @return void
      *
@@ -1507,7 +1507,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiExpenseElementUpdate(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
+    public function apiExpenseElementUpdate(RequestAbstract $request, ResponseAbstract $response, array $data = []) : void
     {
         if (!empty($val = $this->validateExpenseElementUpdate($request))) {
             $response->header->status = RequestStatusCode::R_400;
@@ -1588,7 +1588,7 @@ final class ApiController extends Controller
      *
      * @param RequestAbstract  $request  Request
      * @param ResponseAbstract $response Response
-     * @param mixed            $data     Generic data
+     * @param array            $data     Generic data
      *
      * @return void
      *
@@ -1596,7 +1596,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiExpenseElementDelete(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
+    public function apiExpenseElementDelete(RequestAbstract $request, ResponseAbstract $response, array $data = []) : void
     {
         if (!empty($val = $this->validateExpenseElementDelete($request))) {
             $response->header->status = RequestStatusCode::R_400;
