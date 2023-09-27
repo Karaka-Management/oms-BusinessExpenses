@@ -43,7 +43,7 @@ final class ExpenseMapper extends DataMapperFactory
         'bizexpenses_expense_status'        => ['name' => 'bizexpenses_expense_status', 'type' => 'int', 'internal' => 'status'],
         'bizexpenses_expense_description'   => ['name' => 'bizexpenses_expense_description', 'type' => 'string', 'internal' => 'description'],
         'bizexpenses_expense_approved'      => ['name' => 'bizexpenses_expense_approved', 'type' => 'bool', 'internal' => 'approved'],
-        'bizexpenses_expense_approvedby'    => ['name' => 'bizexpenses_expense_approvedby', 'type' => 'bool', 'internal' => 'approvedBy'],
+        'bizexpenses_expense_approvedby'    => ['name' => 'bizexpenses_expense_approvedby', 'type' => 'int', 'internal' => 'approvedBy'],
         'bizexpenses_expense_paid'          => ['name' => 'bizexpenses_expense_paid', 'type' => 'bool', 'internal' => 'paid'],
         'bizexpenses_expense_net'           => ['name' => 'bizexpenses_expense_net', 'type' => 'Serializable', 'internal' => 'net'],
         'bizexpenses_expense_gross'         => ['name' => 'bizexpenses_expense_gross', 'type' => 'Serializable', 'internal' => 'gross'],

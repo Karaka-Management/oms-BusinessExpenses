@@ -87,4 +87,120 @@ final class BackendController extends Controller
 
         return $view;
     }
+
+    /**
+     * Routing end-point for application behaviour.
+     *
+     * @param RequestAbstract  $request  Request
+     * @param ResponseAbstract $response Response
+     * @param mixed            $data     Generic data
+     *
+     * @return RenderableInterface Returns a renderable object
+     *
+     * @since 1.0.0
+     * @codeCoverageIgnore
+     */
+    public function viewBusinessExpensesExpenseCreate(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : RenderableInterface
+    {
+        $view = new View($this->app->l11nManager, $request, $response);
+
+        $view->setTemplate('/Modules/BusinessExpenses/Theme/Backend/expense-single');
+        $view->data['nav'] = $this->app->moduleManager->get('Navigation')->createNavigationMid(1001001001, $request, $response);
+
+        $expense = ExpenseMapper::get()
+            ->with('from')
+            ->where('id', (int) $request->getData('id'))
+            ->execute();
+
+        $view->data['expense'] = $expense;
+
+        return $view;
+    }
+
+    /**
+     * Routing end-point for application behaviour.
+     *
+     * @param RequestAbstract  $request  Request
+     * @param ResponseAbstract $response Response
+     * @param mixed            $data     Generic data
+     *
+     * @return RenderableInterface Returns a renderable object
+     *
+     * @since 1.0.0
+     * @codeCoverageIgnore
+     */
+    public function viewBusinessExpensesTypeList(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : RenderableInterface
+    {
+        $view = new View($this->app->l11nManager, $request, $response);
+
+        $view->setTemplate('/Modules/BusinessExpenses/Theme/Backend/expense-single');
+        $view->data['nav'] = $this->app->moduleManager->get('Navigation')->createNavigationMid(1001001001, $request, $response);
+
+        $expense = ExpenseMapper::get()
+            ->with('from')
+            ->where('id', (int) $request->getData('id'))
+            ->execute();
+
+        $view->data['expense'] = $expense;
+
+        return $view;
+    }
+
+    /**
+     * Routing end-point for application behaviour.
+     *
+     * @param RequestAbstract  $request  Request
+     * @param ResponseAbstract $response Response
+     * @param mixed            $data     Generic data
+     *
+     * @return RenderableInterface Returns a renderable object
+     *
+     * @since 1.0.0
+     * @codeCoverageIgnore
+     */
+    public function viewBusinessExpensesType(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : RenderableInterface
+    {
+        $view = new View($this->app->l11nManager, $request, $response);
+
+        $view->setTemplate('/Modules/BusinessExpenses/Theme/Backend/expense-single');
+        $view->data['nav'] = $this->app->moduleManager->get('Navigation')->createNavigationMid(1001001001, $request, $response);
+
+        $expense = ExpenseMapper::get()
+            ->with('from')
+            ->where('id', (int) $request->getData('id'))
+            ->execute();
+
+        $view->data['expense'] = $expense;
+
+        return $view;
+    }
+
+    /**
+     * Routing end-point for application behaviour.
+     *
+     * @param RequestAbstract  $request  Request
+     * @param ResponseAbstract $response Response
+     * @param mixed            $data     Generic data
+     *
+     * @return RenderableInterface Returns a renderable object
+     *
+     * @since 1.0.0
+     * @codeCoverageIgnore
+     */
+    public function viewBusinessExpensesTypeCreate(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : RenderableInterface
+    {
+        $view = new View($this->app->l11nManager, $request, $response);
+
+        $view->setTemplate('/Modules/BusinessExpenses/Theme/Backend/expense-single');
+        $view->data['nav'] = $this->app->moduleManager->get('Navigation')->createNavigationMid(1001001001, $request, $response);
+
+        $expense = ExpenseMapper::get()
+            ->with('from')
+            ->where('id', (int) $request->getData('id'))
+            ->execute();
+
+        $view->data['expense'] = $expense;
+
+        return $view;
+    }
 }
