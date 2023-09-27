@@ -18,7 +18,7 @@
     "directory": "BusinessExpenses",
     "dependencies": {
         "Admin": "1.0.0",
-        "Supplier": "1.0.0"
+        "SupplierManagement": "1.0.0"
     },
     "providing": {
         "Navigation": "*"
