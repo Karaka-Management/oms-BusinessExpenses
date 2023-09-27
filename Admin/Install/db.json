@@ -144,7 +144,7 @@
                 "null": false
             },
             "bizexpenses_expense_taxp": {
-                "name": "bizexpenses_expense_taxP",
+                "name": "bizexpenses_expense_taxp",
                 "type": "BIGINT",
                 "null": false
             },
