@@ -47,9 +47,6 @@ use phpOMS\Stdlib\Base\FloatInt;
  * @license OMS License 2.0
  * @link    https://jingga.app
  * @since   1.0.0
- *
- * @todo: create Media add and remove functions for the expense report itself (not just the elements).
- * Also adjust the db schema for that.
  */
 final class ApiController extends Controller
 {
@@ -493,6 +490,136 @@ final class ApiController extends Controller
         $element->country = $country;
 
         return $element;
+    }
+
+    /**
+     * Api method to create a bill
+     *
+     * @param RequestAbstract  $request  Request
+     * @param ResponseAbstract $response Response
+     * @param array            $data     Generic data
+     *
+     * @return void
+     *
+     * @api
+     *
+     * @since 1.0.0
+     */
+    public function apiMediaAddToExpense(RequestAbstract $request, ResponseAbstract $response, array $data = []) : void
+    {
+        if (!empty($val = $this->validateMediaAddToExpense($request))) {
+            $response->header->status = RequestStatusCode::R_400;
+            $this->createInvalidAddResponse($request, $response, $val);
+
+            return;
+        }
+
+        /** @var \Modules\BusinessExpenses\Models\Expense $expense */
+        $expense = ExpenseMapper::get()->where('id', (int) $request->getData('expense'))->execute();
+        $path    = $this->createExpenseDir($expense);
+
+        $uploaded = [];
+        if (!empty($uploadedFiles = $request->files)) {
+            $uploaded = $this->app->moduleManager->get('Media')->uploadFiles(
+                names: [],
+                fileNames: [],
+                files: $uploadedFiles,
+                account: $request->header->account,
+                basePath: __DIR__ . '/../../../Modules/Media/Files' . $path,
+                virtualPath: $path,
+                pathSettings: PathSettings::FILE_PATH,
+                hasAccountRelation: false,
+                readContent: $request->getDataBool('parse_content') ?? false
+            );
+
+            $collection = null;
+            foreach ($uploaded as $media) {
+                $this->createModelRelation(
+                    $request->header->account,
+                    $expense->id,
+                    $media->id,
+                    ExpenseMapper::class,
+                    'files',
+                    '',
+                    $request->getOrigin()
+                );
+
+                if ($request->hasData('type')) {
+                    $this->createModelRelation(
+                        $request->header->account,
+                        $media->id,
+                        $request->getDataInt('type'),
+                        MediaMapper::class,
+                        'types',
+                        '',
+                        $request->getOrigin()
+                    );
+                }
+
+                if ($collection === null) {
+                    /** @var \Modules\Media\Models\Collection $collection */
+                    $collection = MediaMapper::getParentCollection($path)->limit(1)->execute();
+
+                    if ($collection->id === 0) {
+                        $collection = $this->app->moduleManager->get('Media')->createRecursiveMediaCollection(
+                            $path,
+                            $request->header->account,
+                            __DIR__ . '/../../../Modules/Media/Files' . $path,
+                        );
+                    }
+                }
+
+                $this->createModelRelation(
+                    $request->header->account,
+                    $collection->id,
+                    $media->id,
+                    CollectionMapper::class,
+                    'sources',
+                    '',
+                    $request->getOrigin()
+                );
+            }
+        }
+
+        if (!empty($mediaFiles = $request->getDataJson('media'))) {
+            foreach ($mediaFiles as $media) {
+                $this->createModelRelation(
+                    $request->header->account,
+                    $expense->id,
+                    (int) $media,
+                    ExpenseElementMapper::class,
+                    'files',
+                    '',
+                    $request->getOrigin()
+                );
+            }
+        }
+
+        $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Media', 'Media added to bill.', [
+            'upload' => $uploaded,
+            'media'  => $mediaFiles,
+        ]);
+    }
+
+    /**
+     * Method to validate bill creation from request
+     *
+     * @param RequestAbstract $request Request
+     *
+     * @return array<string, bool>
+     *
+     * @since 1.0.0
+     */
+    private function validateMediaAddToExpense(RequestAbstract $request) : array
+    {
+        $val = [];
+        if (($val['media'] = (!$request->hasData('media') && empty($request->files)))
+            || ($val['expense'] = !$request->hasData('expense'))
+        ) {
+            return $val;
+        }
+
+        return [];
     }
 
     /**
