@@ -23,7 +23,7 @@ final class NullExpenseTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @covers Modules\BusinessExpenses\Models\NullExpense
-     * @group framework
+     * @group module
      */
     public function testNull() : void
     {
@@ -32,7 +32,7 @@ final class NullExpenseTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @covers Modules\BusinessExpenses\Models\NullExpense
-     * @group framework
+     * @group module
      */
     public function testId() : void
     {
