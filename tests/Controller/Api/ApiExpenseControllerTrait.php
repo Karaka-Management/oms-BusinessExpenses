@@ -12,91 +12,75 @@
  */
 declare(strict_types=1);
 
-namespace Modules\BusinessExpenses\tests\Controller;
+namespace Modules\BusinessExpenses\tests\Controller\Api;
 
-use Model\CoreSettings;
-use Modules\Admin\Models\AccountPermission;
-use Modules\BusinessExpenses\tests\Controller\Api\ApiExpenseControllerTrait;
-use phpOMS\Account\Account;
-use phpOMS\Account\AccountManager;
-use phpOMS\Account\PermissionType;
-use phpOMS\Application\ApplicationAbstract;
-use phpOMS\Dispatcher\Dispatcher;
-use phpOMS\Event\EventManager;
-use phpOMS\Localization\L11nManager;
-use phpOMS\Module\ModuleAbstract;
-use phpOMS\Module\ModuleManager;
-use phpOMS\Router\WebRouter;
+use phpOMS\Account\AccountStatus;
+use phpOMS\Account\AccountType;
+use phpOMS\Message\Http\HttpRequest;
+use phpOMS\Message\Http\HttpResponse;
+use phpOMS\Message\Http\RequestStatusCode;
+use phpOMS\System\File\Local\Directory;
+use phpOMS\Uri\HttpUri;
+use phpOMS\Utils\RnG\DateTime;
 use phpOMS\Utils\TestUtils;
 
-/**
- * @testdox Modules\tests\BusinessExpenses\Controller\ApiControllerTest: BusinessExpenses api controller
- *
- * @internal
- */
-final class ApiControllerTest extends \PHPUnit\Framework\TestCase
+trait ApiExpenseControllerTrait
 {
-    protected ApplicationAbstract $app;
-
-    /**
-     * @var \Modules\BusinessExpenses\Controller\ApiController
-     */
-    protected ModuleAbstract $module;
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function setUp() : void
-    {
-        $this->app = new class() extends ApplicationAbstract
-        {
-            protected string $appName = 'Api';
-        };
-
-        $this->app->dbPool          = $GLOBALS['dbpool'];
-        $this->app->unitId          = 1;
-        $this->app->accountManager  = new AccountManager($GLOBALS['session']);
-        $this->app->appSettings     = new CoreSettings();
-        $this->app->moduleManager   = new ModuleManager($this->app, __DIR__ . '/../../../../Modules/');
-        $this->app->dispatcher      = new Dispatcher($this->app);
-        $this->app->eventManager    = new EventManager($this->app->dispatcher);
-        $this->app->l11nManager     = new L11nManager();
-        $this->app->eventManager->importFromFile(__DIR__ . '/../../../../Web/Api/Hooks.php');
-
-        $account = new Account();
-        TestUtils::setMember($account, 'id', 1);
-
-        $permission       = new AccountPermission();
-        $permission->unit = 1;
-        $permission->app  = 2;
-        $permission->setPermission(
-            PermissionType::READ
-            | PermissionType::CREATE
-            | PermissionType::MODIFY
-            | PermissionType::DELETE
-            | PermissionType::PERMISSION
-        );
-
-        $account->addPermission($permission);
-
-        $this->app->accountManager->add($account);
-        $this->app->router = new WebRouter();
-
-        $this->module = $this->app->moduleManager->get('BusinessExpenses', 'Api');
-
-        TestUtils::setMember($this->module, 'app', $this->app);
-    }
-
-    use ApiExpenseControllerTrait;
-    }
-
-    public function testInvalidapiExpenseElementDelete() : void
+    public function testExpenseCreate() : void
     {
         $response = new HttpResponse();
         $request  = new HttpRequest(new HttpUri(''));
 
         $request->header->account = 1;
-        $this->module->apiExpenseElementDelete($request, $response);
-        self::assertEquals(RequestStatusCode::R_400, $response->header->status);
+        $request->setData('type', 1);
+        $request->setData('description', 'Some test description');
+
+        $this->module->apiExpenseCreate($request, $response);
+        self::assertEquals('ok', $response->getData('')['status']);
+        self::assertGreaterThan(0, $response->getDataArray('')['response']->id);
+    }
+
+    public function testExpenseElementCreate() : void
+    {
+        if (!\is_dir(__DIR__ . '/temp')) {
+            \mkdir(__DIR__ . '/temp');
+        }
+
+        $response = new HttpResponse();
+        $request  = new HttpRequest(new HttpUri(''));
+
+        $request->header->account = 1;
+
+        $request->setData('type', 1);
+        $request->setData('description', 'Test description');
+        $request->setData('expense', 1);
+
+        $tmpInvoices = \scandir(__DIR__ . '/billing');
+        $invoiceDocs = [];
+        foreach ($tmpInvoices as $invoice) {
+            if ($invoice !== '..' && $invoice !== '.') {
+                $invoiceDocs[] = $invoice;
+            }
+        }
+
+        $file = $invoiceDocs[0];
+        \copy(__DIR__ . '/billing/' . $file, __DIR__ . '/temp/' . $file);
+
+        $toUpload['file0'] = [
+            'name'     => $file,
+            'type'     => \explode('.', $file)[1],
+            'tmp_name' => __DIR__ . '/temp/' . $file,
+            'error'    => \UPLOAD_ERR_OK,
+            'size'     => \filesize(__DIR__ . '/temp/' . $file),
+        ];
+
+        TestUtils::setMember($request, 'files', $toUpload);
+        $this->module->apiExpenseElementCreate($request, $response);
+        self::assertEquals('ok', $response->getData('')['status']);
+        self::assertGreaterThan(0, $response->getDataArray('')['response']->id);
+
+        if (\is_dir(__DIR__ . '/temp')) {
+            Directory::delete(__DIR__ . '/temp');
+        }
     }
 }
