@@ -9,7 +9,7 @@
         "target": "self",
         "icon": null,
         "order": 40,
-        "from": 1001000000,
+        "from": "BusinessExpenses",
         "permission": { "permission": 2, "type": null, "element": null },
         "parent": 1002401001,
         "children": [
@@ -23,7 +23,7 @@
                 "target": "self",
                 "icon": null,
                 "order": 40,
-                "from": 1001000000,
+                "from": "BusinessExpenses",
                 "permission": { "permission": 2, "type": null, "element": null },
                 "parent": 1001001001,
                 "children": [
@@ -39,9 +39,57 @@
                 "target": "self",
                 "icon": null,
                 "order": 40,
-                "from": 1001000000,
+                "from": "BusinessExpenses",
                 "permission": { "permission": 2, "type": null, "element": null },
                 "parent": 1001001001,
+                "children": [
+                ]
+            }
+        ]
+    },
+    {
+        "id": 1001003001,
+        "pid": "/",
+        "type": 2,
+        "subtype": 1,
+        "name": "BusinessExpenses",
+        "uri": "{/base}/businessexpenses/expense/list",
+        "target": "self",
+        "icon": null,
+        "order": 40,
+        "from": "BusinessExpenses",
+        "permission": { "permission": 2, "type": null, "element": null },
+        "parent": 1003401001,
+        "children": [
+            {
+                "id": 1001004001,
+                "pid": "/",
+                "type": 3,
+                "subtype": 1,
+                "name": "List",
+                "uri": "{/base}/businessexpenses/expense/list",
+                "target": "self",
+                "icon": null,
+                "order": 40,
+                "from": "BusinessExpenses",
+                "permission": { "permission": 2, "type": null, "element": null },
+                "parent": 1001003001,
+                "children": [
+                ]
+            },
+            {
+                "id": 1001004002,
+                "pid": "/",
+                "type": 3,
+                "subtype": 1,
+                "name": "Create",
+                "uri": "{/base}/businessexpenses/expense/create",
+                "target": "self",
+                "icon": null,
+                "order": 40,
+                "from": "BusinessExpenses",
+                "permission": { "permission": 2, "type": null, "element": null },
+                "parent": 1001003001,
                 "children": [
                 ]
             }
