@@ -55,22 +55,12 @@ echo $this->data['nav']->render(); ?>
                             <i class="filter g-icon">filter_alt</i>
                         </label>
                     <td><?= $this->getHtml('Paid'); ?>
-                        <label for="iSalesClientList-sort-3">
-                            <input type="radio" name="iSalesClientList-sort" id="iSalesClientList-sort-3">
-                            <i class="sort-asc g-icon">expand_less</i>
-                        </label>
-                        <label for="iSalesClientList-sort-4">
-                            <input type="radio" name="iSalesClientList-sort" id="iSalesClientList-sort-4">
-                            <i class="sort-desc g-icon">expand_more</i>
+                        <label>
+                            <i class="filter g-icon">filter_alt</i>
                         </label>
                     <td><?= $this->getHtml('Approved'); ?>
-                        <label for="iSalesClientList-sort-3">
-                            <input type="radio" name="iSalesClientList-sort" id="iSalesClientList-sort-3">
-                            <i class="sort-asc g-icon">expand_less</i>
-                        </label>
-                        <label for="iSalesClientList-sort-4">
-                            <input type="radio" name="iSalesClientList-sort" id="iSalesClientList-sort-4">
-                            <i class="sort-desc g-icon">expand_more</i>
+                        <label>
+                            <i class="filter g-icon">filter_alt</i>
                         </label>
                     <td class="wf-100"><?= $this->getHtml('From'); ?>
                         <label for="iSalesClientList-sort-5">
