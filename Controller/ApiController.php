@@ -26,10 +26,12 @@ use Modules\BusinessExpenses\Models\ExpenseMapper;
 use Modules\BusinessExpenses\Models\ExpenseStatus;
 use Modules\BusinessExpenses\Models\ExpenseTypeL11nMapper;
 use Modules\BusinessExpenses\Models\ExpenseTypeMapper;
+use Modules\BusinessExpenses\Models\PermissionCategory;
 use Modules\Media\Models\CollectionMapper;
 use Modules\Media\Models\MediaMapper;
 use Modules\Media\Models\PathSettings;
 use Modules\SupplierManagement\Models\NullSupplier;
+use phpOMS\Account\PermissionType;
 use phpOMS\Localization\BaseStringL11n;
 use phpOMS\Localization\BaseStringL11nType;
 use phpOMS\Localization\ISO639x1Enum;
@@ -440,7 +442,7 @@ final class ApiController extends Controller
             $request->setData('element', $element->id, true);
             $this->apiMediaAddToExpenseElement($request, $response, $data);
 
-            // @todo: refill element with parsed data from media (ocr)
+            // @todo refill element with parsed data from media (ocr)
         }
 
         $this->createStandardCreateResponse($request, $response, $element);
@@ -462,9 +464,9 @@ final class ApiController extends Controller
         $element->description = $request->getDataString('description') ?? '';
         $element->type        = new NullBaseStringL11nType((int) $request->getData('type'));
 
-        // @todo: fill from media if available
+        // @todo fill from media if available
 
-        // @todo: handle different value set (net, gross, taxr, ...).
+        // @todo handle different value set (net, gross, taxr, ...).
         // Depending on the value set the other values should be calculated
         $element->net      = new FloatInt($request->getDataInt('net') ?? 0);
         $element->taxR     = new FloatInt($request->getDataInt('taxr') ?? 0);
@@ -476,7 +478,7 @@ final class ApiController extends Controller
             $element->supplier = new NullSupplier((int) $request->getData('supplier'));
         }
 
-        // @todo: use country of expense if no country is set
+        // @todo use country of expense if no country is set
         $country = $request->getDataString('country') ?? '';
         if (empty($country)) {
             $account = $this->app->accountManager->get($request->header->account);
@@ -770,7 +772,7 @@ final class ApiController extends Controller
      */
     public function apiMediaRemoveFromExpenseElement(RequestAbstract $request, ResponseAbstract $response, array $data = []) : void
     {
-        // @todo: check that it is not system generated media!
+        // @todo check that it is not system generated media!
         if (!empty($val = $this->validateMediaRemoveFromExpenseElement($request))) {
             $response->header->status = RequestStatusCode::R_400;
             $this->createInvalidRemoveResponse($request, $response, $val);
@@ -796,7 +798,7 @@ final class ApiController extends Controller
 
         if (\count($elementCollection) !== 1) {
             // For some reason there are multiple collections with the same virtual path?
-            // @todo: check if this is the correct way to handle it or if we need to make sure that it is a collection
+            // @todo check if this is the correct way to handle it or if we need to make sure that it is a collection
             return;
         }
 
@@ -827,7 +829,7 @@ final class ApiController extends Controller
         if ($referenceCount === 0) {
             // Is not used anywhere else -> remove from db and file system
 
-            // @todo: remove media types from media
+            // @todo remove media types from media
 
             $this->deleteModel($request->header->account, $media, MediaMapper::class, 'element_media', $request->getOrigin());
 
@@ -991,8 +993,17 @@ final class ApiController extends Controller
      */
     public function apiNoteUpdate(RequestAbstract $request, ResponseAbstract $response, array $data = []) : void
     {
-        // @todo: check permissions
-        $this->app->moduleManager->get('Editor', 'Api')->apiEditorDocUpdate($request, $response, $data);
+        $accountId = $request->header->account;
+        if (!$this->app->accountManager->get($accountId)->hasPermission(
+            PermissionType::MODIFY, $this->app->unitId, $this->app->appId, self::NAME, PermissionCategory::EXPENSE_NOTE, $request->getDataInt('id'))
+        ) {
+            $this->fillJsonResponse($request, $response, NotificationLevel::HIDDEN, '', '', []);
+            $response->header->status = RequestStatusCode::R_403;
+
+            return;
+        }
+
+        $this->app->moduleManager->get('Editor', 'Api')->apiEditorUpdate($request, $response, $data);
     }
 
     /**
@@ -1010,8 +1021,17 @@ final class ApiController extends Controller
      */
     public function apiNoteDelete(RequestAbstract $request, ResponseAbstract $response, array $data = []) : void
     {
-        // @todo: check permissions
-        $this->app->moduleManager->get('Editor', 'Api')->apiEditorDocDelete($request, $response, $data);
+        $accountId = $request->header->account;
+        if (!$this->app->accountManager->get($accountId)->hasPermission(
+            PermissionType::DELETE, $this->app->unitId, $this->app->appId, self::NAME, PermissionCategory::EXPENSE_NOTE, $request->getDataInt('id'))
+        ) {
+            $this->fillJsonResponse($request, $response, NotificationLevel::HIDDEN, '', '', []);
+            $response->header->status = RequestStatusCode::R_403;
+
+            return;
+        }
+
+        $this->app->moduleManager->get('Editor', 'Api')->apiEditorDelete($request, $response, $data);
     }
 
     /**
@@ -1052,7 +1072,7 @@ final class ApiController extends Controller
      *
      * @return BaseStringL11nType
      *
-     * @todo: implement
+     * @todo Implement API update function
      *
      * @since 1.0.0
      */
@@ -1070,7 +1090,7 @@ final class ApiController extends Controller
      *
      * @return array<string, bool>
      *
-     * @todo: implement
+     * @todo Implement API validation function
      *
      * @since 1.0.0
      */
@@ -1099,7 +1119,6 @@ final class ApiController extends Controller
      */
     public function apiExpenseTypeDelete(RequestAbstract $request, ResponseAbstract $response, array $data = []) : void
     {
-        // @todo: check if type unused
         if (!empty($val = $this->validateExpenseTypeDelete($request))) {
             $response->header->status = RequestStatusCode::R_400;
             $this->createInvalidDeleteResponse($request, $response, $val);
@@ -1170,7 +1189,7 @@ final class ApiController extends Controller
      *
      * @return BaseStringL11n
      *
-     * @todo: implement
+     * @todo Implement API update function
      *
      * @since 1.0.0
      */
@@ -1191,14 +1210,15 @@ final class ApiController extends Controller
      *
      * @return array<string, bool>
      *
-     * @todo: implement
-     *
      * @since 1.0.0
      */
     private function validateExpenseTypeL11nUpdate(RequestAbstract $request) : array
     {
         $val = [];
-        if (($val['id'] = !$request->hasData('id'))) {
+        if (($val['id'] = !$request->hasData('id'))
+            || ($val['title'] = !$request->hasData('title'))
+            || ($val['language'] = $request->hasData('language') && !ISO639x1Enum::isValidValue($request->getDataString('language')))
+        ) {
             return $val;
         }
 
@@ -1239,7 +1259,7 @@ final class ApiController extends Controller
      *
      * @return array<string, bool>
      *
-     * @todo: implement
+     * @todo Implement API validation function
      *
      * @since 1.0.0
      */
@@ -1291,7 +1311,7 @@ final class ApiController extends Controller
      *
      * @return BaseStringL11nType
      *
-     * @todo: implement
+     * @todo Implement API update function
      *
      * @since 1.0.0
      */
@@ -1309,7 +1329,7 @@ final class ApiController extends Controller
      *
      * @return array<string, bool>
      *
-     * @todo: implement
+     * @todo Implement API validation function
      *
      * @since 1.0.0
      */
@@ -1338,7 +1358,7 @@ final class ApiController extends Controller
      */
     public function apiExpenseElementTypeDelete(RequestAbstract $request, ResponseAbstract $response, array $data = []) : void
     {
-        // @todo: make sure can be deleted
+        // @todo make sure can be deleted
         if (!empty($val = $this->validateExpenseElementTypeDelete($request))) {
             $response->header->status = RequestStatusCode::R_400;
             $this->createInvalidDeleteResponse($request, $response, $val);
@@ -1359,7 +1379,7 @@ final class ApiController extends Controller
      *
      * @return array<string, bool>
      *
-     * @todo: implement
+     * @todo Implement API validation function
      *
      * @since 1.0.0
      */
@@ -1411,7 +1431,7 @@ final class ApiController extends Controller
      *
      * @return BaseStringL11n
      *
-     * @todo: implement
+     * @todo Implement API update function
      *
      * @since 1.0.0
      */
@@ -1432,14 +1452,17 @@ final class ApiController extends Controller
      *
      * @return array<string, bool>
      *
-     * @todo: implement
+     * @todo Implement API validation function
      *
      * @since 1.0.0
      */
     private function validateExpenseElementTypeL11nUpdate(RequestAbstract $request) : array
     {
         $val = [];
-        if (($val['id'] = !$request->hasData('id'))) {
+        if (($val['id'] = !$request->hasData('id'))
+            || ($val['title'] = !$request->hasData('title'))
+            || ($val['language'] = $request->hasData('language') && !ISO639x1Enum::isValidValue($request->getDataString('language')))
+        ) {
             return $val;
         }
 
@@ -1480,7 +1503,7 @@ final class ApiController extends Controller
      *
      * @return array<string, bool>
      *
-     * @todo: implement
+     * @todo Implement API validation function
      *
      * @since 1.0.0
      */
@@ -1532,7 +1555,7 @@ final class ApiController extends Controller
      *
      * @return Expense
      *
-     * @todo: implement
+     * @todo Implement API update function
      *
      * @since 1.0.0
      */
@@ -1553,7 +1576,7 @@ final class ApiController extends Controller
      *
      * @return array<string, bool>
      *
-     * @todo: implement
+     * @todo Implement API validation function
      *
      * @since 1.0.0
      */
@@ -1592,9 +1615,9 @@ final class ApiController extends Controller
         /** @var \Modules\BusinessExpenses\Models\Expense $expense */
         $expense = ExpenseMapper::get()->where('id', (int) $request->getData('id'))->execute();
 
-        // @todo: delete elements
-        // @todo: delete media
-        // @todo: check external accounting references?
+        // @todo delete elements
+        // @todo delete media
+        // @todo check external accounting references?
 
         $this->deleteModel($request->header->account, $expense, ExpenseMapper::class, 'expense', $request->getOrigin());
         $this->createStandardDeleteResponse($request, $response, $expense);
@@ -1607,7 +1630,7 @@ final class ApiController extends Controller
      *
      * @return array<string, bool>
      *
-     * @todo: implement
+     * @todo Implement API validation function
      *
      * @since 1.0.0
      */
@@ -1668,7 +1691,7 @@ final class ApiController extends Controller
      *
      * @return ExpenseElement
      *
-     * @todo: implement
+     * @todo Implement API update function
      *
      * @since 1.0.0
      */
@@ -1696,7 +1719,7 @@ final class ApiController extends Controller
      *
      * @return array<string, bool>
      *
-     * @todo: implement
+     * @todo Implement API validation function
      *
      * @since 1.0.0
      */
@@ -1732,7 +1755,7 @@ final class ApiController extends Controller
             return;
         }
 
-        // @todo: delete media
+        // @todo delete media
 
         /** @var \Modules\BusinessExpenses\Models\ExpenseElement $expenseElement */
         $expenseElement = ExpenseElementMapper::get()->where('id', (int) $request->getData('id'))->execute();
@@ -1758,7 +1781,7 @@ final class ApiController extends Controller
      *
      * @return array<string, bool>
      *
-     * @todo: implement
+     * @todo Implement API validation function
      *
      * @since 1.0.0
      */
