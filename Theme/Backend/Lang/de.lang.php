@@ -31,4 +31,7 @@ return ['BusinessExpenses' => [
     'Start'       => 'Start',
     'Status'      => 'Status',
     'Title'       => 'Titel',
+    'Overview'       => 'Übersicht',
+    'Clocking'       => 'Zeiterfassung',
+    'Type'       => 'Typ',
 ]];
