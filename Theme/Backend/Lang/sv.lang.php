@@ -13,9 +13,6 @@
 declare(strict_types=1);
 
 return ['BusinessExpenses' => [
-    ':status1'    => '',
-    ':status2'    => '',
-    ':status3'    => '',
     'Amount'      => '',
     'Approved'    => '',
     'CreatedAt'   => '',
@@ -30,5 +27,4 @@ return ['BusinessExpenses' => [
     'Report'      => '',
     'Start'       => '',
     'Status'      => '',
-    'Title'       => '',
 ]];
