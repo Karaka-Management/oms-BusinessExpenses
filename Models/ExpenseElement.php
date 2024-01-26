@@ -54,8 +54,6 @@ class ExpenseElement
 
     public ?Account $ref = null;
 
-    public array $media = [];
-
     public string $taxId = '';
 
     public ?Supplier $supplier = null;
@@ -82,4 +80,6 @@ class ExpenseElement
         $this->start    = new \DateTime('now');
         $this->end      = new \DateTime('now');
     }
+
+    use \Modules\Media\Models\MediaListTrait;
 }

@@ -93,7 +93,10 @@ final class ApiController extends Controller
     {
         $type        = new BaseStringL11nType();
         $type->title = $request->getDataString('name') ?? '';
-        $type->setL11n($request->getDataString('title') ?? '', $request->getDataString('language') ?? ISO639x1Enum::_EN);
+        $type->setL11n(
+            $request->getDataString('title') ?? '',
+            ISO639x1Enum::tryFromValue($request->getDataString('language')) ?? ISO639x1Enum::_EN
+        );
 
         return $type;
     }
@@ -157,12 +160,10 @@ final class ApiController extends Controller
      */
     private function createExpenseTypeL11nFromRequest(RequestAbstract $request) : BaseStringL11n
     {
-        $typeL11n      = new BaseStringL11n();
-        $typeL11n->ref = $request->getDataInt('type') ?? 0;
-        $typeL11n->setLanguage(
-            $request->getDataString('language') ?? $request->header->l11n->language
-        );
-        $typeL11n->content = $request->getDataString('title') ?? '';
+        $typeL11n           = new BaseStringL11n();
+        $typeL11n->ref      = $request->getDataInt('type') ?? 0;
+        $typeL11n->language = ISO639x1Enum::tryFromValue($request->getDataString('language')) ?? $request->header->l11n->language;
+        $typeL11n->content  = $request->getDataString('title') ?? '';
 
         return $typeL11n;
     }
@@ -229,7 +230,10 @@ final class ApiController extends Controller
     {
         $type        = new BaseStringL11nType();
         $type->title = $request->getDataString('name') ?? '';
-        $type->setL11n($request->getDataString('title') ?? '', $request->getDataString('language') ?? ISO639x1Enum::_EN);
+        $type->setL11n(
+            $request->getDataString('title') ?? '',
+            ISO639x1Enum::tryFromValue($request->getDataString('language')) ?? ISO639x1Enum::_EN
+        );
 
         return $type;
     }
@@ -293,12 +297,10 @@ final class ApiController extends Controller
      */
     private function createExpenseElementTypeL11nFromRequest(RequestAbstract $request) : BaseStringL11n
     {
-        $typeL11n      = new BaseStringL11n();
-        $typeL11n->ref = $request->getDataInt('type') ?? 0;
-        $typeL11n->setLanguage(
-            $request->getDataString('language') ?? $request->header->l11n->language
-        );
-        $typeL11n->content = $request->getDataString('title') ?? '';
+        $typeL11n           = new BaseStringL11n();
+        $typeL11n->ref      = $request->getDataInt('type') ?? 0;
+        $typeL11n->language = ISO639x1Enum::tryFromValue($request->getDataString('language')) ?? $request->header->l11n->language;
+        $typeL11n->content  = $request->getDataString('title') ?? '';
 
         return $typeL11n;
     }
@@ -365,7 +367,7 @@ final class ApiController extends Controller
         $expense              = new Expense();
         $expense->from        = new NullAccount((int) $request->header->account);
         $expense->type        = new NullBaseStringL11nType((int) $request->getDataInt('type'));
-        $expense->status      = $request->getDataInt('status') ?? ExpenseStatus::DRAFT;
+        $expense->status      = ExpenseStatus::tryFromValue($request->getDataInt('status')) ?? ExpenseStatus::DRAFT;
         $expense->description = $request->getDataString('description') ?? '';
 
         $country = $request->getDataString('country') ?? '';
@@ -1195,10 +1197,8 @@ final class ApiController extends Controller
      */
     public function updateExpenseTypeL11nFromRequest(RequestAbstract $request, BaseStringL11n $new) : BaseStringL11n
     {
-        $new->setLanguage(
-            $request->getDataString('language') ?? $new->language
-        );
-        $new->content = $request->getDataString('title') ?? $new->content;
+        $new->language = ISO639x1Enum::tryFromValue($request->getDataString('language')) ?? $new->language;
+        $new->content  = $request->getDataString('title') ?? $new->content;
 
         return $new;
     }
@@ -1437,10 +1437,8 @@ final class ApiController extends Controller
      */
     public function updateExpenseElementTypeL11nFromRequest(RequestAbstract $request, BaseStringL11n $new) : BaseStringL11n
     {
-        $new->setLanguage(
-            $request->getDataString('language') ?? $new->language
-        );
-        $new->content = $request->getDataString('title') ?? $new->content;
+        $new->language = ISO639x1Enum::tryFromValue($request->getDataString('language')) ?? $new->language;
+        $new->content  = $request->getDataString('title') ?? $new->content;
 
         return $new;
     }
@@ -1562,7 +1560,7 @@ final class ApiController extends Controller
     public function updateExpenseFromRequest(RequestAbstract $request, Expense $new) : Expense
     {
         $new->type        = $request->hasData('type') ? new NullBaseStringL11nType((int) $request->getDataInt('type')) : $new->type;
-        $new->status      = $request->getDataInt('status') ?? $new->status;
+        $new->status      = ExpenseStatus::tryFromValue($request->getDataInt('status')) ?? $new->status;
         $new->description = $request->getDataString('description') ?? $new->description;
         $new->country     = $request->getDataString('country') ?? $new->country;
 

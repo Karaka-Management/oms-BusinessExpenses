@@ -18,7 +18,7 @@ use phpOMS\Account\PermissionType;
 use phpOMS\Router\RouteVerb;
 
 return [
-    '^.*/businessexpenses/expense/list.*$' => [
+    '^.*/businessexpenses/expense/list(\?.*$|$)' => [
         [
             'dest'       => '\Modules\BusinessExpenses\Controller\BackendController:viewBusinessExpensesList',
             'verb'       => RouteVerb::GET,
@@ -29,7 +29,7 @@ return [
             ],
         ],
     ],
-    '^.*/businessexpenses/expense/create.*$' => [
+    '^.*/businessexpenses/expense/create(\?.*$|$)' => [
         [
             'dest'       => '\Modules\BusinessExpenses\Controller\BackendController:viewBusinessExpensesExpenseCreate',
             'verb'       => RouteVerb::GET,
@@ -40,7 +40,7 @@ return [
             ],
         ],
     ],
-    '^.*/businessexpenses/expense(\?.*|$)$' => [
+    '^.*/businessexpenses/expense(\?.*$|$)' => [
         [
             'dest'       => '\Modules\BusinessExpenses\Controller\BackendController:viewBusinessExpensesExpense',
             'verb'       => RouteVerb::GET,
@@ -51,7 +51,7 @@ return [
             ],
         ],
     ],
-    '^.*/businessexpenses/type/list\?.*$' => [
+    '^.*/businessexpenses/type/list(\?.*$|$)' => [
         [
             'dest'       => '\Modules\BusinessExpenses\Controller\BackendController:viewBusinessExpensesTypeList',
             'verb'       => RouteVerb::GET,
@@ -62,7 +62,7 @@ return [
             ],
         ],
     ],
-    '^.*/businessexpenses/type(\?.*|$)$' => [
+    '^.*/businessexpenses/type(\?.*$|$)' => [
         [
             'dest'       => '\Modules\BusinessExpenses\Controller\BackendController:viewBusinessExpensesType',
             'verb'       => RouteVerb::GET,
@@ -73,7 +73,7 @@ return [
             ],
         ],
     ],
-    '^.*/businessexpenses/type/create.*$' => [
+    '^.*/businessexpenses/type/create(\?.*$|$)' => [
         [
             'dest'       => '\Modules\BusinessExpenses\Controller\BackendController:viewBusinessExpensesTypeCreate',
             'verb'       => RouteVerb::GET,

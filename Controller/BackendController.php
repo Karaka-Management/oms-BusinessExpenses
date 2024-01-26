@@ -75,7 +75,7 @@ final class BackendController extends Controller
     {
         $view = new View($this->app->l11nManager, $request, $response);
 
-        $view->setTemplate('/Modules/BusinessExpenses/Theme/Backend/expense-single');
+        $view->setTemplate('/Modules/BusinessExpenses/Theme/Backend/expense-view');
         $view->data['nav'] = $this->app->moduleManager->get('Navigation')->createNavigationMid(1001001001, $request, $response);
 
         $expense = ExpenseMapper::get()
@@ -110,7 +110,7 @@ final class BackendController extends Controller
     {
         $view = new View($this->app->l11nManager, $request, $response);
 
-        $view->setTemplate('/Modules/BusinessExpenses/Theme/Backend/expense-single');
+        $view->setTemplate('/Modules/BusinessExpenses/Theme/Backend/expense-view');
         $view->data['nav'] = $this->app->moduleManager->get('Navigation')->createNavigationMid(1001001001, $request, $response);
 
         $expense = ExpenseMapper::get()
@@ -139,7 +139,7 @@ final class BackendController extends Controller
     {
         $view = new View($this->app->l11nManager, $request, $response);
 
-        $view->setTemplate('/Modules/BusinessExpenses/Theme/Backend/expense-single');
+        $view->setTemplate('/Modules/BusinessExpenses/Theme/Backend/expense-view');
         $view->data['nav'] = $this->app->moduleManager->get('Navigation')->createNavigationMid(1001001001, $request, $response);
 
         $expense = ExpenseMapper::get()
@@ -168,7 +168,7 @@ final class BackendController extends Controller
     {
         $view = new View($this->app->l11nManager, $request, $response);
 
-        $view->setTemplate('/Modules/BusinessExpenses/Theme/Backend/expense-single');
+        $view->setTemplate('/Modules/BusinessExpenses/Theme/Backend/expense-view');
         $view->data['nav'] = $this->app->moduleManager->get('Navigation')->createNavigationMid(1001001001, $request, $response);
 
         $expense = ExpenseMapper::get()
@@ -197,7 +197,7 @@ final class BackendController extends Controller
     {
         $view = new View($this->app->l11nManager, $request, $response);
 
-        $view->setTemplate('/Modules/BusinessExpenses/Theme/Backend/expense-single');
+        $view->setTemplate('/Modules/BusinessExpenses/Theme/Backend/expense-view');
         $view->data['nav'] = $this->app->moduleManager->get('Navigation')->createNavigationMid(1001001001, $request, $response);
 
         $expense = ExpenseMapper::get()

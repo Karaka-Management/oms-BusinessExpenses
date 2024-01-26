@@ -14,10 +14,9 @@
 declare(strict_types=1);
 
 use Modules\BusinessExpenses\Models\NullExpense;
-use phpOMS\Uri\UriFactory;
 
 /** @var \phpOMS\Views\View $this */
-$expense = $this->getData('expense') ?? new NullExpense();
+$expense  = $this->getData('expense') ?? new NullExpense();
 $sessions = $this->data['sessions'] ?? [];
 
 echo $this->data['nav']->render(); ?>
@@ -109,17 +108,17 @@ echo $this->data['nav']->render(); ?>
                     <section class="portlet">
                         <div class="portlet-head"><?= $this->getHtml('Expenses'); ?><i class="g-icon download btn end-xs">download</i></div>
                         <div class="slider">
-                        <table id="iSalesClientList" class="default sticky">
+                        <table id="iExpenseList" class="default sticky">
                             <thead>
                             <tr>
                                 <td>
                                 <td><?= $this->getHtml('ID', '0', '0'); ?>
-                                    <label for="iSalesClientList-sort-1">
-                                        <input type="radio" name="iSalesClientList-sort" id="iSalesClientList-sort-1">
+                                    <label for="iExpenseList-sort-1">
+                                        <input type="radio" name="iExpenseList-sort" id="iExpenseList-sort-1">
                                         <i class="sort-asc g-icon">expand_less</i>
                                     </label>
-                                    <label for="iSalesClientList-sort-2">
-                                        <input type="radio" name="iSalesClientList-sort" id="iSalesClientList-sort-2">
+                                    <label for="iExpenseList-sort-2">
+                                        <input type="radio" name="iExpenseList-sort" id="iExpenseList-sort-2">
                                         <i class="sort-desc g-icon">expand_more</i>
                                     </label>
                                     <label>
@@ -245,21 +244,21 @@ echo $this->data['nav']->render(); ?>
                                 <td>
                                     <?php
                                         if ($lastOpenSession !== null
-                                            && $session->getStart()->format('Y-m-d') === $lastOpenSession->getStart()->format('Y-m-d')
+                                            && $session->start->format('Y-m-d') === $lastOpenSession->start->format('Y-m-d')
                                         ) : ?>
                                         <span class="tag">Today</span>
                                     <?php else : ?>
-                                        <?= $session->getStart()->format('Y-m-d'); ?> - <?= $this->getHtml('D' . $session->getStart()->format('w')); ?>
+                                        <?= $session->start->format('Y-m-d'); ?> - <?= $this->getHtml('D' . $session->start->format('w')); ?>
                                     <?php endif; ?>
-                                <td><span class="tag"><?= $this->getHtml('CT' . $session->getType()); ?></span>
-                                <td><span class="tag"><?= $this->getHtml('CS' . $session->getStatus()); ?></span>
-                                <td><?= $session->getStart()->format('H:i'); ?>
+                                <td><span class="tag"><?= $this->getHtml('CT' . $session->type); ?></span>
+                                <td><span class="tag"><?= $this->getHtml('CS' . $session->status); ?></span>
+                                <td><?= $session->start->format('H:i'); ?>
                                 <td><?= (int) ($session->getBreak() / 3600); ?>h <?= ((int) ($session->getBreak() / 60) % 60); ?>m
                                 <td><?= $session->getEnd() !== null ? $session->getEnd()->format('H:i') : ''; ?>
                                 <td><?= (int) ($session->getBusy() / 3600); ?>h <?= ((int) ($session->getBusy() / 60) % 60); ?>m
                             <?php
                                 $busy['week'] += $session->getBusy();
-                                if ($session->getStart()->getTimestamp() < $startWeek->getTimestamp()
+                                if ($session->start->getTimestamp() < $startWeek->getTimestamp()
                                     || $count === $sessionCount
                             ) : ?>
                             <tr>
@@ -273,7 +272,7 @@ echo $this->data['nav']->render(); ?>
                             ?>
                             <?php
                                 $busy['month'] += $session->getBusy();
-                                if ($session->getStart()->getTimestamp() < $startMonth->getTimestamp()
+                                if ($session->start->getTimestamp() < $startMonth->getTimestamp()
                                     || $count === $sessionCount
                             ) : ?>
                             <tr>

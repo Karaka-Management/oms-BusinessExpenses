@@ -17,7 +17,6 @@ namespace Modules\BusinessExpenses\tests\Controller\Api;
 use phpOMS\Message\Http\HttpRequest;
 use phpOMS\Message\Http\HttpResponse;
 use phpOMS\System\File\Local\Directory;
-use phpOMS\Uri\HttpUri;
 use phpOMS\Utils\TestUtils;
 
 trait ApiExpenseControllerTrait
@@ -25,7 +24,7 @@ trait ApiExpenseControllerTrait
     public function testExpenseCreate() : void
     {
         $response = new HttpResponse();
-        $request  = new HttpRequest(new HttpUri(''));
+        $request  = new HttpRequest();
 
         $request->header->account = 1;
         $request->setData('type', 1);
@@ -43,7 +42,7 @@ trait ApiExpenseControllerTrait
         }
 
         $response = new HttpResponse();
-        $request  = new HttpRequest(new HttpUri(''));
+        $request  = new HttpRequest();
 
         $request->header->account = 1;
 

@@ -37,8 +37,8 @@ final class ExpenseTypeMapper extends DataMapperFactory
      * @since 1.0.0
      */
     public const COLUMNS = [
-        'bizexpenses_expense_type_id'         => ['name' => 'bizexpenses_expense_type_id',       'type' => 'int',    'internal' => 'id'],
-        'bizexpenses_expense_type_name'       => ['name' => 'bizexpenses_expense_type_name',     'type' => 'string', 'internal' => 'title', 'autocomplete' => true],
+        'bizexpenses_expense_type_id'   => ['name' => 'bizexpenses_expense_type_id',       'type' => 'int',    'internal' => 'id'],
+        'bizexpenses_expense_type_name' => ['name' => 'bizexpenses_expense_type_name',     'type' => 'string', 'internal' => 'title', 'autocomplete' => true],
     ];
 
     /**

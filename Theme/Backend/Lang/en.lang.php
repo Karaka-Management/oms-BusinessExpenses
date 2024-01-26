@@ -30,7 +30,7 @@ return ['BusinessExpenses' => [
     'Report'      => 'Report',
     'Start'       => 'Start',
     'Status'      => 'Status',
-    'Overview'       => 'Overview',
-    'Clocking'       => 'Clocking',
-    'Type'       => 'Type',
+    'Overview'    => 'Overview',
+    'Clocking'    => 'Clocking',
+    'Type'        => 'Type',
 ]];
