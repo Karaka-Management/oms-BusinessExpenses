@@ -46,8 +46,6 @@ final class ExpenseElementMapper extends DataMapperFactory
         'bizexpenses_expense_element_net'         => ['name' => 'bizexpenses_expense_element_net', 'type' => 'Serializable', 'internal' => 'net'],
         'bizexpenses_expense_element_gross'       => ['name' => 'bizexpenses_expense_element_gross', 'type' => 'Serializable', 'internal' => 'gross'],
         'bizexpenses_expense_element_taxp'        => ['name' => 'bizexpenses_expense_element_taxp', 'type' => 'Serializable', 'internal' => 'taxP'],
-        'bizexpenses_expense_element_taxr'        => ['name' => 'bizexpenses_expense_element_taxr', 'type' => 'Serializable', 'internal' => 'taxR'],
-        'bizexpenses_expense_element_quantity'    => ['name' => 'bizexpenses_expense_element_quantity', 'type' => 'Serializable', 'internal' => 'quantity'],
         'bizexpenses_expense_element_taxid'       => ['name' => 'bizexpenses_expense_element_taxid', 'type' => 'string', 'internal' => 'taxId'],
         'bizexpenses_expense_element_start'       => ['name' => 'bizexpenses_expense_element_start', 'type' => 'DateTime', 'internal' => 'start'],
         'bizexpenses_expense_element_end'         => ['name' => 'bizexpenses_expense_element_end', 'type' => 'DateTime', 'internal' => 'end'],
@@ -56,6 +54,7 @@ final class ExpenseElementMapper extends DataMapperFactory
         'bizexpenses_expense_element_type'        => ['name' => 'bizexpenses_expense_element_type', 'type' => 'int', 'internal' => 'type'],
         'bizexpenses_expense_element_country'     => ['name' => 'bizexpenses_expense_element_country', 'type' => 'string', 'internal' => 'country'],
         'bizexpenses_expense_element_expense'     => ['name' => 'bizexpenses_expense_element_expense', 'type' => 'int', 'internal' => 'expense'],
+        'bizexpenses_expense_element_bill'         => ['name' => 'bizexpenses_expense_element_bill', 'type' => 'int', 'internal' => 'bill'],
     ];
 
     /**

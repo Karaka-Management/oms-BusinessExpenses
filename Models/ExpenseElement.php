@@ -42,13 +42,9 @@ class ExpenseElement
 
     public FloatInt $net;
 
-    public FloatInt $taxR;
-
     public FloatInt $taxP;
 
     public FloatInt $gross;
-
-    public FloatInt $quantity;
 
     public BaseStringL11nType $type;
 
@@ -64,6 +60,8 @@ class ExpenseElement
 
     public \DateTime $end;
 
+    public ?int $bill = null;
+
     /**
      * Constructor.
      *
@@ -73,10 +71,8 @@ class ExpenseElement
     {
         $this->type     = new BaseStringL11nType();
         $this->net      = new FloatInt();
-        $this->taxR     = new FloatInt();
         $this->taxP     = new FloatInt();
         $this->gross    = new FloatInt();
-        $this->quantity = new FloatInt();
         $this->start    = new \DateTime('now');
         $this->end      = new \DateTime('now');
     }

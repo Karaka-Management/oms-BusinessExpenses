@@ -26,8 +26,10 @@ use Modules\BusinessExpenses\Models\ExpenseMapper;
 use Modules\BusinessExpenses\Models\ExpenseStatus;
 use Modules\BusinessExpenses\Models\ExpenseTypeL11nMapper;
 use Modules\BusinessExpenses\Models\ExpenseTypeMapper;
+use Modules\BusinessExpenses\Models\MediaType;
 use Modules\BusinessExpenses\Models\PermissionCategory;
 use Modules\Media\Models\CollectionMapper;
+use Modules\Media\Models\MediaClass;
 use Modules\Media\Models\MediaMapper;
 use Modules\Media\Models\PathSettings;
 use Modules\SupplierManagement\Models\NullSupplier;
@@ -36,6 +38,8 @@ use phpOMS\Localization\BaseStringL11n;
 use phpOMS\Localization\BaseStringL11nType;
 use phpOMS\Localization\ISO639x1Enum;
 use phpOMS\Localization\NullBaseStringL11nType;
+use phpOMS\Message\Http\HttpRequest;
+use phpOMS\Message\Http\HttpResponse;
 use phpOMS\Message\Http\RequestStatusCode;
 use phpOMS\Message\NotificationLevel;
 use phpOMS\Message\RequestAbstract;
@@ -437,17 +441,46 @@ final class ApiController extends Controller
             ->execute();
 
         $new = clone $old;
-        $new->recalculate();
-        $this->updateModel($request->header->account, $old, $new, ExpenseMapper::class, 'expense', $request->getOrigin());
 
         if (!empty($request->files)) {
             $request->setData('element', $element->id, true);
             $this->apiMediaAddToExpenseElement($request, $response, $data);
-
-            // @todo refill element with parsed data from media (ocr)
         }
 
+        $new->recalculate();
+        $this->updateModel($request->header->account, $old, $new, ExpenseMapper::class, 'expense', $request->getOrigin());
+
         $this->createStandardCreateResponse($request, $response, $element);
+    }
+
+    public function apiExpenseElementFromUploadCreate(RequestAbstract $request, ResponseAbstract $response, array $data = []) : void
+    {
+        if (!empty($val = $this->validateExpenseElementCreate($request))) {
+            $response->header->status = RequestStatusCode::R_400;
+            $this->createInvalidCreateResponse($request, $response, $val);
+
+            return;
+        }
+
+        $elements = [];
+
+        foreach ($request->files as $file) {
+            $internalResponse = new HttpResponse();
+            $internalRequest = new HttpRequest();
+
+            $internalRequest->header->account = $request->header->account;
+            $internalRequest->header->l11n    = $request->header->l11n;
+
+            $internalRequest->setData('expense', $request->getDataInt('expense'));
+            $internalRequest->setData('file_type', MediaType::BILL);
+            $internalRequest->addFile($file);
+
+            $this->apiExpenseElementCreate($internalRequest, $internalResponse, $data);
+
+            $elements[] = $internalResponse->getDataArray($internalRequest->uri->__toString())['response'];
+        }
+
+        $this->createStandardCreateResponse($request, $response, $elements);
     }
 
     /**
@@ -471,10 +504,8 @@ final class ApiController extends Controller
         // @todo handle different value set (net, gross, taxr, ...).
         // Depending on the value set the other values should be calculated
         $element->net      = new FloatInt($request->getDataInt('net') ?? 0);
-        $element->taxR     = new FloatInt($request->getDataInt('taxr') ?? 0);
         $element->taxP     = new FloatInt($request->getDataInt('taxp') ?? 0);
         $element->gross    = new FloatInt($request->getDataInt('gross') ?? 0);
-        $element->quantity = new FloatInt($request->getDataInt('quantity') ?? 0);
 
         if ($request->hasData('supplier')) {
             $element->supplier = new NullSupplier((int) $request->getData('supplier'));
@@ -524,7 +555,7 @@ final class ApiController extends Controller
 
         $uploaded = [];
         if (!empty($uploadedFiles = $request->files)) {
-            $uploaded = $this->app->moduleManager->get('Media')->uploadFiles(
+            $uploaded = $this->app->moduleManager->get('Media', 'Api')->uploadFiles(
                 names: [],
                 fileNames: [],
                 files: $uploadedFiles,
@@ -585,18 +616,17 @@ final class ApiController extends Controller
             }
         }
 
-        if (!empty($mediaFiles = $request->getDataJson('media'))) {
-            foreach ($mediaFiles as $media) {
-                $this->createModelRelation(
-                    $request->header->account,
-                    $expense->id,
-                    (int) $media,
-                    ExpenseElementMapper::class,
-                    'files',
-                    '',
-                    $request->getOrigin()
-                );
-            }
+        $mediaFiles = $request->getDataJson('media');
+        foreach ($mediaFiles as $media) {
+            $this->createModelRelation(
+                $request->header->account,
+                $expense->id,
+                (int) $media,
+                ExpenseElementMapper::class,
+                'files',
+                '',
+                $request->getOrigin()
+            );
         }
 
         $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Media', 'Media added to bill.', [
@@ -656,7 +686,7 @@ final class ApiController extends Controller
 
         $uploaded = [];
         if (!empty($uploadedFiles = $request->files)) {
-            $uploaded = $this->app->moduleManager->get('Media')->uploadFiles(
+            $uploaded = $this->app->moduleManager->get('Media', 'Api')->uploadFiles(
                 names: [],
                 fileNames: [],
                 files: $uploadedFiles,
@@ -717,24 +747,67 @@ final class ApiController extends Controller
             }
         }
 
-        if (!empty($mediaFiles = $request->getDataJson('media'))) {
-            foreach ($mediaFiles as $media) {
-                $this->createModelRelation(
-                    $request->header->account,
-                    $element,
-                    (int) $media,
-                    ExpenseElementMapper::class,
-                    'files',
-                    '',
-                    $request->getOrigin()
-                );
-            }
+        $mediaFiles = $request->getDataJson('media');
+        foreach ($mediaFiles as $media) {
+            $this->createModelRelation(
+                $request->header->account,
+                $element,
+                (int) $media,
+                ExpenseElementMapper::class,
+                'files',
+                '',
+                $request->getOrigin()
+            );
         }
 
-        $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Media', 'Media added to bill.', [
-            'upload' => $uploaded,
-            'media'  => $mediaFiles,
-        ]);
+        // Is invoice
+        if ($request->getDataString('file_type') === MediaType::BILL
+            && \count($uploaded) + \count($mediaFiles) === 1
+            && $this->app->moduleManager->isActive('Billing')
+            && $expense->net->value !== 0
+        ) {
+            $internalResponse = new HttpResponse();
+            $internalRequest = new HttpRequest();
+
+            $internalRequest->header->account = $request->header->account;
+            $internalRequest->header->l11n    = $request->header->l11n;
+
+            $internalRequest->setData('media', empty($uploaded) ? \reset($mediaFiles) : \reset($uploaded)->id);
+            $internalRequest->setData('async', false);
+
+            $this->app->moduleManager->get('Billing', 'ApiPurchase')->apiSupplierBillUpload($internalRequest, $internalResponse, $data);
+
+            $bills = $internalResponse->getDataArray($internalRequest->uri->__toString())['response'];
+
+            $elementObj = ExpenseElementMapper::get()
+                ->where('id', $element)
+                ->execute();
+
+            $oldElement = clone $elementObj;
+            $elementObj->bill = \reset($bills);
+
+            $bill = \Modules\Billing\Models\BillMapper::get()
+                ->where('id', $elementObj->bill)
+                ->execute();
+
+            $elementObj->net      = $bill->netSales;
+            $elementObj->taxP     = $bill->taxP;
+            $elementObj->gross    = $bill->grossSales;
+            $elementObj->supplier = $bill->supplier->id === 0 ? $bill->billTo : null;
+            $elementObj->country  = $bill->billCountry;
+
+            $this->updateModel($request->header->account, $oldElement, $elementObj, ExpenseElementMapper::class, 'expense_element', $request->getOrigin());
+        }
+
+        $this->fillJsonResponse(
+            $request,
+            $response,
+            NotificationLevel::OK,
+            'Media', 'Media added to bill.',
+            [
+                'upload' => $uploaded,
+                'media'  => $mediaFiles,
+            ]);
     }
 
     /**
@@ -774,7 +847,6 @@ final class ApiController extends Controller
      */
     public function apiMediaRemoveFromExpenseElement(RequestAbstract $request, ResponseAbstract $response, array $data = []) : void
     {
-        // @todo check that it is not system generated media!
         if (!empty($val = $this->validateMediaRemoveFromExpenseElement($request))) {
             $response->header->status = RequestStatusCode::R_400;
             $this->createInvalidRemoveResponse($request, $response, $val);
@@ -791,20 +863,27 @@ final class ApiController extends Controller
         /** @var \Modules\BusinessExpenses\Models\ExpenseElement $element */
         $element = ExpenseElementMapper::get()->where('id', (int) $request->getData('element'))->execute();
 
-        $path = $this->createExpenseDir($expense);
+        $path = \dirname($this->createExpenseDir($expense));
 
-        /** @var \Modules\Media\Models\Collection[] $elementCollection */
-        $elementCollection = CollectionMapper::getAll()
+        /** @var \Modules\Media\Models\Collection $collection */
+        $collection = CollectionMapper::get()
+            ->where('name', (string) $element->id)
             ->where('virtual', $path)
+            ->where('class', MediaClass::COLLECTION)
+            ->limit(1)
             ->execute();
 
-        if (\count($elementCollection) !== 1) {
-            // For some reason there are multiple collections with the same virtual path?
-            // @todo check if this is the correct way to handle it or if we need to make sure that it is a collection
-            return;
+        if ($collection->id !== 0) {
+            $this->deleteModelRelation(
+                $request->header->account,
+                $collection->id,
+                $media->id,
+                CollectionMapper::class,
+                'sources',
+                '',
+                $request->getOrigin()
+            );
         }
-
-        $collection = \reset($elementCollection);
 
         $this->deleteModelRelation(
             $request->header->account,
@@ -816,23 +895,9 @@ final class ApiController extends Controller
             $request->getOrigin()
         );
 
-        $this->deleteModelRelation(
-            $request->header->account,
-            $collection->id,
-            $media->id,
-            CollectionMapper::class,
-            'sources',
-            '',
-            $request->getOrigin()
-        );
-
         $referenceCount = MediaMapper::countInternalReferences($media->id);
 
         if ($referenceCount === 0) {
-            // Is not used anywhere else -> remove from db and file system
-
-            // @todo remove media types from media
-
             $this->deleteModel($request->header->account, $media, MediaMapper::class, 'element_media', $request->getOrigin());
 
             if (\is_dir($media->getAbsolutePath())) {
@@ -1259,8 +1324,6 @@ final class ApiController extends Controller
      *
      * @return array<string, bool>
      *
-     * @todo Implement API validation function
-     *
      * @since 1.0.0
      */
     private function validateExpenseTypeL11nDelete(RequestAbstract $request) : array
@@ -1378,8 +1441,6 @@ final class ApiController extends Controller
      * @param RequestAbstract $request Request
      *
      * @return array<string, bool>
-     *
-     * @todo Implement API validation function
      *
      * @since 1.0.0
      */
@@ -1500,8 +1561,6 @@ final class ApiController extends Controller
      * @param RequestAbstract $request Request
      *
      * @return array<string, bool>
-     *
-     * @todo Implement API validation function
      *
      * @since 1.0.0
      */
@@ -1628,8 +1687,6 @@ final class ApiController extends Controller
      *
      * @return array<string, bool>
      *
-     * @todo Implement API validation function
-     *
      * @since 1.0.0
      */
     private function validateExpenseDelete(RequestAbstract $request) : array
@@ -1700,10 +1757,8 @@ final class ApiController extends Controller
 
         // Depending on the value set the other values should be calculated
         $new->net      = $request->hasData('net') ? new FloatInt($request->getDataInt('net') ?? 0) : $new->net;
-        $new->taxR     = $request->hasData('taxr') ? new FloatInt($request->getDataInt('taxr') ?? 0) : $new->taxR;
         $new->taxP     = $request->hasData('taxp') ? new FloatInt($request->getDataInt('taxp') ?? 0) : $new->taxP;
         $new->gross    = $request->hasData('gross') ? new FloatInt($request->getDataInt('gross') ?? 0) : $new->gross;
-        $new->quantity = $request->hasData('quantity') ? new FloatInt($request->getDataInt('quantity') ?? 0) : $new->quantity;
         $new->supplier = $request->hasData('supplier') ? new NullSupplier((int) $request->getData('supplier')) : $new->supplier;
         $new->country  = $request->getDataString('country') ?? $new->country;
 
@@ -1778,8 +1833,6 @@ final class ApiController extends Controller
      * @param RequestAbstract $request Request
      *
      * @return array<string, bool>
-     *
-     * @todo Implement API validation function
      *
      * @since 1.0.0
      */

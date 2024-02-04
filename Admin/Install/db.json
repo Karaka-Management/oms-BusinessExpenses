@@ -230,16 +230,6 @@
                 "type": "BIGINT",
                 "null": false
             },
-            "bizexpenses_expense_element_taxr": {
-                "name": "bizexpenses_expense_element_taxr",
-                "type": "BIGINT",
-                "null": false
-            },
-            "bizexpenses_expense_element_quantity": {
-                "name": "bizexpenses_expense_element_quantity",
-                "type": "BIGINT",
-                "null": false
-            },
             "bizexpenses_expense_element_taxid": {
                 "name": "bizexpenses_expense_element_taxid",
                 "type": "TEXT",
@@ -269,6 +259,12 @@
                 "null": false,
                 "foreignTable": "account",
                 "foreignKey": "account_id"
+            },
+            "bizexpenses_expense_element_bill": {
+                "name": "bizexpenses_expense_element_bill",
+                "type": "INT",
+                "null": true,
+                "default": null
             },
             "bizexpenses_expense_element_type": {
                 "name": "bizexpenses_expense_element_type",

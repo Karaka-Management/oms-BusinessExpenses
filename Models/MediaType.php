@@ -24,15 +24,9 @@ use phpOMS\Stdlib\Base\Enum;
  * @link    https://jingga.app
  * @since   1.0.0
  */
-abstract class ExpenseStatus extends Enum
+abstract class MediaType extends Enum
 {
-    public const DRAFT = 1;
+    public const BILL = 1;
 
-    public const OPEN = 2;
-
-    public const APPROVED = 3;
-
-    public const DENIED = 4;
-
-    public const DELETED = 5;
+    public const OTHER = 2;
 }
