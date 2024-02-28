@@ -83,7 +83,7 @@ final class Installer extends InstallerAbstract
         $expenseTypes = [];
 
         /** @var \Modules\BusinessExpenses\Controller\ApiController $module */
-        $module = $app->moduleManager->getModuleInstance('BusinessExpenses');
+        $module = $app->moduleManager->get('BusinessExpenses');
 
         /** @var array $type */
         foreach ($types as $type) {
@@ -144,7 +144,7 @@ final class Installer extends InstallerAbstract
         $elementTypes = [];
 
         /** @var \Modules\BusinessExpenses\Controller\ApiController $module */
-        $module = $app->moduleManager->getModuleInstance('BusinessExpenses');
+        $module = $app->moduleManager->get('BusinessExpenses');
 
         /** @var array $type */
         foreach ($types as $type) {

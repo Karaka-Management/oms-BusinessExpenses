@@ -119,8 +119,8 @@ echo $this->data['nav']->render(); ?>
                     <td>
                     <td data-label="<?= $this->getHtml('ID', '0', '0'); ?>"><a href="<?= $url; ?>"><?= $value->id; ?></a>
                     <td data-label="<?= $this->getHtml('Status'); ?>"><a href="<?= $url; ?>"><?= $this->getHtml(':status' . $value->status); ?></a>
-                    <td class="centerText" data-label="<?= $this->getHtml('Paid'); ?>"><a href="<?= $url; ?>"><i class="g-icon"><?= $value->paid ? 'check' : 'close'; ?></i></a>
-                    <td class="centerText" data-label="<?= $this->getHtml('Approved'); ?>"><a href="<?= $url; ?>"><i class="g-icon"><?= $value->approved ? 'check' : 'close'; ?></i></a>
+                    <td class="cT" data-label="<?= $this->getHtml('Paid'); ?>"><a href="<?= $url; ?>"><i class="g-icon"><?= $value->paid ? 'check' : 'close'; ?></i></a>
+                    <td class="cT" data-label="<?= $this->getHtml('Approved'); ?>"><a href="<?= $url; ?>"><i class="g-icon"><?= $value->approved ? 'check' : 'close'; ?></i></a>
                     <td data-label="<?= $this->getHtml('From'); ?>"><a href="<?= $url; ?>"><?= $this->printHtml($this->renderUserName('%3$s %2$s %1$s', [$value->from->name1, $value->from->name2, $value->from->name3])); ?></a>
                     <td data-label="<?= $this->getHtml('Amount'); ?>"><a href="<?= $url; ?>"><?= $this->getCurrency($value->gross, symbol: ''); ?></a>
                     <td data-label="<?= $this->getHtml('Start'); ?>"><a href="<?= $url; ?>"><?= $this->printHtml($value->start->format('Y-m-d')); ?></a>

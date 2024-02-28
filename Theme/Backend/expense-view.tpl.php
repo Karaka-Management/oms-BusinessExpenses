@@ -34,7 +34,7 @@ echo $this->data['nav']->render(); ?>
         <div class="tab">
             <div class="row">
                 <div class="col-xs-12 col-lg-6">
-                    <section class="portlet highlight-2">
+                    <section class="portlet hl-2">
                         <div class="portlet-body">
                             <table class="wf-100">
                                 <tr><td><?= $this->getHtml('Net'); ?>:
@@ -47,7 +47,7 @@ echo $this->data['nav']->render(); ?>
                 </div>
 
                 <div class="col-xs-12 col-lg-6">
-                    <section class="portlet highlight-3">
+                    <section class="portlet hl-3">
                         <div class="portlet-body">
                             <table class="wf-100">
                                 <tr><td><?= $this->getHtml('Approved'); ?>:
