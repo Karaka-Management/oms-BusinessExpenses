@@ -69,12 +69,12 @@ class ExpenseElement
      */
     public function __construct()
     {
-        $this->type     = new BaseStringL11nType();
-        $this->net      = new FloatInt();
-        $this->taxP     = new FloatInt();
-        $this->gross    = new FloatInt();
-        $this->start    = new \DateTime('now');
-        $this->end      = new \DateTime('now');
+        $this->type  = new BaseStringL11nType();
+        $this->net   = new FloatInt();
+        $this->taxP  = new FloatInt();
+        $this->gross = new FloatInt();
+        $this->start = new \DateTime('now');
+        $this->end   = new \DateTime('now');
     }
 
     use \Modules\Media\Models\MediaListTrait;

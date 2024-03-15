@@ -54,7 +54,7 @@ final class ExpenseElementMapper extends DataMapperFactory
         'bizexpenses_expense_element_type'        => ['name' => 'bizexpenses_expense_element_type', 'type' => 'int', 'internal' => 'type'],
         'bizexpenses_expense_element_country'     => ['name' => 'bizexpenses_expense_element_country', 'type' => 'string', 'internal' => 'country'],
         'bizexpenses_expense_element_expense'     => ['name' => 'bizexpenses_expense_element_expense', 'type' => 'int', 'internal' => 'expense'],
-        'bizexpenses_expense_element_bill'         => ['name' => 'bizexpenses_expense_element_bill', 'type' => 'int', 'internal' => 'bill'],
+        'bizexpenses_expense_element_bill'        => ['name' => 'bizexpenses_expense_element_bill', 'type' => 'int', 'internal' => 'bill'],
     ];
 
     /**

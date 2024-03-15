@@ -453,6 +453,19 @@ final class ApiController extends Controller
         $this->createStandardCreateResponse($request, $response, $element);
     }
 
+    /**
+     * Api method to create expense element from an upload
+     *
+     * @param RequestAbstract  $request  Request
+     * @param ResponseAbstract $response Response
+     * @param array            $data     Generic data
+     *
+     * @return void
+     *
+     * @api
+     *
+     * @since 1.0.0
+     */
     public function apiExpenseElementFromUploadCreate(RequestAbstract $request, ResponseAbstract $response, array $data = []) : void
     {
         if (!empty($val = $this->validateExpenseElementCreate($request))) {
@@ -466,7 +479,7 @@ final class ApiController extends Controller
 
         foreach ($request->files as $file) {
             $internalResponse = new HttpResponse();
-            $internalRequest = new HttpRequest();
+            $internalRequest  = new HttpRequest();
 
             $internalRequest->header->account = $request->header->account;
             $internalRequest->header->l11n    = $request->header->l11n;
@@ -503,9 +516,9 @@ final class ApiController extends Controller
 
         // @todo handle different value set (net, gross, taxr, ...).
         // Depending on the value set the other values should be calculated
-        $element->net      = new FloatInt($request->getDataInt('net') ?? 0);
-        $element->taxP     = new FloatInt($request->getDataInt('taxp') ?? 0);
-        $element->gross    = new FloatInt($request->getDataInt('gross') ?? 0);
+        $element->net   = new FloatInt($request->getDataInt('net') ?? 0);
+        $element->taxP  = new FloatInt($request->getDataInt('taxp') ?? 0);
+        $element->gross = new FloatInt($request->getDataInt('gross') ?? 0);
 
         if ($request->hasData('supplier')) {
             $element->supplier = new NullSupplier((int) $request->getData('supplier'));
@@ -761,13 +774,13 @@ final class ApiController extends Controller
         }
 
         // Is invoice
-        if ($request->getDataString('file_type') === MediaType::BILL
+        if ($request->getDataInt('file_type') === MediaType::BILL
             && \count($uploaded) + \count($mediaFiles) === 1
             && $this->app->moduleManager->isActive('Billing')
             && $expense->net->value !== 0
         ) {
             $internalResponse = new HttpResponse();
-            $internalRequest = new HttpRequest();
+            $internalRequest  = new HttpRequest();
 
             $internalRequest->header->account = $request->header->account;
             $internalRequest->header->l11n    = $request->header->l11n;
@@ -783,7 +796,7 @@ final class ApiController extends Controller
                 ->where('id', $element)
                 ->execute();
 
-            $oldElement = clone $elementObj;
+            $oldElement       = clone $elementObj;
             $elementObj->bill = \reset($bills);
 
             $bill = \Modules\Billing\Models\BillMapper::get()
@@ -793,7 +806,7 @@ final class ApiController extends Controller
             $elementObj->net      = $bill->netSales;
             $elementObj->taxP     = $bill->taxP;
             $elementObj->gross    = $bill->grossSales;
-            $elementObj->supplier = $bill->supplier->id === 0 ? $bill->billTo : null;
+            $elementObj->supplier = $bill->supplier;
             $elementObj->country  = $bill->billCountry;
 
             $this->updateModel($request->header->account, $oldElement, $elementObj, ExpenseElementMapper::class, 'expense_element', $request->getOrigin());
