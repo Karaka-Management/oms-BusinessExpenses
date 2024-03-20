@@ -22,7 +22,7 @@ use Modules\BusinessExpenses\Models\NullExpenseElement;
 final class NullExpenseElementTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @covers Modules\BusinessExpenses\Models\NullExpenseElement
+     * @covers \Modules\BusinessExpenses\Models\NullExpenseElement
      * @group module
      */
     public function testNull() : void
@@ -31,7 +31,7 @@ final class NullExpenseElementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers Modules\BusinessExpenses\Models\NullExpenseElement
+     * @covers \Modules\BusinessExpenses\Models\NullExpenseElement
      * @group module
      */
     public function testId() : void
@@ -41,7 +41,7 @@ final class NullExpenseElementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers Modules\BusinessExpenses\Models\NullExpenseElement
+     * @covers \Modules\BusinessExpenses\Models\NullExpenseElement
      * @group module
      */
     public function testJsonSerialize() : void
