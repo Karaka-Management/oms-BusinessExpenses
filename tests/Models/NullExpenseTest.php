@@ -19,31 +19,23 @@ use Modules\BusinessExpenses\Models\NullExpense;
 /**
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Modules\BusinessExpenses\Models\NullExpense::class)]
 final class NullExpenseTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @covers \Modules\BusinessExpenses\Models\NullExpense
-     * @group module
-     */
+    #[\PHPUnit\Framework\Attributes\Group('module')]
     public function testNull() : void
     {
         self::assertInstanceOf('\Modules\BusinessExpenses\Models\Expense', new NullExpense());
     }
 
-    /**
-     * @covers \Modules\BusinessExpenses\Models\NullExpense
-     * @group module
-     */
+    #[\PHPUnit\Framework\Attributes\Group('module')]
     public function testId() : void
     {
         $null = new NullExpense(2);
         self::assertEquals(2, $null->id);
     }
 
-    /**
-     * @covers \Modules\BusinessExpenses\Models\NullExpense
-     * @group module
-     */
+    #[\PHPUnit\Framework\Attributes\Group('module')]
     public function testJsonSerialize() : void
     {
         $null = new NullExpense(2);

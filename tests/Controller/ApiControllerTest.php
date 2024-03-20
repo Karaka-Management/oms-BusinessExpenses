@@ -30,10 +30,9 @@ use phpOMS\Router\WebRouter;
 use phpOMS\Utils\TestUtils;
 
 /**
- * @testdox Modules\tests\BusinessExpenses\Controller\ApiControllerTest: BusinessExpenses api controller
- *
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\TestDox('Modules\tests\BusinessExpenses\Controller\ApiControllerTest: BusinessExpenses api controller')]
 final class ApiControllerTest extends \PHPUnit\Framework\TestCase
 {
     protected ApplicationAbstract $app;
