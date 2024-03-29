@@ -35,7 +35,7 @@ return [
             'verb'       => RouteVerb::GET,
             'permission' => [
                 'module' => BackendController::NAME,
-                'type'   => PermissionType::READ,
+                'type'   => PermissionType::CREATE,
                 'state'  => PermissionCategory::EXPENSE,
             ],
         ],
@@ -62,7 +62,7 @@ return [
             ],
         ],
     ],
-    '^.*/businessexpenses/type(\?.*$|$)' => [
+    '^.*/businessexpenses/type/view(\?.*$|$)' => [
         [
             'dest'       => '\Modules\BusinessExpenses\Controller\BackendController:viewBusinessExpensesType',
             'verb'       => RouteVerb::GET,
