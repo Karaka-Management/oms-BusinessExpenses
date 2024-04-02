@@ -40,13 +40,35 @@ return [
             ],
         ],
     ],
-    '^/businessexpenses/expense(\?.*$|$)' => [
+    '^/businessexpenses/expense/view(\?.*$|$)' => [
         [
             'dest'       => '\Modules\BusinessExpenses\Controller\BackendController:viewBusinessExpensesExpense',
             'verb'       => RouteVerb::GET,
             'permission' => [
                 'module' => BackendController::NAME,
                 'type'   => PermissionType::READ,
+                'state'  => PermissionCategory::EXPENSE,
+            ],
+        ],
+    ],
+    '^/businessexpenses/expense/element/view(\?.*$|$)' => [
+        [
+            'dest'       => '\Modules\BusinessExpenses\Controller\BackendController:viewBusinessExpensesElement',
+            'verb'       => RouteVerb::GET,
+            'permission' => [
+                'module' => BackendController::NAME,
+                'type'   => PermissionType::READ,
+                'state'  => PermissionCategory::EXPENSE,
+            ],
+        ],
+    ],
+    '^/businessexpenses/expense/element/create(\?.*$|$)' => [
+        [
+            'dest'       => '\Modules\BusinessExpenses\Controller\BackendController:viewBusinessExpensesElementCreate',
+            'verb'       => RouteVerb::GET,
+            'permission' => [
+                'module' => BackendController::NAME,
+                'type'   => PermissionType::CREATE,
                 'state'  => PermissionCategory::EXPENSE,
             ],
         ],

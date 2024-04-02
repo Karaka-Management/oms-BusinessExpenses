@@ -52,7 +52,7 @@ final class BackendController extends Controller
 
         $list = ExpenseMapper::getAll()
             ->with('from')
-            ->execute();
+            ->executeGetArray();
 
         $view->data['expenses'] = $list;
 

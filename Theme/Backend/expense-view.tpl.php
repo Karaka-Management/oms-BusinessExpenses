@@ -14,6 +14,7 @@
 declare(strict_types=1);
 
 use Modules\BusinessExpenses\Models\NullExpense;
+use phpOMS\Uri\UriFactory;
 
 /** @var \phpOMS\Views\View $this */
 $expense  = $this->getData('expense') ?? new NullExpense();
@@ -106,7 +107,14 @@ echo $this->data['nav']->render(); ?>
             <div class="row">
                 <div class="col-xs-12">
                     <section class="portlet">
-                        <div class="portlet-head"><?= $this->getHtml('Expenses'); ?><i class="g-icon download btn end-xs">download</i></div>
+                        <div class="portlet-head">
+                            <?= $this->getHtml('Expenses'); ?>
+                            <i class="g-icon download btn end-xs">download</i>
+                            <div class="end-xs">
+                                <a class="button save" href="<?= UriFactory::build('{/base}/businessexpenses/expense/element/create?id=' . $expense->id); ?>"><?= $this->getHtml('New', '0', '0'); ?></a>
+                                <a class="button" href="<?= UriFactory::build('{/base}/businessexpenses/expense/element/upload?id=' . $expense->id); ?>"><?= $this->getHtml('Upload'); ?></a>
+                            </div>
+                        </div>
                         <div class="slider">
                         <table id="iExpenseList" class="default sticky">
                             <thead>
@@ -128,13 +136,15 @@ echo $this->data['nav']->render(); ?>
                                 <td><?= $this->getHtml('End'); ?>
                                 <td class="wf-100"><?= $this->getHtml('Type'); ?>
                             <tbody>
-                                <?php foreach ($expense->elements as $element) : ?>
-                                    <tr>
+                                <?php foreach ($expense->elements as $element) :
+                                    $url = UriFactory::build('{/base}/businessexpenses/expense/element/view?{?}&id=' . $element->id);
+                                ?>
+                                    <tr data-href="<?= $url; ?>">
                                         <td>
-                                            <td><?= $element->id; ?>
-                                        <td><?= $element->start->format('Y-m-d H:i'); ?>
-                                        <td><?= $element->end?->format('Y-m-d H:i'); ?>
-                                        <td><?= $this->printHtml($element->type->l11n); ?>
+                                        <td><a href="<?= $url; ?>"><?= $element->id; ?></a>
+                                        <td><a href="<?= $url; ?>"><?= $element->start->format('Y-m-d H:i'); ?></a>
+                                        <td><a href="<?= $url; ?>"><?= $element->end?->format('Y-m-d H:i'); ?></a>
+                                        <td><a href="<?= $url; ?>"><?= $this->printHtml($element->type->l11n); ?></a>
                                 <?php endforeach; ?>
                         </table>
                     </section>

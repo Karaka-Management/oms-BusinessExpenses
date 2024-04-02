@@ -33,4 +33,5 @@ return ['BusinessExpenses' => [
     'Overview'    => 'Overview',
     'Clocking'    => 'Clocking',
     'Type'        => 'Type',
+    'Upload'      => 'Upload',
 ]];

@@ -113,8 +113,8 @@ echo $this->data['nav']->render(); ?>
                 <tbody>
                 <?php $count = 0;
                 foreach ($expenses as $key => $value) : ++$count;
-                 $url = UriFactory::build('{/base}/businessexpenses/expense?{?}&id=' . $value->id);
-                 ?>
+                    $url = UriFactory::build('{/base}/businessexpenses/expense/view?{?}&id=' . $value->id);
+                ?>
                 <tr data-href="<?= $url; ?>">
                     <td>
                     <td data-label="<?= $this->getHtml('ID', '0', '0'); ?>"><a href="<?= $url; ?>"><?= $value->id; ?></a>
