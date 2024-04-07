@@ -22,7 +22,7 @@ return [
         [
             'dest'       => '\Modules\BusinessExpenses\Controller\BackendController:viewBusinessExpensesList',
             'verb'       => RouteVerb::GET,
-            'active' => true,
+            'active'     => true,
             'permission' => [
                 'module' => BackendController::NAME,
                 'type'   => PermissionType::READ,
@@ -34,7 +34,7 @@ return [
         [
             'dest'       => '\Modules\BusinessExpenses\Controller\BackendController:viewBusinessExpensesExpenseCreate',
             'verb'       => RouteVerb::GET,
-            'active' => true,
+            'active'     => true,
             'permission' => [
                 'module' => BackendController::NAME,
                 'type'   => PermissionType::CREATE,
@@ -46,7 +46,7 @@ return [
         [
             'dest'       => '\Modules\BusinessExpenses\Controller\BackendController:viewBusinessExpensesExpense',
             'verb'       => RouteVerb::GET,
-            'active' => true,
+            'active'     => true,
             'permission' => [
                 'module' => BackendController::NAME,
                 'type'   => PermissionType::READ,
@@ -58,7 +58,7 @@ return [
         [
             'dest'       => '\Modules\BusinessExpenses\Controller\BackendController:viewBusinessExpensesElement',
             'verb'       => RouteVerb::GET,
-            'active' => true,
+            'active'     => true,
             'permission' => [
                 'module' => BackendController::NAME,
                 'type'   => PermissionType::READ,
@@ -70,7 +70,7 @@ return [
         [
             'dest'       => '\Modules\BusinessExpenses\Controller\BackendController:viewBusinessExpensesElementCreate',
             'verb'       => RouteVerb::GET,
-            'active' => true,
+            'active'     => true,
             'permission' => [
                 'module' => BackendController::NAME,
                 'type'   => PermissionType::CREATE,
@@ -82,7 +82,7 @@ return [
         [
             'dest'       => '\Modules\BusinessExpenses\Controller\BackendController:viewBusinessExpensesTypeList',
             'verb'       => RouteVerb::GET,
-            'active' => true,
+            'active'     => true,
             'permission' => [
                 'module' => BackendController::NAME,
                 'type'   => PermissionType::READ,
@@ -94,7 +94,7 @@ return [
         [
             'dest'       => '\Modules\BusinessExpenses\Controller\BackendController:viewBusinessExpensesType',
             'verb'       => RouteVerb::GET,
-            'active' => true,
+            'active'     => true,
             'permission' => [
                 'module' => BackendController::NAME,
                 'type'   => PermissionType::READ,
@@ -106,7 +106,7 @@ return [
         [
             'dest'       => '\Modules\BusinessExpenses\Controller\BackendController:viewBusinessExpensesTypeCreate',
             'verb'       => RouteVerb::GET,
-            'active' => true,
+            'active'     => true,
             'permission' => [
                 'module' => BackendController::NAME,
                 'type'   => PermissionType::CREATE,
