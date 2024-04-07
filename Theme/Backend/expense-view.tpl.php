@@ -265,9 +265,9 @@ echo $this->data['nav']->render(); ?>
                                 <td><?= $session->start->format('H:i'); ?>
                                 <td><?= (int) ($session->getBreak() / 3600); ?>h <?= ((int) ($session->getBreak() / 60) % 60); ?>m
                                 <td><?= $session->getEnd() !== null ? $session->getEnd()->format('H:i') : ''; ?>
-                                <td><?= (int) ($session->getBusy() / 3600); ?>h <?= ((int) ($session->getBusy() / 60) % 60); ?>m
+                                <td><?= (int) ($session->busy / 3600); ?>h <?= ((int) ($session->busy / 60) % 60); ?>m
                             <?php
-                                $busy['week'] += $session->getBusy();
+                                $busy['week'] += $session->busy;
                                 if ($session->start->getTimestamp() < $startWeek->getTimestamp()
                                     || $count === $sessionCount
                             ) : ?>
@@ -281,7 +281,7 @@ echo $this->data['nav']->render(); ?>
                                 endif;
                             ?>
                             <?php
-                                $busy['month'] += $session->getBusy();
+                                $busy['month'] += $session->busy;
                                 if ($session->start->getTimestamp() < $startMonth->getTimestamp()
                                     || $count === $sessionCount
                             ) : ?>

@@ -15,6 +15,7 @@ declare(strict_types=1);
 namespace Modules\BusinessExpenses\Controller;
 
 use Modules\BusinessExpenses\Models\ExpenseMapper;
+use Modules\BusinessExpenses\Models\ExpenseTypeMapper;
 use phpOMS\Contract\RenderableInterface;
 use phpOMS\Message\RequestAbstract;
 use phpOMS\Message\ResponseAbstract;
@@ -78,7 +79,7 @@ final class BackendController extends Controller
         $view->setTemplate('/Modules/BusinessExpenses/Theme/Backend/expense-view');
         $view->data['nav'] = $this->app->moduleManager->get('Navigation')->createNavigationMid(1001001001, $request, $response);
 
-        $expense = ExpenseMapper::get()
+        $view->data['expense'] = ExpenseMapper::get()
             ->with('from')
             ->with('notes')
             ->with('elements')
@@ -86,8 +87,6 @@ final class BackendController extends Controller
             ->with('elements/type/l11n')
             ->where('id', (int) $request->getData('id'))
             ->execute();
-
-        $view->data['expense'] = $expense;
 
         $view->data['expense-notes'] = new \Modules\Editor\Theme\Backend\Components\Compound\BaseView($this->app->l11nManager, $request, $response);
 
@@ -113,12 +112,16 @@ final class BackendController extends Controller
         $view->setTemplate('/Modules/BusinessExpenses/Theme/Backend/expense-view');
         $view->data['nav'] = $this->app->moduleManager->get('Navigation')->createNavigationMid(1001001001, $request, $response);
 
-        $expense = ExpenseMapper::get()
+        $view->data['expense'] = ExpenseMapper::get()
             ->with('from')
+            ->with('notes')
+            ->with('elements')
+            ->with('elements/type')
+            ->with('elements/type/l11n')
             ->where('id', (int) $request->getData('id'))
             ->execute();
 
-        $view->data['expense'] = $expense;
+        $view->data['expense-notes'] = new \Modules\Editor\Theme\Backend\Components\Compound\BaseView($this->app->l11nManager, $request, $response);
 
         return $view;
     }
@@ -139,15 +142,13 @@ final class BackendController extends Controller
     {
         $view = new View($this->app->l11nManager, $request, $response);
 
-        $view->setTemplate('/Modules/BusinessExpenses/Theme/Backend/expense-view');
+        $view->setTemplate('/Modules/BusinessExpenses/Theme/Backend/expense-type-list');
         $view->data['nav'] = $this->app->moduleManager->get('Navigation')->createNavigationMid(1001001001, $request, $response);
 
-        $expense = ExpenseMapper::get()
-            ->with('from')
-            ->where('id', (int) $request->getData('id'))
+        $view->data['types'] = ExpenseTypeMapper::getAll()
+            ->with('l11n')
+            ->where('l11n/language', $request->header->l11n->language)
             ->execute();
-
-        $view->data['expense'] = $expense;
 
         return $view;
     }
@@ -171,12 +172,11 @@ final class BackendController extends Controller
         $view->setTemplate('/Modules/BusinessExpenses/Theme/Backend/expense-view');
         $view->data['nav'] = $this->app->moduleManager->get('Navigation')->createNavigationMid(1001001001, $request, $response);
 
-        $expense = ExpenseMapper::get()
-            ->with('from')
+        $view->data['type'] = ExpenseTypeMapper::get()
+            ->with('l11n')
             ->where('id', (int) $request->getData('id'))
+            ->where('l11n/language', $request->header->l11n->language)
             ->execute();
-
-        $view->data['expense'] = $expense;
 
         return $view;
     }
@@ -197,15 +197,8 @@ final class BackendController extends Controller
     {
         $view = new View($this->app->l11nManager, $request, $response);
 
-        $view->setTemplate('/Modules/BusinessExpenses/Theme/Backend/expense-view');
+        $view->setTemplate('/Modules/BusinessExpenses/Theme/Backend/expense-type-view');
         $view->data['nav'] = $this->app->moduleManager->get('Navigation')->createNavigationMid(1001001001, $request, $response);
-
-        $expense = ExpenseMapper::get()
-            ->with('from')
-            ->where('id', (int) $request->getData('id'))
-            ->execute();
-
-        $view->data['expense'] = $expense;
 
         return $view;
     }
