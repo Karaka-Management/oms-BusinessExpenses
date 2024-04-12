@@ -31,6 +31,7 @@ use Modules\BusinessExpenses\Models\PermissionCategory;
 use Modules\Media\Models\CollectionMapper;
 use Modules\Media\Models\MediaClass;
 use Modules\Media\Models\MediaMapper;
+use Modules\Media\Models\NullCollection;
 use Modules\Media\Models\PathSettings;
 use Modules\SupplierManagement\Models\NullSupplier;
 use phpOMS\Account\PermissionType;
@@ -566,85 +567,39 @@ final class ApiController extends Controller
         $expense = ExpenseMapper::get()->where('id', (int) $request->getData('expense'))->execute();
         $path    = $this->createExpenseDir($expense);
 
-        $uploaded = [];
-        if (!empty($uploadedFiles = $request->files)) {
+        $uploaded = new NullCollection();
+        if (!empty($request->files)) {
             $uploaded = $this->app->moduleManager->get('Media', 'Api')->uploadFiles(
                 names: [],
                 fileNames: [],
-                files: $uploadedFiles,
+                files: $request->files,
                 account: $request->header->account,
                 basePath: __DIR__ . '/../../../Modules/Media/Files' . $path,
                 virtualPath: $path,
                 pathSettings: PathSettings::FILE_PATH,
                 hasAccountRelation: false,
-                readContent: $request->getDataBool('parse_content') ?? false
+                readContent: $request->getDataBool('parse_content') ?? false,
+                type: $request->getDataInt('type'),
+                rel: $expense->id,
+                mapper: ExpenseMapper::class,
+                field: 'files'
             );
-
-            $collection = null;
-            foreach ($uploaded as $media) {
-                $this->createModelRelation(
-                    $request->header->account,
-                    $expense->id,
-                    $media->id,
-                    ExpenseMapper::class,
-                    'files',
-                    '',
-                    $request->getOrigin()
-                );
-
-                if ($request->hasData('type')) {
-                    $this->createModelRelation(
-                        $request->header->account,
-                        $media->id,
-                        $request->getDataInt('type'),
-                        MediaMapper::class,
-                        'types',
-                        '',
-                        $request->getOrigin()
-                    );
-                }
-
-                if ($collection === null) {
-                    /** @var \Modules\Media\Models\Collection $collection */
-                    $collection = MediaMapper::getParentCollection($path)->limit(1)->execute();
-
-                    if ($collection->id === 0) {
-                        $collection = $this->app->moduleManager->get('Media')->createRecursiveMediaCollection(
-                            $path,
-                            $request->header->account,
-                            __DIR__ . '/../../../Modules/Media/Files' . $path,
-                        );
-                    }
-                }
-
-                $this->createModelRelation(
-                    $request->header->account,
-                    $collection->id,
-                    $media->id,
-                    CollectionMapper::class,
-                    'sources',
-                    '',
-                    $request->getOrigin()
-                );
-            }
         }
 
-        $mediaFiles = $request->getDataJson('media');
-        foreach ($mediaFiles as $media) {
-            $this->createModelRelation(
+        if (!empty($media = $request->getDataJson('media'))) {
+            $this->app->moduleManager->get('Media', 'Api')->addMediaToCollectionAndModel(
                 $request->header->account,
+                $media,
                 $expense->id,
-                (int) $media,
-                ExpenseElementMapper::class,
+                ExpenseMapper::class,
                 'files',
-                '',
-                $request->getOrigin()
+                $path
             );
         }
 
-        $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Media', 'Media added to bill.', [
-            'upload' => $uploaded,
-            'media'  => $mediaFiles,
+        $this->fillJsonResponse($request, $response, NotificationLevel::OK, '', $this->app->l11nManager->getText($response->header->l11n->language, '0', '0', 'SuccessfulAdd'), [
+            'upload' => $uploaded->sources,
+            'media'  => $media,
         ]);
     }
 
@@ -697,85 +652,39 @@ final class ApiController extends Controller
 
         $element = (int) $request->getData('element');
 
-        $uploaded = [];
-        if (!empty($uploadedFiles = $request->files)) {
+        $uploaded = new NullCollection();
+        if (!empty($request->files)) {
             $uploaded = $this->app->moduleManager->get('Media', 'Api')->uploadFiles(
                 names: [],
                 fileNames: [],
-                files: $uploadedFiles,
+                files: $request->files,
                 account: $request->header->account,
                 basePath: __DIR__ . '/../../../Modules/Media/Files' . $path,
                 virtualPath: $path,
                 pathSettings: PathSettings::FILE_PATH,
                 hasAccountRelation: false,
-                readContent: $request->getDataBool('parse_content') ?? false
+                readContent: $request->getDataBool('parse_content') ?? false,
+                type: $request->getData('type'),
+                rel: $element,
+                mapper: ExpenseElementMapper::class,
+                field: 'files'
             );
-
-            $collection = null;
-            foreach ($uploaded as $media) {
-                $this->createModelRelation(
-                    $request->header->account,
-                    $element,
-                    $media->id,
-                    ExpenseElementMapper::class,
-                    'files',
-                    '',
-                    $request->getOrigin()
-                );
-
-                if ($request->hasData('type')) {
-                    $this->createModelRelation(
-                        $request->header->account,
-                        $media->id,
-                        $request->getDataInt('type'),
-                        MediaMapper::class,
-                        'types',
-                        '',
-                        $request->getOrigin()
-                    );
-                }
-
-                if ($collection === null) {
-                    /** @var \Modules\Media\Models\Collection $collection */
-                    $collection = MediaMapper::getParentCollection($path)->limit(1)->execute();
-
-                    if ($collection->id === 0) {
-                        $collection = $this->app->moduleManager->get('Media')->createRecursiveMediaCollection(
-                            $path,
-                            $request->header->account,
-                            __DIR__ . '/../../../Modules/Media/Files' . $path,
-                        );
-                    }
-                }
-
-                $this->createModelRelation(
-                    $request->header->account,
-                    $collection->id,
-                    $media->id,
-                    CollectionMapper::class,
-                    'sources',
-                    '',
-                    $request->getOrigin()
-                );
-            }
         }
 
-        $mediaFiles = $request->getDataJson('media');
-        foreach ($mediaFiles as $media) {
-            $this->createModelRelation(
+        if (!empty($media = $request->getDataJson('media'))) {
+            $this->app->moduleManager->get('Media', 'Api')->addMediaToCollectionAndModel(
                 $request->header->account,
+                $media,
                 $element,
-                (int) $media,
                 ExpenseElementMapper::class,
                 'files',
-                '',
-                $request->getOrigin()
+                $path
             );
         }
 
         // Is invoice
         if ($request->getDataInt('file_type') === MediaType::BILL
-            && \count($uploaded) + \count($mediaFiles) === 1
+            && \count($uploaded->sources) + \count($media) === 1
             && $this->app->moduleManager->isActive('Billing')
             && $expense->net->value !== 0
         ) {
@@ -785,7 +694,7 @@ final class ApiController extends Controller
             $internalRequest->header->account = $request->header->account;
             $internalRequest->header->l11n    = $request->header->l11n;
 
-            $internalRequest->setData('media', empty($uploaded) ? \reset($mediaFiles) : \reset($uploaded)->id);
+            $internalRequest->setData('media', empty($uploaded->sources) ? \reset($media) : \reset($uploaded->sources)->id);
             $internalRequest->setData('async', false);
 
             $this->app->moduleManager->get('Billing', 'ApiPurchase')->apiSupplierBillUpload($internalRequest, $internalResponse, $data);
@@ -816,10 +725,10 @@ final class ApiController extends Controller
             $request,
             $response,
             NotificationLevel::OK,
-            'Media', 'Media added to bill.',
+            '', $this->app->l11nManager->getText($response->header->l11n->language, '0', '0', 'SuccessfulAdd'),
             [
                 'upload' => $uploaded,
-                'media'  => $mediaFiles,
+                'media'  => $media,
             ]);
     }
 
