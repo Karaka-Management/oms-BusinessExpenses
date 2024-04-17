@@ -14,6 +14,8 @@ declare(strict_types=1);
 
 namespace Modules\BusinessExpenses\Controller;
 
+use Modules\BusinessExpenses\Models\ExpenseElementMapper;
+use Modules\BusinessExpenses\Models\ExpenseElementTypeMapper;
 use Modules\BusinessExpenses\Models\ExpenseMapper;
 use Modules\BusinessExpenses\Models\ExpenseTypeMapper;
 use phpOMS\Contract\RenderableInterface;
@@ -86,9 +88,45 @@ final class BackendController extends Controller
             ->with('elements/type')
             ->with('elements/type/l11n')
             ->where('id', (int) $request->getData('id'))
+            ->where('elements/type/l11n/language', $response->header->l11n->language)
             ->execute();
 
         $view->data['expense-notes'] = new \Modules\Editor\Theme\Backend\Components\Compound\BaseView($this->app->l11nManager, $request, $response);
+
+        return $view;
+    }
+
+    /**
+     * Routing end-point for application behavior.
+     *
+     * @param RequestAbstract  $request  Request
+     * @param ResponseAbstract $response Response
+     * @param array            $data     Generic data
+     *
+     * @return RenderableInterface Returns a renderable object
+     *
+     * @since 1.0.0
+     * @codeCoverageIgnore
+     */
+    public function viewBusinessExpensesElement(RequestAbstract $request, ResponseAbstract $response, array $data = []) : RenderableInterface
+    {
+        $view = new View($this->app->l11nManager, $request, $response);
+
+        $view->setTemplate('/Modules/BusinessExpenses/Theme/Backend/element-view');
+        $view->data['nav'] = $this->app->moduleManager->get('Navigation')->createNavigationMid(1001001001, $request, $response);
+
+        $view->data['element'] = ExpenseElementMapper::get()
+            ->with('notes')
+            ->where('id', (int) $request->getData('id'))
+            ->execute();
+
+        $view->data['types'] = ExpenseElementTypeMapper::getAll()
+            ->with('l11n')
+            ->where('l11n/language', $response->header->l11n->language)
+            ->executeGetArray();
+
+        $view->data['expense-notes'] = new \Modules\Editor\Theme\Backend\Components\Compound\BaseView($this->app->l11nManager, $request, $response);
+        $view->data['media-upload'] = new \Modules\Media\Theme\Backend\Components\Upload\BaseView($this->app->l11nManager, $request, $response);
 
         return $view;
     }
@@ -121,7 +159,32 @@ final class BackendController extends Controller
             ->where('id', (int) $request->getData('id'))
             ->execute();
 
-        $view->data['expense-notes'] = new \Modules\Editor\Theme\Backend\Components\Compound\BaseView($this->app->l11nManager, $request, $response);
+        return $view;
+    }
+
+    /**
+     * Routing end-point for application behavior.
+     *
+     * @param RequestAbstract  $request  Request
+     * @param ResponseAbstract $response Response
+     * @param array            $data     Generic data
+     *
+     * @return RenderableInterface Returns a renderable object
+     *
+     * @since 1.0.0
+     * @codeCoverageIgnore
+     */
+    public function viewBusinessExpensesElementCreate(RequestAbstract $request, ResponseAbstract $response, array $data = []) : RenderableInterface
+    {
+        $view = new View($this->app->l11nManager, $request, $response);
+
+        $view->setTemplate('/Modules/BusinessExpenses/Theme/Backend/element-view');
+        $view->data['nav'] = $this->app->moduleManager->get('Navigation')->createNavigationMid(1001001001, $request, $response);
+
+        $view->data['types'] = ExpenseElementTypeMapper::getAll()
+            ->with('l11n')
+            ->where('l11n/language', $response->header->l11n->language)
+            ->executeGetArray();
 
         return $view;
     }

@@ -374,6 +374,8 @@ final class ApiController extends Controller
         $expense->type        = new NullBaseStringL11nType((int) $request->getDataInt('type'));
         $expense->status      = ExpenseStatus::tryFromValue($request->getDataInt('status')) ?? ExpenseStatus::DRAFT;
         $expense->description = $request->getDataString('description') ?? '';
+        $expense->start       = $request->getDataDateTime('start') ?? $expense->start;
+        $expense->end         = $request->getDataDateTime('end') ?? $expense->end;
 
         $country = $request->getDataString('country') ?? '';
         if (empty($country)) {

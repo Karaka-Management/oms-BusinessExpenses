@@ -14,14 +14,20 @@
 declare(strict_types=1);
 
 use Modules\BusinessExpenses\Models\NullExpense;
+use Modules\BusinessExpenses\Models\NullExpenseElement;
+use phpOMS\Stdlib\Base\FloatInt;
+use phpOMS\Stdlib\Base\SmartDateTime;
 use phpOMS\Uri\UriFactory;
 
 /** @var \phpOMS\Views\View $this */
-$expense  = $this->getData('expense') ?? new NullExpense();
+$expense  = $this->data['expense'] ?? new NullExpense();
 $sessions = $this->data['sessions'] ?? [];
+
+$isNew = $expense->id === 0;
 
 echo $this->data['nav']->render(); ?>
 <div class="tabview tab-2">
+    <?php if (!$isNew) : ?>
     <div class="box">
         <ul class="tab-links">
             <li><label for="c-tab-1"><?= $this->getHtml('Overview'); ?></label>
@@ -30,8 +36,9 @@ echo $this->data['nav']->render(); ?>
             <li><label for="c-tab-4"><?= $this->getHtml('Clocking'); ?></label>
         </ul>
     </div>
+    <?php endif; ?>
     <div class="tab-content">
-        <input type="radio" id="c-tab-1" name="tabular-2"<?= $this->request->uri->fragment === 'c-tab-1' ? ' checked' : ''; ?>>
+        <input type="radio" id="c-tab-1" name="tabular-2"<?= $isNew || $this->request->uri->fragment === 'c-tab-1' ? ' checked' : ''; ?>>
         <div class="tab">
             <div class="row">
                 <div class="col-xs-12 col-lg-6">
@@ -64,6 +71,7 @@ echo $this->data['nav']->render(); ?>
             <div class="row">
                 <div class="col-xs-12 col-md-6">
                     <section class="portlet">
+                    <form method="<?= $isNew ? 'PUT' : 'POST'; ?>" action="<?= UriFactory::build('{/api}businessexpenses/expense?csrf={$CSRF}'); ?>">
                         <div class="portlet-head"><?= $this->getHtml('Report'); ?></div>
                         <div class="portlet-body">
                             <div class="form-group">
@@ -88,15 +96,23 @@ echo $this->data['nav']->render(); ?>
 
                             <div class="form-group">
                                 <label for="iDescription"><?= $this->getHtml('Description'); ?></label>
-                                <textarea id="iDescription" name="description"><?= $this->printHtml($expense->description); ?></textarea>
+                                <textarea id="iDescription" name="description"><?= $this->printTextarea($expense->description); ?></textarea>
                             </div>
                         </div>
-                        <div class="portlet-foot"></div>
+                        <div class="portlet-foot">
+                            <?php if ($isNew) : ?>
+                                <input id="iCreateSubmit" type="Submit" value="<?= $this->getHtml('Create', '0', '0'); ?>">
+                            <?php else : ?>
+                                <input id="iSaveSubmit" type="Submit" value="<?= $this->getHtml('Save', '0', '0'); ?>">
+                            <?php endif; ?>
+                        </div>
+                        </form>
                     </section>
                 </div>
             </div>
         </div>
 
+        <?php if (!$isNew) : ?>
         <input type="radio" id="c-tab-2" name="tabular-2"<?= $this->request->uri->fragment === 'c-tab-2' ? ' checked' : ''; ?>>
         <div class="tab">
             <?= $this->data['expense-notes']->render('expense-notes', '', $expense->notes); ?>
@@ -104,6 +120,23 @@ echo $this->data['nav']->render(); ?>
 
         <input type="radio" id="c-tab-3" name="tabular-2"<?= $this->request->uri->fragment === 'c-tab-3' ? ' checked' : ''; ?>>
         <div class="tab">
+            <?php
+                $costs = [
+                    'total' => new FloatInt(),
+                    'week' => new FloatInt(),
+                    'day' => new FloatInt(),
+                ];
+
+                $elements = $expense->elements;
+
+                $current = SmartDateTime::createFromDateTime($expense->start);
+                $current->smartModify(0, 0, -1);
+
+                $end     = clone $expense->end;
+                $element = empty($elements)
+                    ? new NullExpenseElement()
+                    : \reset($elements);
+            ?>
             <div class="row">
                 <div class="col-xs-12">
                     <section class="portlet">
@@ -119,33 +152,47 @@ echo $this->data['nav']->render(); ?>
                         <table id="iExpenseList" class="default sticky">
                             <thead>
                             <tr>
-                                <td>
-                                <td><?= $this->getHtml('ID', '0', '0'); ?>
-                                    <label for="iExpenseList-sort-1">
-                                        <input type="radio" name="iExpenseList-sort" id="iExpenseList-sort-1">
-                                        <i class="sort-asc g-icon">expand_less</i>
-                                    </label>
-                                    <label for="iExpenseList-sort-2">
-                                        <input type="radio" name="iExpenseList-sort" id="iExpenseList-sort-2">
-                                        <i class="sort-desc g-icon">expand_more</i>
-                                    </label>
-                                    <label>
-                                        <i class="filter g-icon">filter_alt</i>
-                                    </label>
                                 <td><?= $this->getHtml('Start'); ?>
                                 <td><?= $this->getHtml('End'); ?>
                                 <td class="wf-100"><?= $this->getHtml('Type'); ?>
+                                <td><?= $this->getHtml('Costs'); ?>
                             <tbody>
-                                <?php foreach ($expense->elements as $element) :
+                                <?php
+                                while ($current->format('Y-m-d') !== $end->format('Y-m-d')) :
+                                    $current->smartModify(0, 0, 1);
+
+                                if ($element->id !== 0 && $element->start->format('Y-m-d') === $current->format('Y-m-d')) :
                                     $url = UriFactory::build('{/base}/businessexpenses/expense/element/view?{?}&id=' . $element->id);
                                 ?>
-                                    <tr data-href="<?= $url; ?>">
-                                        <td>
-                                        <td><a href="<?= $url; ?>"><?= $element->id; ?></a>
-                                        <td><a href="<?= $url; ?>"><?= $element->start->format('Y-m-d H:i'); ?></a>
-                                        <td><a href="<?= $url; ?>"><?= $element->end?->format('Y-m-d H:i'); ?></a>
-                                        <td><a href="<?= $url; ?>"><?= $this->printHtml($element->type->l11n); ?></a>
-                                <?php endforeach; ?>
+                                <tr data-href="<?= $url; ?>">
+                                    <td><a href="<?= $url; ?>"><?= $element->start->format('Y-m-d H:i'); ?></a>
+                                    <td><a href="<?= $url; ?>"><?= $element->end?->format('Y-m-d H:i'); ?></a>
+                                    <td><a href="<?= $url; ?>"><?= $this->printHtml($element->type->l11n); ?></a>
+                                    <td><a href="<?= $url; ?>"><?= $this->getCurrency($element->gross, symbol: ''); ?></a>
+                                <?php
+                                    $costs['total']->add($element->gross->value);
+                                    $costs['week']->add($element->gross->value);
+                                    $costs['day']->add($element->gross->value);
+
+                                    $element = \next($elements);
+                                    if ($element === false) {
+                                        $element = new NullExpenseElement();
+                                    }
+
+                                    // Required to handle multiple elements in one day
+                                    if ($element->id !== 0 && $element->start->format('Y-m-d') === $current->format('Y-m-d')) {
+                                        $current->smartModify(0, 0, -1);
+                                    }
+                                ?>
+                                <?php else : ?>
+                                <tr>
+                                    <td class="disabled"><?= $current->format('Y-m-d'); ?>
+                                    <td colspan="3" class="empty">
+                            <?php endif; ?>
+                            <?php endwhile; ?>
+                            <tr class="hl-3">
+                                <td colspan="3"><?= $this->getHtml('Total'); ?>
+                                <td><?= $costs['total']->getAmount(); ?>
                         </table>
                     </section>
                 </div>
@@ -275,10 +322,10 @@ echo $this->data['nav']->render(); ?>
                                 <th colspan="6"> <?= $startWeek->format('Y/m/d'); ?> - <?= $endWeek->format('Y/m/d'); ?>
                                 <th><?= (int) ($busy['week'] / 3600); ?>h <?= ((int) ($busy['week'] / 60) % 60); ?>m
                             <?php
-                                    $endWeek      = $startWeek;
-                                    $startWeek    = $startWeek->createModify(0, 0, -7);
-                                    $busy['week'] = 0;
-                                endif;
+                                $endWeek      = $startWeek;
+                                $startWeek    = $startWeek->createModify(0, 0, -7);
+                                $busy['week'] = 0;
+                            endif;
                             ?>
                             <?php
                                 $busy['month'] += $session->busy;
@@ -289,10 +336,10 @@ echo $this->data['nav']->render(); ?>
                                 <th colspan="6"> <?= $startMonth->format('Y/m/d'); ?> - <?= $endMonth->format('Y/m/d'); ?>
                                 <th><?= (int) ($busy['month'] / 3600); ?>h <?= ((int) ($busy['month'] / 60) % 60); ?>m
                             <?php
-                                    $endMonth      = $startMonth;
-                                    $startMonth    = $startMonth->createModify(0, -1, 0);
-                                    $busy['month'] = 0;
-                                endif;
+                                $endMonth      = $startMonth;
+                                $startMonth    = $startMonth->createModify(0, -1, 0);
+                                $busy['month'] = 0;
+                            endif;
                             ?>
                             <?php endforeach; ?>
                             <?php if ($count === 0) : ?>
@@ -304,5 +351,6 @@ echo $this->data['nav']->render(); ?>
                 </div>
             </div>
         </div>
+        <?php endif; ?>
     </div>
 </div>

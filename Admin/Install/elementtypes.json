@@ -6,6 +6,13 @@
 			"de": "Kraftstoff"
 		}
 	},
+	{
+		"name": "parking",
+		"l11n": {
+			"en": "Parking",
+			"de": "Parken"
+		}
+	},
     {
 		"name": "entertainment",
 		"l11n": {
@@ -53,6 +60,13 @@
         "l11n": {
             "en": "Present",
             "de": "Geschenk"
+        }
+    },
+	{
+        "name": "postage",
+        "l11n": {
+            "en": "Postage",
+            "de": "Porto"
         }
     },
     {
