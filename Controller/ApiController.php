@@ -467,6 +467,10 @@ final class ApiController extends Controller
      *
      * @api
      *
+     * @feature When creating a BusinessExpenseElement try to create that element
+     *      from the uploaded media for empty fields (i.e. description, price, ...)
+     *      https://github.com/Karaka-Management/oms-BusinessExpenses/issues/1
+     *
      * @since 1.0.0
      */
     public function apiExpenseElementFromUploadCreate(RequestAbstract $request, ResponseAbstract $response, array $data = []) : void
