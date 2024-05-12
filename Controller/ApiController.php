@@ -585,7 +585,7 @@ final class ApiController extends Controller
                 pathSettings: PathSettings::FILE_PATH,
                 hasAccountRelation: false,
                 readContent: $request->getDataBool('parse_content') ?? false,
-                type: $request->getDataInt('type'),
+                tag: $request->getDataInt('tag'),
                 rel: $expense->id,
                 mapper: ExpenseMapper::class,
                 field: 'files'
@@ -670,7 +670,7 @@ final class ApiController extends Controller
                 pathSettings: PathSettings::FILE_PATH,
                 hasAccountRelation: false,
                 readContent: $request->getDataBool('parse_content') ?? false,
-                type: $request->getData('type'),
+                tag: $request->getDataInt('tag'),
                 rel: $element,
                 mapper: ExpenseElementMapper::class,
                 field: 'files'
