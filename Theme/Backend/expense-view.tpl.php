@@ -26,7 +26,7 @@ $sessions = $this->data['sessions'] ?? [];
 $isNew = $expense->id === 0;
 
 echo $this->data['nav']->render(); ?>
-<div class="tabview tab-2">
+<div id="iExpenseView" class="tabview tab-2 url-rewrite">
     <?php if (!$isNew) : ?>
     <div class="box">
         <ul class="tab-links">
@@ -54,6 +54,7 @@ echo $this->data['nav']->render(); ?>
                     </section>
                 </div>
 
+                <!--
                 <div class="col-xs-12 col-lg-6">
                     <section class="portlet hl-3">
                         <div class="portlet-body">
@@ -66,6 +67,7 @@ echo $this->data['nav']->render(); ?>
                         </div>
                     </section>
                 </div>
+                -->
             </div>
 
             <div class="row">
@@ -123,8 +125,8 @@ echo $this->data['nav']->render(); ?>
             <?php
                 $costs = [
                     'total' => new FloatInt(),
-                    'week' => new FloatInt(),
-                    'day' => new FloatInt(),
+                    'week'  => new FloatInt(),
+                    'day'   => new FloatInt(),
                 ];
 
                 $elements = $expense->elements;
@@ -189,6 +191,15 @@ echo $this->data['nav']->render(); ?>
                                     <td class="disabled"><?= $current->format('Y-m-d'); ?>
                                     <td colspan="3" class="empty">
                             <?php endif; ?>
+                            <?php endwhile; ?>
+                            <?php while (($element = \next($elements)) !== false) :
+                                $url = UriFactory::build('{/base}/businessexpenses/expense/element/view?{?}&id=' . $element->id);
+                            ?>
+                                <tr data-href="<?= $url; ?>" class="hl-1">
+                                    <td><a href="<?= $url; ?>"><?= $element->start->format('Y-m-d H:i'); ?></a>
+                                    <td><a href="<?= $url; ?>"><?= $element->end?->format('Y-m-d H:i'); ?></a>
+                                    <td><a href="<?= $url; ?>"><?= $this->printHtml($element->type->l11n); ?></a>
+                                    <td><a href="<?= $url; ?>"><?= $this->getCurrency($element->gross, symbol: ''); ?></a>
                             <?php endwhile; ?>
                             <tr class="hl-3">
                                 <td colspan="3"><?= $this->getHtml('Total'); ?>

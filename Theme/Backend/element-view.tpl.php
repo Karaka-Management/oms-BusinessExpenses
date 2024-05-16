@@ -17,8 +17,8 @@ use Modules\BusinessExpenses\Models\NullExpense;
 use phpOMS\Uri\UriFactory;
 
 /** @var \phpOMS\Views\View $this */
-$element  = $this->data['element'] ?? new NullExpense();
-$isNew = $element->id === 0;
+$element = $this->data['element'] ?? new NullExpense();
+$isNew   = $element->id === 0;
 
 echo $this->data['nav']->render(); ?>
 <div class="tabview tab-2">

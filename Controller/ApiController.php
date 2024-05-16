@@ -497,7 +497,7 @@ final class ApiController extends Controller
 
             $this->apiExpenseElementCreate($internalRequest, $internalResponse, $data);
 
-            $elements[] = $internalResponse->getDataArray($internalRequest->uri->__toString())['response'];
+            $elements[] = $internalResponse->getDataArray($internalRequest->uri->__toString())['response'] ?? null;
         }
 
         $this->createStandardCreateResponse($request, $response, $elements);
@@ -705,7 +705,13 @@ final class ApiController extends Controller
 
             $this->app->moduleManager->get('Billing', 'ApiPurchase')->apiSupplierBillUpload($internalRequest, $internalResponse, $data);
 
-            $bills = $internalResponse->getDataArray($internalRequest->uri->__toString())['response'];
+            $bills = $internalResponse->getDataArray($internalRequest->uri->__toString())['response'] ?? [];
+            if (empty($bills)) {
+                $response->header->status = RequestStatusCode::R_400;
+                $this->createInvalidAddResponse($request, $response, $bills);
+
+                return;
+            }
 
             $elementObj = ExpenseElementMapper::get()
                 ->where('id', $element)

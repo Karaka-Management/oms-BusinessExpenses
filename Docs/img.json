@@ -1,0 +1,12 @@
+[
+    [
+        "/businessexpenses/expense/view?id=1",
+        "//*[@id=\"content\"]/div[2]/div[2]/div[1]/div[2]/div/section",
+        "/BusinessExpenses/Docs/Help/img/expenses_overview.png"
+    ],
+    [
+        "/businessexpenses/expense/element/view?id=1",
+        "//*[@id=\"content\"]/div[2]/div[2]/div[1]/div/div/section",
+        "/BusinessExpenses/Docs/Help/img/expenses_element_overview.png"
+    ]
+]

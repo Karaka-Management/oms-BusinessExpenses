@@ -69,6 +69,20 @@
             "de": "Porto"
         }
     },
+	{
+        "name": "stationary",
+        "l11n": {
+            "en": "Stationary",
+            "de": "Büromaterial"
+        }
+    },
+	{
+        "name": "it",
+        "l11n": {
+            "en": "IT",
+            "de": "IT"
+        }
+    },
     {
         "name": "other",
         "l11n": {
