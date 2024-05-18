@@ -17,6 +17,7 @@ return ['BusinessExpenses' => [
     ':status2'    => 'Fertiggestellt',
     ':status3'    => 'Inaktiv',
     'Amount'      => 'Betrag',
+    'Entries'      => 'Buchungen',
     'Approved'    => 'Genehmigt',
     'CreatedAt'   => 'Erstellt',
     'Description' => 'Beschreibung',

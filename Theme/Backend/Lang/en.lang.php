@@ -17,6 +17,7 @@ return ['BusinessExpenses' => [
     ':status2'    => 'Finalized',
     ':status3'    => 'Inactive',
     'Amount'      => 'Amount',
+    'Entries'    => 'Entries',
     'Approved'    => 'Approved',
     'CreatedAt'   => 'Created At',
     'Description' => 'Description',
