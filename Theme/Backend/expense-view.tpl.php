@@ -316,10 +316,10 @@ echo $this->data['nav']->render(); ?>
                                         ) : ?>
                                         <span class="tag">Today</span>
                                     <?php else : ?>
-                                        <?= $session->start->format('Y-m-d'); ?> - <?= $this->getHtml('D' . $session->start->format('w')); ?>
+                                        <?= $session->start->format('Y-m-d'); ?> - <?= $this->getHtml(':D' . $session->start->format('w')); ?>
                                     <?php endif; ?>
-                                <td><span class="tag"><?= $this->getHtml('CT' . $session->type); ?></span>
-                                <td><span class="tag"><?= $this->getHtml('CS' . $session->status); ?></span>
+                                <td><span class="tag"><?= $this->getHtml(':CT' . $session->type); ?></span>
+                                <td><span class="tag"><?= $this->getHtml(':CS' . $session->status); ?></span>
                                 <td><?= $session->start->format('H:i'); ?>
                                 <td><?= (int) ($session->getBreak() / 3600); ?>h <?= ((int) ($session->getBreak() / 60) % 60); ?>m
                                 <td><?= $session->getEnd() !== null ? $session->getEnd()->format('H:i') : ''; ?>
