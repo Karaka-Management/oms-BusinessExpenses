@@ -100,7 +100,7 @@ echo $this->data['nav']->render(); ?>
         <input type="radio" id="c-tab-2" name="tabular-2" checked>
         <div class="tab col-simple">
             <div class="col-xs-12">
-                <?= $this->data['media-upload']->render('item-file', 'files', '', $element->files); ?>
+                <?= $this->data['media-upload']->render('item-file', 'files', '', $element->files, '{/api}businessexpenses/expense/element/file?csrf={$CSRF}', (string) $element->id); ?>
             </div>
         </div>
         <?php endif; ?>

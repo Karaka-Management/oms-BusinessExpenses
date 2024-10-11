@@ -92,7 +92,7 @@ final class Installer extends InstallerAbstract
 
             $request->header->account = 1;
             $request->setData('name', $type['name'] ?? '');
-            $request->setData('title', \reset($type['l11n']));
+            $request->setData('content', \reset($type['l11n']));
             $request->setData('language', \array_keys($type['l11n'])[0] ?? 'en');
 
             $module->apiExpenseTypeCreate($request, $response);
@@ -117,9 +117,9 @@ final class Installer extends InstallerAbstract
                 $request  = new HttpRequest();
 
                 $request->header->account = 1;
-                $request->setData('title', $l11n);
+                $request->setData('content', $l11n);
                 $request->setData('language', $language);
-                $request->setData('type', $expenseTypes[$type['name']]['id']);
+                $request->setData('ref', $expenseTypes[$type['name']]['id']);
 
                 $module->apiExpenseTypeL11nCreate($request, $response);
             }
@@ -153,7 +153,7 @@ final class Installer extends InstallerAbstract
 
             $request->header->account = 1;
             $request->setData('name', $type['name'] ?? '');
-            $request->setData('title', \reset($type['l11n']));
+            $request->setData('content', \reset($type['l11n']));
             $request->setData('language', \array_keys($type['l11n'])[0] ?? 'en');
 
             $module->apiExpenseElementTypeCreate($request, $response);
@@ -178,9 +178,9 @@ final class Installer extends InstallerAbstract
                 $request  = new HttpRequest();
 
                 $request->header->account = 1;
-                $request->setData('title', $l11n);
+                $request->setData('content', $l11n);
                 $request->setData('language', $language);
-                $request->setData('type', $elementTypes[$type['name']]['id']);
+                $request->setData('ref', $elementTypes[$type['name']]['id']);
 
                 $module->apiExpenseElementTypeL11nCreate($request, $response);
             }
