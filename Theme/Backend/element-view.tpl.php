@@ -97,7 +97,7 @@ echo $this->data['nav']->render(); ?>
         </div>
 
         <?php if (!$isNew) : ?>
-        <input type="radio" id="c-tab-2" name="tabular-2" checked>
+        <input type="radio" id="c-tab-2" name="tabular-2">
         <div class="tab col-simple">
             <div class="col-xs-12">
                 <?= $this->data['media-upload']->render('item-file', 'files', '', $element->files, '{/api}businessexpenses/expense/element/file?csrf={$CSRF}', (string) $element->id); ?>
