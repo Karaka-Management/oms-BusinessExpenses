@@ -446,7 +446,7 @@ final class ApiController extends Controller
         $new = clone $old;
 
         if (!empty($request->files)) {
-            $request->setData('element', $element->id, true);
+            $request->setData('ref', $element->id, true);
             $this->apiMediaAddToExpenseElement($request, $response, $data);
         }
 
@@ -470,6 +470,10 @@ final class ApiController extends Controller
      * @feature When creating a BusinessExpenseElement try to create that element
      *      from the uploaded media for empty fields (i.e. description, price, ...)
      *      https://github.com/Karaka-Management/oms-BusinessExpenses/issues/1
+     *
+     * @feature When uploading an expense check the date on the bill with the date of the element.
+     *      If different warn user.
+     *      https://github.com/Karaka-Management/phpOMS/issues/391
      *
      * @since 1.0.0
      */
