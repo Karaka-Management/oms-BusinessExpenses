@@ -87,7 +87,7 @@ final class BackendController extends Controller
             ->with('elements')
             ->with('elements/type')
             ->with('elements/type/l11n')
-            ->where('id', (int) $request->getData('id'))
+            ->where('id', $request->getDataInt('id') ?? 0)
             ->where('elements/type/l11n/language', $response->header->l11n->language)
             ->execute();
 
@@ -117,7 +117,7 @@ final class BackendController extends Controller
 
         $view->data['element'] = ExpenseElementMapper::get()
             ->with('notes')
-            ->where('id', (int) $request->getData('id'))
+            ->where('id', $request->getDataInt('id') ?? 0)
             ->execute();
 
         $view->data['types'] = ExpenseElementTypeMapper::getAll()
@@ -156,7 +156,7 @@ final class BackendController extends Controller
             ->with('elements')
             ->with('elements/type')
             ->with('elements/type/l11n')
-            ->where('id', (int) $request->getData('id'))
+            ->where('id', $request->getDataInt('id') ?? 0)
             ->execute();
 
         return $view;
@@ -237,7 +237,7 @@ final class BackendController extends Controller
 
         $view->data['type'] = ExpenseTypeMapper::get()
             ->with('l11n')
-            ->where('id', (int) $request->getData('id'))
+            ->where('id', $request->getDataInt('id') ?? 0)
             ->where('l11n/language', $request->header->l11n->language)
             ->execute();
 

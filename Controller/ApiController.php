@@ -1072,7 +1072,7 @@ final class ApiController extends Controller
         }
 
         /** @var BaseStringL11nType $old */
-        $old = ExpenseTypeMapper::get()->where('id', (int) $request->getData('id'))->execute();
+        $old = ExpenseTypeMapper::get()->where('id', $request->getDataInt('id') ?? 0)->execute();
         $new = $this->updateExpenseTypeFromRequest($request, clone $old);
 
         $this->updateModel($request->header->account, $old, $new, ExpenseTypeMapper::class, 'expense_type', $request->getOrigin());
@@ -1142,7 +1142,7 @@ final class ApiController extends Controller
         }
 
         /** @var BaseStringL11nType $expenseType */
-        $expenseType = ExpenseTypeMapper::get()->where('id', (int) $request->getData('id'))->execute();
+        $expenseType = ExpenseTypeMapper::get()->where('id', $request->getDataInt('id') ?? 0)->execute();
         $this->deleteModel($request->header->account, $expenseType, ExpenseTypeMapper::class, 'expense_type', $request->getOrigin());
         $this->createStandardDeleteResponse($request, $response, $expenseType);
     }
@@ -1189,7 +1189,7 @@ final class ApiController extends Controller
         }
 
         /** @var BaseStringL11n $old */
-        $old = ExpenseTypeL11nMapper::get()->where('id', (int) $request->getData('id'))->execute();
+        $old = ExpenseTypeL11nMapper::get()->where('id', $request->getDataInt('id') ?? 0)->execute();
         $new = $this->updateExpenseTypeL11nFromRequest($request, clone $old);
 
         $this->updateModel($request->header->account, $old, $new, ExpenseTypeL11nMapper::class, 'expense_type_l11n', $request->getOrigin());
@@ -1260,7 +1260,7 @@ final class ApiController extends Controller
             return;
         }
 
-        $expenseTypeL11n = ExpenseTypeL11nMapper::get()->where('id', (int) $request->getData('id'))->execute();
+        $expenseTypeL11n = ExpenseTypeL11nMapper::get()->where('id', $request->getDataInt('id') ?? 0)->execute();
         $this->deleteModel($request->header->account, $expenseTypeL11n, ExpenseTypeL11nMapper::class, 'expense_type_l11n', $request->getOrigin());
         $this->createStandardDeleteResponse($request, $response, $expenseTypeL11n);
     }
@@ -1307,7 +1307,7 @@ final class ApiController extends Controller
         }
 
         /** @var BaseStringL11nType $old */
-        $old = ExpenseElementTypeMapper::get()->where('id', (int) $request->getData('id'))->execute();
+        $old = ExpenseElementTypeMapper::get()->where('id', $request->getDataInt('id') ?? 0)->execute();
         $new = $this->updateExpenseElementTypeFromRequest($request, clone $old);
 
         $this->updateModel($request->header->account, $old, $new, ExpenseElementTypeMapper::class, 'expense_element_type', $request->getOrigin());
@@ -1378,7 +1378,7 @@ final class ApiController extends Controller
         }
 
         /** @var BaseStringL11nType $expenseElementType */
-        $expenseElementType = ExpenseElementTypeMapper::get()->where('id', (int) $request->getData('id'))->execute();
+        $expenseElementType = ExpenseElementTypeMapper::get()->where('id', $request->getDataInt('id') ?? 0)->execute();
         $this->deleteModel($request->header->account, $expenseElementType, ExpenseElementTypeMapper::class, 'expense_element_type', $request->getOrigin());
         $this->createStandardDeleteResponse($request, $response, $expenseElementType);
     }
@@ -1425,7 +1425,7 @@ final class ApiController extends Controller
         }
 
         /** @var BaseStringL11n $old */
-        $old = ExpenseElementTypeL11nMapper::get()->where('id', (int) $request->getData('id'))->execute();
+        $old = ExpenseElementTypeL11nMapper::get()->where('id', $request->getDataInt('id') ?? 0)->execute();
         $new = $this->updateExpenseElementTypeL11nFromRequest($request, clone $old);
 
         $this->updateModel($request->header->account, $old, $new, ExpenseElementTypeL11nMapper::class, 'expense_element_type_l11n', $request->getOrigin());
@@ -1498,7 +1498,7 @@ final class ApiController extends Controller
             return;
         }
 
-        $expenseElementTypeL11n = ExpenseElementTypeL11nMapper::get()->where('id', (int) $request->getData('id'))->execute();
+        $expenseElementTypeL11n = ExpenseElementTypeL11nMapper::get()->where('id', $request->getDataInt('id') ?? 0)->execute();
         $this->deleteModel($request->header->account, $expenseElementTypeL11n, ExpenseElementTypeL11nMapper::class, 'expense_element_type_l11n', $request->getOrigin());
         $this->createStandardDeleteResponse($request, $response, $expenseElementTypeL11n);
     }
@@ -1545,7 +1545,7 @@ final class ApiController extends Controller
         }
 
         /** @var \Modules\BusinessExpenses\Models\Expense $old */
-        $old = ExpenseMapper::get()->where('id', (int) $request->getData('id'))->execute();
+        $old = ExpenseMapper::get()->where('id', $request->getDataInt('id') ?? 0)->execute();
         $new = $this->updateExpenseFromRequest($request, clone $old);
 
         $this->updateModel($request->header->account, $old, $new, ExpenseMapper::class, 'expense', $request->getOrigin());
@@ -1618,7 +1618,7 @@ final class ApiController extends Controller
         }
 
         /** @var \Modules\BusinessExpenses\Models\Expense $expense */
-        $expense = ExpenseMapper::get()->where('id', (int) $request->getData('id'))->execute();
+        $expense = ExpenseMapper::get()->where('id', $request->getDataInt('id') ?? 0)->execute();
 
         // @todo delete elements
         // @todo delete media
@@ -1670,7 +1670,7 @@ final class ApiController extends Controller
         }
 
         /** @var \Modules\BusinessExpenses\Models\ExpenseElement $old */
-        $old = ExpenseElementMapper::get()->where('id', (int) $request->getData('id'))->execute();
+        $old = ExpenseElementMapper::get()->where('id', $request->getDataInt('id') ?? 0)->execute();
         $new = $this->updateExpenseElementFromRequest($request, clone $old);
         $this->updateModel($request->header->account, $old, $new, ExpenseElementMapper::class, 'expense_element', $request->getOrigin());
 
@@ -1759,7 +1759,7 @@ final class ApiController extends Controller
         // @todo delete media
 
         /** @var \Modules\BusinessExpenses\Models\ExpenseElement $expenseElement */
-        $expenseElement = ExpenseElementMapper::get()->where('id', (int) $request->getData('id'))->execute();
+        $expenseElement = ExpenseElementMapper::get()->where('id', $request->getDataInt('id') ?? 0)->execute();
         $this->deleteModel($request->header->account, $expenseElement, ExpenseElementMapper::class, 'expense_element', $request->getOrigin());
 
         /* @var \Modules\BusinessExpenses\Models\Expense $expense */
